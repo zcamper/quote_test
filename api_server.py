@@ -298,16 +298,23 @@ Customer-Facing Quote Description:"""
         # This request goes to the internal ollama service.
         response = requests.post(OLLAMA_API_URL, json=payload, timeout=90)
 
-        # Instead of just raise_for_status(), we inspect the response for better error messages.
-        response_data = response.json()
-
+        # Check for non-successful responses first.
         if not response.ok:
-            # If Ollama returned an error (e.g., 404 model not found, 500 internal error)
-            error_message = response_data.get("error", "Unknown error from LLM service")
+            error_message = "Unknown error from LLM service"
+            # Try to parse a JSON error from Ollama, but don't fail if it's not JSON
+            try:
+                error_data = response.json()
+                error_message = error_data.get("error", error_message)
+            except ValueError:
+                # If the response isn't JSON, use the raw text.
+                error_message = response.text or f"Service returned status {response.status_code}"
+
             print(f"Ollama service returned an error: {response.status_code} - {error_message}")
-            # Pass the specific error from Ollama to the frontend.
+            # Pass a clear error to the frontend.
             return jsonify({"error": f"LLM Error: {error_message}"}), response.status_code
 
+        # If we get here, the response was OK, so it should be valid JSON.
+        response_data = response.json()
         summary = response_data.get('response', '').strip()
 
         return jsonify({"summary": summary})
@@ -316,7 +323,7 @@ Customer-Facing Quote Description:"""
         print(f"Error connecting to Ollama service: {e}")
         return jsonify({"error": "Failed to connect to the LLM service. Is it running?"}), 503
     except Exception as e:
-        # Catch-all for other unexpected errors (e.g., JSON decoding, etc.)
+        # Catch-all for other unexpected errors (e.g., JSON decoding during success)
         print(f"An unexpected error occurred in summarize_writeup: {e}")
         return jsonify({"error": "An unexpected server error occurred while generating the summary."}), 500
 
