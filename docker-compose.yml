@@ -41,9 +41,10 @@ services:
     image: ollama/ollama
     container_name: quote_llm
     restart: unless-stopped
+    entrypoint: /bin/sh
     # This command runs on startup. It first ensures the 'mistral' model is
     # pulled, and only then does it start the main server process.
-    command: sh -c "ollama pull mistral && ollama serve"
+    command: -c "ollama pull mistral && ollama serve"
     volumes:
       - ollama_data:/root/.ollama
     healthcheck:
