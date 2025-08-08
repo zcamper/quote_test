@@ -886,7 +886,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             } else if (data && data.baseData) {
                 // No revisions, but ERP/base data exists.
-                alert(`Service Call ID "${serviceCallId}" found. You can create the first revision.`);
+                // REMOVED: alert(`Service Call ID "${serviceCallId}" found. You can create the first revision.`);
                 quoteState = { serviceCallId, revisions: [], revision: 1, baseData: data.baseData };
                 populateBaseData(data.baseData);
                 
