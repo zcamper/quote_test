@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quote_api
+    restart: unless-stopped
+    # The Python Flask app runs on port 3000.
+    # We mount the source code and DB for development.
+    volumes:
+      - ./api_server.py:/app/api_server.py
+      - ./test_data_trim.db:/app/test_data_trim.db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    depends_on:
+      ollama:
+        # The API now only needs to wait for the ollama service to be healthy,
+        # as the model is already baked into the image.
+        condition: service_healthy
+  web:
+    image: nginx:1.21-alpine
+    container_name: quote_web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./Quote_Sheet_V1.html:/usr/share/nginx/html/index.html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      api:
+        condition: service_healthy
+
+  ollama:
+    # Build a custom image with the model pre-loaded
+    image: ollama/ollama
+    container_name: quote_llm
+    restart: unless-stopped
+    # This command runs on startup. It first ensures the 'mistral' model is
+    # pulled, and only then does it start the main server process.
+    command: sh -c "ollama pull mistral && ollama serve"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      # This more reliable check uses curl to directly query the Ollama API.
+      # It passes only when the server is running AND the mistral model is listed in the /api/tags endpoint.
+      test: ["CMD", "sh", "-c", "curl -s -f http://127.0.0.1:11434/api/tags | grep -q 'mistral:latest'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      # Increased start_period to give ample time for the model to download on the first run.
+      start_period: 300s
+    # The API is available at http://ollama:11434 for other services
+
+volumes:
+  ollama_data:

@@ -1,0 +1,20 @@
+# Byte-compiled and cache files
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# SQLite Database files
+# This will prevent your test_data_trim.db from being committed.
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE-specific folders
+.vscode/
+.idea/
+.codeoss/
+
