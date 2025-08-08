@@ -8,7 +8,7 @@ from datetime import datetime
 SQLITE_DB_NAME = "test_data_trim.db"
 app = Flask(__name__)
 
-OLLAMA_API_URL = "http://ollama:11434/api/generate"
+OLLAMA_URL = "http://host.docker.internal:11434"
 MODEL_NAME = "mistral"
 
 # Enable CORS to allow the HTML file (served from file:// or localhost) to make requests
