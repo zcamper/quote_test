@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask import Flask, jsonify, request
 import requests
 from datetime import datetime
+import json
 
 # --- CONFIGURATION ---
 SQLITE_DB_NAME = "test_data_trim.db"
@@ -267,8 +268,8 @@ def health_check():
 @app.route('/summarize', methods=['POST'])
 def summarize_writeup():
     """
-    Receives a service write-up and uses LocalAI to generate
-    a customer-facing quote description.
+    Receives a service write-up and uses an LLM to generate
+    a customer-facing quote description, potentially extracting tech info.
     """
     data = request.get_json()
     if not data or 'writeup' not in data:
@@ -276,21 +277,48 @@ def summarize_writeup():
 
     service_writeup = data['writeup']
 
-    prompt = f"""You are an expert technical writer for an HVAC company.
-A technician provided this service call write-up. Rewrite it into a clear, professional, customer-facing description for a quote.
-Focus on the work performed and its value. Omit internal jargon. The output must be a single paragraph.
+    # --- Enhanced Prompt ---
+    prompt = f"""You are an expert technical writer for a generator repair company.
+    A technician provided this service call write-up. Your task is to:
+    1. Rewrite the entire write-up into a clear, professional, customer-facing description for a quote.
+       Focus on the work performed and its value. Omit internal jargon. The output must be a single paragraph.
+    2. Extract the following information from the write-up if present:
+       - Number of technicians involved (tech_count)
+       - Total hours worked (tech_hours)
+       - Days spent (travel_days) or number of days (if not specified, default to 0)
 
-Technician's Write-up:
-"{service_writeup}"
+    Please respond with ONLY a JSON object containing these fields:
+    {{
+        "customer_description": "The rewritten customer-facing description.",
+        "tech_count": <number>,
+        "tech_hours": <number>,
+        "travel_days": <number>
+    }}
+    If any information is not explicitly stated in the write-up, use 0 for tech_count and tech_hours, and 0 or a reasonable estimate for travel_days.
 
-Customer-Facing Quote Description:"""
+    Technician's Write-up:
+    "{service_writeup}"
 
-    summary, error = call_localai(prompt)
+    JSON Response:"""
+
+    llm_output, error = call_localai(prompt, expect_json=True)
 
     if error:
         return jsonify({"error": error}), 503
 
-    return jsonify({"summary": summary})
+    # --- Extract Data ---
+    customer_description = llm_output.get("customer_description", "")
+    tech_count = llm_output.get("tech_count", 0)
+    tech_hours = llm_output.get("tech_hours", 0)
+    travel_days = llm_output.get("travel_days", 0)
+
+    # --- Return Combined Result ---
+    return jsonify({
+        "customer_description": customer_description,
+        "tech_count": tech_count,
+        "tech_hours": tech_hours,
+        "travel_days": travel_days
+    }), 200
 
 # --- APPLICATION STARTUP ---
 
@@ -304,7 +332,7 @@ except Exception as e:
 import requests
 import os
 
-def call_localai(prompt):
+def call_localai(prompt, expect_json=False):
     """Call LocalAI API with the given prompt. Returns (content, error_message)."""
     try:
         # LocalAI endpoint (using host.docker.internal to connect to the host)
@@ -332,6 +360,13 @@ def call_localai(prompt):
         if not content:
             print(f"LocalAI response missing content: {result}")
             return None, "LLM response was empty or malformed"
+
+        if expect_json:
+            try:
+                return json.loads(content), None
+            except json.JSONDecodeError:
+                print(f"LLM did not return valid JSON: {content}")
+                return None, "LLM did not return valid JSON"
             
         return content, None
         
