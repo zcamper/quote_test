@@ -53,6 +53,12 @@
         .tab-inactive {
             @apply border-b-2 border-transparent text-[var(--text-secondary)] hover:text-gray-700 hover:border-gray-300;
         }
+        .sidebar {
+            float: right;
+            width: 30%;
+            padding: 10px;
+            background-color: #f4f4f4;
+        }
     </style>
 </head>
 <body>
@@ -440,7 +446,6 @@
 </div>
 </div>
 </div>
-</div>
 </main>
 </div>
 <script>
@@ -736,7 +741,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const partsTableBody = document.querySelector('#parts-table tbody');
         if (partsTableBody) partsTableBody.innerHTML = '';
         const subcontractorsList = document.getElementById('subcontractors-list');
-        if (subcontractorsList) subcontractorsList.innerHTML = '';
+        if (subcontractorsList) subcontractoresList.innerHTML = '';
         document.querySelectorAll('.unit-info-value').forEach(el => {
             el.textContent = 'N/A';
             el.classList.remove('text-green-600');
