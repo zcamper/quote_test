@@ -17,7 +17,8 @@ services:
       retries: 5
       start_period: 10s
     depends_on:
-      ollama:
+      # No need to depend on ollama anymore
+      localai:
         condition: service_healthy
 
   web:
@@ -33,26 +34,22 @@ services:
       api:
         condition: service_healthy
 
-  ollama:
-    # Build a custom image with the model pre-loaded
-    build:
-      context: .
-      dockerfile: Dockerfile.ollama
+  localai:
+    image: localai/localai:latest
     container_name: quote_llm
     restart: unless-stopped
-   # ports:
-  #    - "11434:11434"
+    ports:
+      - "4444:4444"
     volumes:
-      - ollama_data:/root/.ollama
+      - localai_data:/root/.local-ai
+    command: |
+      --api-port 4444
     healthcheck:
-      # This more reliable check uses curl to directly query the Ollama API.
-      # It passes only when the server is running AND the mistral model is listed in the /api/tags endpoint.
-      test: ["CMD", "sh", "-c", "curl -s -f http://127.0.0.1:11434/api/tags | grep -q 'mistral:latest'"]
+      test: ["CMD", "curl", "-f", "http://localhost:4444/health"]
       interval: 10s
       timeout: 5s
       retries: 5
-      # Increased start_period to give ample time for the model to download on the first run.
-      start_period: 300s
+      start_period: 30s
 
 volumes:
-  ollama_data:
+  localai_data:

@@ -335,6 +335,39 @@ try:
 except Exception as e:
     print(f"🔴 CRITICAL: An error occurred during database setup: {e}")
 
+# Updated LocalAI integration
+import requests
+import os
+
+def call_localai(prompt):
+    """Call LocalAI API with the given prompt"""
+    try:
+        # LocalAI endpoint (assuming it's running on port 4444)
+        url = "http://localai:4444/v1/chat/completions"
+        
+        headers = {
+            "Content-Type": "application/json"
+        }
+        
+        data = {
+            "model": "mistral-7b-instruct-v0.3",  # Your downloaded model
+            "messages": [
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.7,
+            "max_tokens": 500
+        }
+        
+        response = requests.post(url, json=data, headers=headers)
+        response.raise_for_status()
+        
+        result = response.json()
+        return result['choices'][0]['message']['content']
+        
+    except Exception as e:
+        print(f"Error calling LocalAI: {e}")
+        return "Error processing your request"
+
 # The if __name__ == '__main__' block is kept for convenience, allowing you to
 # run the server directly in a local environment (outside of Docker) for debugging.
 if __name__ == '__main__':
