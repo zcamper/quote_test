@@ -285,12 +285,12 @@ Technician's Write-up:
 
 Customer-Facing Quote Description:"""
 
-    try:
-        summary = call_localai(prompt)
-        return jsonify({"summary": summary})
-    except Exception as e:
-        print(f"An unexpected error occurred in summarize_writeup: {e}")
-        return jsonify({"error": "An unexpected server error occurred while generating the summary."}), 500
+    summary, error = call_localai(prompt)
+
+    if error:
+        return jsonify({"error": error}), 503
+
+    return jsonify({"summary": summary})
 
 # --- APPLICATION STARTUP ---
 
@@ -305,7 +305,7 @@ import requests
 import os
 
 def call_localai(prompt):
-    """Call LocalAI API with the given prompt"""
+    """Call LocalAI API with the given prompt. Returns (content, error_message)."""
     try:
         # LocalAI endpoint (assuming it's running on port 4444 on the host)
         url = "http://host.docker.internal:4444/v1/chat/completions"
@@ -323,15 +323,25 @@ def call_localai(prompt):
             "max_tokens": 500
         }
         
-        response = requests.post(url, json=data, headers=headers)
-        response.raise_for_status()
+        response = requests.post(url, json=data, headers=headers, timeout=90)
+        response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
         
         result = response.json()
-        return result['choices'][0]['message']['content']
+        content = result.get('choices', [{}])[0].get('message', {}).get('content')
+
+        if not content:
+            print(f"LocalAI response missing content: {result}")
+            return None, "LLM response was empty or malformed"
+            
+        return content, None
         
+    except requests.exceptions.RequestException as e:
+        print(f"Error connecting to LocalAI service: {e}")
+        return None, "Failed to connect to the LLM service. Is it running?"
     except Exception as e:
-        print(f"Error calling LocalAI: {e}")
-        return "Error processing your request"
+        # Catch-all for other unexpected errors (e.g., JSON decoding)
+        print(f"An unexpected error occurred in call_localai: {e}")
+        return None, "An unexpected server error occurred while calling the LLM."
 
 # The if __name__ == '__main__' block is kept for convenience, allowing you to
 # run the server directly in a local environment (outside of Docker) for debugging.
