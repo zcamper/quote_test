@@ -8,9 +8,6 @@ from datetime import datetime
 SQLITE_DB_NAME = "test_data_trim.db"
 app = Flask(__name__)
 
-OLLAMA_URL = "http://host.docker.internal:11434"
-MODEL_NAME = "mistral"
-
 # Enable CORS to allow the HTML file (served from file:// or localhost) to make requests
 CORS(app)
 
@@ -270,7 +267,7 @@ def health_check():
 @app.route('/summarize', methods=['POST'])
 def summarize_writeup():
     """
-    Receives a service write-up and uses an LLM to generate
+    Receives a service write-up and uses LocalAI to generate
     a customer-facing quote description.
     """
     data = request.get_json()
@@ -279,7 +276,6 @@ def summarize_writeup():
 
     service_writeup = data['writeup']
 
-    # This prompt is a starting point. You can refine it for better results.
     prompt = f"""You are an expert technical writer for an HVAC company.
 A technician provided this service call write-up. Rewrite it into a clear, professional, customer-facing description for a quote.
 Focus on the work performed and its value. Omit internal jargon. The output must be a single paragraph.
@@ -290,40 +286,9 @@ Technician's Write-up:
 Customer-Facing Quote Description:"""
 
     try:
-        payload = {
-            "model": MODEL_NAME,
-            "prompt": prompt,
-            "stream": False  # Get the full response at once
-        }
-        # This request goes to the internal ollama service.
-        response = requests.post(OLLAMA_API_URL, json=payload, timeout=90)
-
-        # Check for non-successful responses first.
-        if not response.ok:
-            error_message = "Unknown error from LLM service"
-            # Try to parse a JSON error from Ollama, but don't fail if it's not JSON
-            try:
-                error_data = response.json()
-                error_message = error_data.get("error", error_message)
-            except ValueError:
-                # If the response isn't JSON, use the raw text.
-                error_message = response.text or f"Service returned status {response.status_code}"
-
-            print(f"Ollama service returned an error: {response.status_code} - {error_message}")
-            # Pass a clear error to the frontend.
-            return jsonify({"error": f"LLM Error: {error_message}"}), response.status_code
-
-        # If we get here, the response was OK, so it should be valid JSON.
-        response_data = response.json()
-        summary = response_data.get('response', '').strip()
-
+        summary = call_localai(prompt)
         return jsonify({"summary": summary})
-    except requests.exceptions.RequestException as e:
-        # This catches network errors, timeouts, etc.
-        print(f"Error connecting to Ollama service: {e}")
-        return jsonify({"error": "Failed to connect to the LLM service. Is it running?"}), 503
     except Exception as e:
-        # Catch-all for other unexpected errors (e.g., JSON decoding during success)
         print(f"An unexpected error occurred in summarize_writeup: {e}")
         return jsonify({"error": "An unexpected server error occurred while generating the summary."}), 500
 
