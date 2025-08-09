@@ -16,10 +16,9 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-    # No longer depends on ollama service
-    # depends_on:
-    #   ollama:
-    #     condition: service_healthy
+    depends_on:
+      ollama:
+        condition: service_healthy
 
   web:
     image: nginx:1.21-alpine
@@ -34,6 +33,26 @@ services:
       api:
         condition: service_healthy
 
-# No ollama service needed anymore if model is baked into the image
-# volumes:
-#   ollama_data:
+  ollama:
+    # Build a custom image with the model pre-loaded
+    build:
+      context: .
+      dockerfile: Dockerfile.ollama
+    container_name: quote_llm
+    restart: unless-stopped
+   # ports:
+  #    - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    healthcheck:
+      # This more reliable check uses curl to directly query the Ollama API.
+      # It passes only when the server is running AND the mistral model is listed in the /api/tags endpoint.
+      test: ["CMD", "sh", "-c", "curl -s -f http://127.0.0.1:11434/api/tags | grep -q 'mistral:latest'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      # Increased start_period to give ample time for the model to download on the first run.
+      start_period: 300s
+
+volumes:
+  ollama_data:

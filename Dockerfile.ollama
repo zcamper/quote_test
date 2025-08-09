@@ -1,0 +1,8 @@
+# Use the official Ollama image as a base
+FROM ollama/ollama:latest
+
+# Copy your pre-trained model into the container if needed
+COPY ./mistral-q4_0.gguf /root/.ollama/models/blobs/
+RUN ollama create mistral -f ./Modelfile
+
+CMD ["serve"]
