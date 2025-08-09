@@ -307,8 +307,8 @@ import os
 def call_localai(prompt):
     """Call LocalAI API with the given prompt"""
     try:
-        # LocalAI endpoint (assuming it's running on port 4444)
-        url = "http://localai:4444/v1/chat/completions"
+        # LocalAI endpoint (assuming it's running on port 4444 on the host)
+        url = "http://host.docker.internal:4444/v1/chat/completions"
         
         headers = {
             "Content-Type": "application/json"

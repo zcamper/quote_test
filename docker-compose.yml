@@ -18,9 +18,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-    depends_on:
-      localai:
-        condition: service_healthy
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   web:
     image: nginx:1.21-alpine
@@ -34,22 +33,3 @@ services:
     depends_on:
       api:
         condition: service_healthy
-
-  localai:
-    image: localai/localai:latest
-    container_name: quote_llm
-    restart: unless-stopped
-    ports:
-      - "4444:4444"
-    volumes:
-      - localai_data:/root/.local-ai
-    command: ["--api-port", "4444"]
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4444/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-
-volumes:
-  localai_data: {}
