@@ -309,7 +309,6 @@
 </div>
 </div>
 </div>
-</div>
 <div class="border-t border-[var(--border-color)] px-6 py-5 bg-gray-50">
 <div class="max-w-xl ml-auto">
 <h3 class="text-lg font-semibold leading-6 text-[var(--text-primary)] mb-4">Quote Summary</h3>
@@ -1117,11 +1116,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 const data = await response.json();
-                const suggestedDescription = data.summary;
+                const suggestedDescription = data.customer_description;
+                const techCount = data.tech_count;
+                const techHours = data.tech_hours;
 
                 const useSuggestion = confirm(`Suggested Description:\n\n${suggestedDescription}\n\nDo you want to use this?`);
                 if (useSuggestion) {
-                    quoteDescEl.value = suggestedDescription;
+                    quoteDescEl.value = suggestedDescription || '';
+                    if (typeof techCount !== 'undefined') document.getElementById('tech-count').value = techCount;
+                    if (typeof techHours !== 'undefined') document.getElementById('tech-hours').value = techHours;
+                    updateTotals();
                 }
             } catch (error) {
                 console.error('Error generating summary:', error);
