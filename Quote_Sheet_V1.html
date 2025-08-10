@@ -258,11 +258,36 @@
 </div>
 </div>
 <div class="bg-white shadow-sm rounded-lg">
-<div class="p-6">
-<h3 class="text-lg font-semibold leading-6 text-[var(--text-primary)]">Customer</h3>
-<p class="mt-1 text-base font-semibold text-[var(--text-primary)]" id="customer-name">Sophia Carter</p>
-<p class="text-sm text-[var(--text-secondary)]" id="customer-company">Acme Corporation</p>
+    <div class="p-6">
+        <h3 class="text-lg font-semibold leading-6 text-[var(--text-primary)] mb-4">Unit Location</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+            <div class="break-words">
+                <p class="text-base font-semibold text-[var(--text-primary)]" id="customer-name">Sophia Carter</p>
+                <p class="text-sm text-[var(--text-secondary)]" id="customer-company">Acme Corporation</p>
+            </div>
+            <div class="break-words">
+                <p class="text-sm text-[var(--text-secondary)]">123 Industrial Way</p>
+                <p class="text-sm text-[var(--text-secondary)]">Springfield, IL 62704</p>
+                <p class="text-sm text-[var(--text-secondary)]">scarter@acmecorp.com</p>
+            </div>
+        </div>
+    </div>
 </div>
+<div class="bg-white shadow-sm rounded-lg">
+    <div class="p-6">
+        <h3 class="grid grid-cols-2 md:grid-cols-2 gap-x-6 text-lg font-semibold leading-6 text-[var(--text-primary)] mb-4">Bill to Customer</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+            <div class="break-words">
+                <p class="text-base font-semibold text-[var(--text-primary)]" id="customer-name">Sophia Carter</p>
+                <p class="text-sm text-[var(--text-secondary)]" id="customer-company">Acme Corporation</p>
+            </div>
+            <div class="break-words">
+                <p class="text-sm text-[var(--text-secondary)]">123 Industrial Way</p>
+                <p class="text-sm text-[var(--text-secondary)]">Springfield, IL 62704</p>
+                <p class="text-sm text-[var(--text-secondary)]">scarter@acmecorp.com</p>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="bg-white shadow-sm rounded-lg">
 <div class="p-6">
@@ -298,69 +323,6 @@
 </div>
 </div>
 </div>
-<div class="bg-white shadow-sm rounded-lg">
-<div class="border-b border-gray-200">
-<nav aria-label="Tabs" class="mb-px flex space-x-6 px-6">
-<button class="tab-active py-4 px-1 text-sm font-medium" id="tab-common-parts">Common Parts</button>
-<button class="tab-inactive py-4 px-1 text-sm font-medium" id="tab-service-articles">Service Articles</button>
-</nav>
-</div>
-<div class="p-6" id="panel-common-parts">
-<h3 class="text-base font-semibold leading-6 text-[var(--text-primary)]">Parts Used on Similar Units</h3>
-<ul class="mt-4 space-y-3 divide-y divide-gray-100">
-<li class="pt-3">
-<div class="flex items-center justify-between">
-<div>
-<p class="text-sm font-medium text-[var(--text-primary)]">OIL-FLTR-1A</p>
-<p class="text-sm text-[var(--text-secondary)]">Oil Filter</p>
-</div>
-<button class="text-[var(--primary-color)] hover:text-[var(--primary-hover-color)] text-sm font-medium inline-flex items-center add-to-quote-btn"><span class="material-icons-outlined text-base mr-1">add</span>Add to Quote</button>
-</div>
-</li>
-<li class="pt-3">
-<div class="flex items-center justify-between">
-<div>
-<p class="text-sm font-medium text-[var(--text-primary)]">FUEL-FLTR-2B</p>
-<p class="text-sm text-[var(--text-secondary)]">Fuel Filter</p>
-</div>
-<button class="text-[var(--primary-color)] hover:text-[var(--primary-hover-color)] text-sm font-medium inline-flex items-center add-to-quote-btn"><span class="material-icons-outlined text-base mr-1">add</span>Add to Quote</button>
-</div>
-</li>
-<li class="pt-3">
-<div class="flex items-center justify-between">
-<div>
-<p class="text-sm font-medium text-[var(--text-primary)]">BELT-ALT-03C</p>
-<p class="text-sm text-[var(--text-secondary)]">Alternator Belt</p>
-</div>
-<button class="text-[var(--primary-color)] hover:text-[var(--primary-hover-color)] text-sm font-medium inline-flex items-center add-to-quote-btn"><span class="material-icons-outlined text-base mr-1">add</span>Add to Quote</button>
-</div>
-</li>
-</ul>
-</div>
-<div class="p-6 hidden" id="panel-service-articles">
-<h3 class="text-base font-semibold leading-6 text-[var(--text-primary)]">Related Service Articles</h3>
-<ul class="mt-4 space-y-3">
-<li>
-<a class="group flex items-start space-x-3 hover:bg-gray-50 p-2 rounded-md" href="#">
-<span class="material-icons-outlined text-[var(--primary-color)] mt-0.5">article</span>
-<div>
-<p class="text-sm font-medium text-gray-800 group-hover:text-[var(--primary-color)]">Troubleshooting Compressor Failure on PowerPro Series</p>
-<p class="text-sm text-[var(--text-secondary)]">Published: 03/15/2023</p>
-</div>
-</a>
-</li>
-<li>
-<a class="group flex items-start space-x-3 hover:bg-gray-50 p-2 rounded-md" href="#">
-<span class="material-icons-outlined text-[var(--primary-color)] mt-0.5">article</span>
-<div>
-<p class="text-sm font-medium text-gray-800 group-hover:text-[var(--primary-color)]">Standard Service Procedure for 150KW Generators</p>
-<p class="text-sm text-[var(--text-secondary)]">Published: 01/20/2023</p>
-</div>
-</a>
-</li>
-</ul>
-</div>
-</div>
 </div>
 
 <div class="lg:col-span-3 space-y-6">
@@ -386,11 +348,11 @@
 <div class="mt-1 grid grid-cols-2 gap-2">
 <div>
 <label class="text-xs text-gray-500" for="tech-count"># Techs</label>
-<input class="labor-input mt-1 block w-200px rounded-md border-gray-300 shadow-sm sm:text-sm" id="tech-count" type="number" value="2">
+<input class="labor-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" id="tech-count" type="number" value="2">
 </div>
 <div>
 <label class="text-xs text-gray-500" for="tech-hours">Hours</label>
-<input class="labor-input mt-1 block w-200px rounded-md border-gray-300 shadow-sm sm:text-sm" id="tech-hours" type="number" value="8">
+<input class="labor-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" id="tech-hours" type="number" value="8">
 </div>
 </div>
 </div>
@@ -398,7 +360,7 @@
 <h3 class="text-sm font-medium text-[var(--text-secondary)]">Travel Labor ($<span id="travel-rate-display">75</span>/hr)</h3>
 <div class="mt-1">
 <label class="text-xs text-gray-500" for="travel-hours">Hours</label>
-<input class="labor-input mt-1 block w-300px rounded-md border-gray-300 shadow-sm sm:text-sm" id="travel-hours" type="number" value="4">
+<input class="labor-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" id="travel-hours" type="number" value="4">
 </div>
 </div>
 </div>
@@ -430,64 +392,89 @@
 </div>
 <div class="flow-root">
 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-<table class="min-w-full divide-y divide-[var(--border-color)]" id="parts-table">
+<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-20">
+<table class="min-w-full divide-y divide-[var(--border-color)] table-fixed" id="parts-table">
 <thead>
-<tr>
-<th class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-[var(--text-primary)] sm:pl-0" scope="col">Part #</th>
-<th class="px-3 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Description</th>
-<th class="px-3 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">Vendor</th>
-<th class="px-3 py-3.5 text-left text-sm font-semibold text-[var(--text-primary)]" scope="col">On Hand</th>
-<th class="px-3 py-3.5 text-right text-sm font-semibold text-[var(--text-primary)]" scope="col">Qty</th>
-<th class="px-3 py-3.5 text-right text-sm font-semibold text-[var(--text-primary)]" scope="col">Unit Cost</th>
-<th class="px-3 py-3.5 text-right text-sm font-semibold text-[var(--text-primary)]" scope="col">Total Cost</th>
-<th class="relative py-3.5 pl-3 pr-4 sm:pr-0"><span class="sr-only">Delete</span></th>
-</tr>
+    <tr class="text-left text-sm font-semibold text-[var(--text-primary)]">
+        <th scope="col" class="py-3.5 pl-4 pr-6 sm:pl-0 w-2/6">KPS Number / Description</th>
+        <th scope="col" class="px-6 py-3.5 w-1/6">Vendor Part # / Vendor</th>
+        <th scope="col" class="px-6 py-3.5 text-right w-1/6">List / Unit Cost</th>
+        <th scope="col" class="px-6 py-3.5 text-right w-1/6">Qty</th>
+        <th scope="col" class="px-6 py-3.5 text-right w-1/6">Total</th>
+        <th scope="col" class="relative py-3.5 pl-6 pr-4 sm:pr-0"><span class="sr-only">Delete</span></th>
+    </tr>
 </thead>
 <tbody class="divide-y divide-[var(--border-color)] bg-white">
-<tr>
-<td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-[var(--text-primary)] sm:pl-0">CM-203A</td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Compressor Motor"></td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="Global Parts"></td>
-<td class="whitespace-nowrap px-3 py-2 text-sm text-green-600 font-medium">5</td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1"></td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="450.00"></td>
-<td class="row-total whitespace-nowrap px-3 py-2 text-sm text-right font-medium text-[var(--text-primary)]">$450.00</td>
-<td class="whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-<button class="text-red-600 hover:text-red-900 delete-part-btn" type="button"><span class="material-icons-outlined text-base">delete</span></button>
-</td>
-</tr>
-<tr>
-<td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-[var(--text-primary)] sm:pl-0">FLT-55B</td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Filter Drier"></td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="ACME Filters"></td>
-<td class="whitespace-nowrap px-3 py-2 text-sm text-green-600 font-medium">12</td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1"></td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="35.00"></td>
-<td class="row-total whitespace-nowrap px-3 py-2 text-sm text-right font-medium text-[var(--text-primary)]">$35.00</td>
-<td class="whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-<button class="text-red-600 hover:text-red-900 delete-part-btn" type="button"><span class="material-icons-outlined text-base">delete</span></button>
-</td>
-</tr>
-<tr>
-<td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-[var(--text-primary)] sm:pl-0">REF-R410A</td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Refrigerant (10 lbs)"></td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="Global Parts"></td>
-<td class="whitespace-nowrap px-3 py-2 text-sm text-red-600 font-medium">0</td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1"></td>
-<td class="whitespace-nowrap px-3 py-2 text-sm"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="120.00"></td>
-<td class="row-total whitespace-nowrap px-3 py-2 text-sm text-right font-medium text-[var(--text-primary)]">$120.00</td>
-<td class="whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-<button class="text-red-600 hover:text-red-900 delete-part-btn" type="button"><span class="material-icons-outlined text-base">delete</span></button>
-</td>
-</tr>
+    <tr>
+        <td class="py-2 pl-4 pr-6 text-sm sm:pl-0 break-words align-top">
+            <div class="font-medium text-[var(--text-primary)]">CM-203A</div>
+            <div class="mt-1"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Compressor Motor"></div>
+        </td>
+        <td class="px-6 py-2 text-sm break-words align-top">
+            <div><input class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value=""></div>
+            <div class="mt-1"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="Global Parts"></div>
+        </td>
+        <td class="px-6 py-2 text-sm text-right align-top">
+            <div><input class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="500.00"></div>
+            <div class="mt-1"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="450.00"></div>
+        </td>
+        <td class="px-6 py-2 text-sm text-right align-top">
+            <input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1">
+        </td>
+        <td class="row-total px-6 py-2 text-sm font-medium text-right text-[var(--text-primary)] align-top">$450.00</td>
+        <td class="py-2 pl-6 pr-4 text-right text-sm font-medium sm:pr-0 align-top">
+            <button class="text-red-600 hover:text-red-900 delete-part-btn" type="button"><span class="material-icons-outlined text-base">delete</span></button>
+        </td>
+    </tr>
+    <tr>
+        <td class="py-2 pl-4 pr-6 text-sm sm:pl-0 break-words align-top">
+            <div class="font-medium text-[var(--text-primary)]">FLT-55B</div>
+            <div class="mt-1"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Filter Drier"></div>
+        </td>
+        <td class="px-6 py-2 text-sm break-words align-top">
+            <div><input class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value=""></div>
+            <div class="mt-1"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="ACME Filters"></div>
+        </td>
+        <td class="px-6 py-2 text-sm text-right align-top">
+            <div><input class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="45.00"></div>
+            <div class="mt-1"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="35.00"></div>
+        </td>
+        <td class="px-6 py-2 text-sm text-right align-top">
+            <input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1">
+        </td>
+        <td class="row-total px-6 py-2 text-sm font-medium text-right text-[var(--text-primary)] align-top">$35.00</td>
+        <td class="py-2 pl-6 pr-4 text-right text-sm font-medium sm:pr-0 align-top">
+            <button class="text-red-600 hover:text-red-900 delete-part-btn" type="button"><span class="material-icons-outlined text-base">delete</span></button>
+        </td>
+    </tr>
+    <tr>
+        <td class="py-2 pl-4 pr-6 text-sm sm:pl-0 break-words align-top">
+            <div class="font-medium text-[var(--text-primary)]">REF-R410A</div>
+            <div class="mt-1"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Refrigerant (10 lbs)"></div>
+        </td>
+        <td class="px-6 py-2 text-sm break-words align-top">
+            <div><input class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value=""></div>
+            <div class="mt-1"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="Global Parts"></div>
+        </td>
+        <td class="px-6 py-2 text-sm text-right align-top">
+            <div><input class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="150.00"></div>
+            <div class="mt-1"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="120.00"></div>
+        </td>
+        <td class="px-6 py-2 text-sm text-right align-top">
+            <input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1">
+        </td>
+        <td class="row-total px-6 py-2 text-sm font-medium text-right text-[var(--text-primary)] align-top">$120.00</td>
+        <td class="py-2 pl-6 pr-4 text-right text-sm font-medium sm:pr-0 align-top">
+            <button class="text-red-600 hover:text-red-900 delete-part-btn" type="button"><span class="material-icons-outlined text-base">delete</span></button>
+        </td>
+    </tr>
 </tbody>
 <tfoot>
-<tr>
-<th class="hidden pl-4 pr-3 pt-4 text-right text-sm font-semibold text-[var(--text-primary)] sm:table-cell sm:pl-0" colspan="7" scope="row">Parts Total</th>
-<th class="pl-4 pr-3 pt-4 text-left text-sm font-semibold text-[var(--text-primary)] sm:hidden" scope="row">Parts Total</th>
-<td class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-[var(--text-primary)] sm:pr-0">$605.00</td>
-</tr>
+    <tr>
+        <th scope="row" colspan="4" class="hidden pl-4 pr-3 pt-4 text-right text-sm font-semibold text-[var(--text-primary)] sm:table-cell sm:pl-0">Parts Total</th>
+        <th scope="row" class="pl-4 pr-3 pt-4 text-left text-sm font-semibold text-[var(--text-primary)] sm:hidden">Parts Total</th>
+        <td class="pl-3 pr-4 pt-4 text-right text-sm font-semibold text-[var(--text-primary)] sm:pr-0">$605.00</td>
+    </tr>
 </tfoot>
 </table>
 </div>
@@ -526,7 +513,7 @@
 </div>
 </div>
 
-<div class="lg:col-span-1">
+<div class="lg:col-span-1 space-y-6">
 <div class="bg-white shadow-sm rounded-lg">
 <div class="px-6 py-5">
 <div class="max-w-xl">
@@ -558,6 +545,27 @@
 </div>
 </div>
 </div>
+
+<div class="bg-white shadow-sm rounded-lg">
+    <div class="p-6">
+        <h3 class="text-lg font-semibold leading-6 text-[var(--text-primary)]">On Hand Inventory</h3>
+        <ul class="mt-4 space-y-2 divide-y divide-gray-100">
+            <li class="flex justify-between items-center pt-2">
+                <p class="text-sm font-medium text-[var(--text-primary)]">CM-203A</p>
+                <p class="text-sm font-medium text-green-600">5</p>
+            </li>
+            <li class="flex justify-between items-center pt-2">
+                <p class="text-sm font-medium text-[var(--text-primary)]">FLT-55B</p>
+                <p class="text-sm font-medium text-green-600">12</p>
+            </li>
+            <li class="flex justify-between items-center pt-2">
+                <p class="text-sm font-medium text-[var(--text-primary)]">REF-R410A</p>
+                <p class="text-sm font-medium text-red-600">0</p>
+            </li>
+        </ul>
+    </div>
+</div>
+
 </div>
 
 </div>
