@@ -188,6 +188,10 @@
 <input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox"/>
 <span class="text-sm text-text-primary">Show Labor</span>
 </label>
+<label class="flex items-center gap-3">
+<input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="exclude-surcharge"/>
+<span class="text-sm text-text-primary">Exclude Fuel & Material Surcharge</span>
+</label>
 </div>
 </div>
 </div>
@@ -226,6 +230,123 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        const quoteDataString = localStorage.getItem('quoteDataForExport');
+        let quoteData;
+        if (quoteDataString) {
+            quoteData = JSON.parse(quoteDataString);
+            populateQuoteData(quoteData);
+        }
+
+        function populateQuoteData(data) {
+            // Populate Customer Information
+            const customerInfoTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Customer Information');
+            if(customerInfoTitle){
+                const customerInfoDiv = customerInfoTitle.nextElementSibling;
+                customerInfoDiv.innerHTML = `
+                    <p><span class="font-medium text-text-primary">Name:</span> ${data.customer.name}</p>
+                    <p><span class="font-medium text-text-primary">Company:</span> ${data.customer.company}</p>
+                `;
+            }
+
+            // Populate Unit Information
+            const unitInfoTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Unit Information');
+            if(unitInfoTitle){
+                const unitInfoDiv = unitInfoTitle.nextElementSibling;
+                unitInfoDiv.innerHTML = `
+                    <p><span class="font-medium text-text-primary">Generator Model:</span> ${data.unitInfo['generator.model']}</p>
+                    <p><span class="font-medium text-text-primary">Generator Serial:</span> ${data.unitInfo['generator.serial']}</p>
+                    <p><span class="font-medium text-text-primary">ATS Model:</span> ${data.unitInfo['ats.model']}</p>
+                    <p><span class="font-medium text-text-primary">ATS Serial:</span> ${data.unitInfo['ats.serial']}</p>
+                    <p><span class="font-medium text-text-primary">Engine Model:</span> ${data.unitInfo['engine.model']}</p>
+                    <p><span class="font-medium text-text-primary">Engine Serial:</span> ${data.unitInfo['engine.serial']}</p>
+                `;
+            }
+
+            // Populate Description of Work
+            const descTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Description of Work');
+            if(descTitle){
+                descTitle.nextElementSibling.textContent = data.description;
+            }
+
+            renderSingleTotal();
+
+            // Populate Summary
+            const summaryDiv = document.querySelector('.text-right');
+            if(summaryDiv && data.summary){
+                summaryDiv.innerHTML = `
+                    <p class="text-sm font-medium text-text-secondary">Subtotal: <span class="ml-2 font-semibold text-text-primary">${data.summary.subTotal}</span></p>
+                    <p class="text-sm font-medium text-text-secondary">Tax (8%): <span class="ml-2 font-semibold text-text-primary">${data.summary.sethFee}</span></p>
+                    <p class="mt-2 text-lg font-bold text-text-primary">Total: <span class="ml-2 text-[var(--primary)]">${data.summary.grandTotal}</span></p>
+                `;
+            }
+        }
+
+        function renderSingleTotal() {
+            const tableBody = document.querySelector('#quote-table tbody');
+            tableBody.innerHTML = '';
+            if(quoteData.parts){
+                quoteData.parts.forEach(part => {
+                    const row = tableBody.insertRow();
+                    const total = part.qty * part.unitCost;
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">${part.part}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">${part.desc}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${part.qty}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${part.unitCost}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${!isNaN(total) ? total.toFixed(2) : '0.00'}</td>
+                    `;
+                });
+            }
+        }
+
+        function renderCategoryBreakdown() {
+            const tableBody = document.querySelector('#quote-table tbody');
+            tableBody.innerHTML = '';
+
+            const categories = [
+                { name: 'Parts Total', value: quoteData.summary.partsTotal },
+                { name: 'Technician Labor', value: quoteData.summary.techLabor },
+                { name: 'Travel Labor', value: quoteData.summary.travelLabor },
+                { name: 'Subcontractor Total', value: quoteData.summary.subTotal }
+            ];
+
+            if (!document.getElementById('exclude-surcharge').checked) {
+                categories.push({ name: 'S.E.TH Fee (1.5%)', value: quoteData.summary.sethFee });
+                categories.push({ name: 'Fuel & Material Surcharge', value: quoteData.summary.surcharge });
+            }
+
+            categories.forEach(category => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">${category.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary"></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary"></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary"></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${category.value}</td>
+                `;
+            });
+        }
+
+        // --- EVENT LISTENERS ---
+
+        document.querySelectorAll('input[name="display_option"]').forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                const selectedLabel = event.target.nextElementSibling.textContent;
+                if (selectedLabel === 'Show Single Total') {
+                    renderSingleTotal();
+                } else if (selectedLabel === 'Show Breakdown by Category'){
+                    renderCategoryBreakdown();
+                }
+            });
+        });
+
+        document.getElementById('exclude-surcharge').addEventListener('change', () => {
+            const breakdownRadio = document.querySelector('input[value="Show Breakdown by Category"]');
+            if(breakdownRadio.checked){
+                renderCategoryBreakdown();
+            }
+        });
+
         // --- EXPORT FUNCTIONS ---
 
         function exportToPdf() {
@@ -290,8 +411,6 @@
                 document.body.removeChild(link);
             }
         }
-
-        // --- EVENT LISTENERS ---
 
         document.getElementById('export-btn').addEventListener('click', () => {
             if (document.getElementById('check-pdf').checked) {

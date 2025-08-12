@@ -99,17 +99,34 @@ def get_service_call_data(service_call_id):
             # Fetch all parts for all relevant quotes in one go
             parts_sql = f"""
                 SELECT quote_id, part_number as part, description as "desc", vendor, 
-                       on_hand as onHand, quantity as qty, unit_cost as unitCost 
+                       quantity as qty, unit_cost as unitCost 
                 FROM quote_line_item WHERE quote_id IN ({placeholders})
             """
             parts_cursor = conn.execute(parts_sql, quote_ids)
+            all_part_numbers = set()
             for part_row in parts_cursor:
                 qid = part_row['quote_id']
                 if qid not in parts_by_quote_id:
                     parts_by_quote_id[qid] = []
                 part_data = dict(part_row)
-                del part_data['quote_id'] # Don't need to send this to the frontend
+                del part_data['quote_id']
                 parts_by_quote_id[qid].append(part_data)
+                all_part_numbers.add(part_data['part'])
+
+            # Fetch on-hand quantities for all unique parts
+            on_hand_quantities = {}
+            if all_part_numbers:
+                placeholders_parts = ','.join('?' for _ in all_part_numbers)
+                on_hand_sql = f"SELECT ITEMNMBR, QTYONHND FROM iv00102_item_quantity_all WHERE ITEMNMBR IN ({placeholders_parts})"
+                on_hand_cursor = conn.execute(on_hand_sql, list(all_part_numbers))
+                for row in on_hand_cursor:
+                    on_hand_quantities[row['ITEMNMBR']] = row['QTYONHND']
+
+            # Add on-hand quantity to each part
+            for qid in parts_by_quote_id:
+                for part in parts_by_quote_id[qid]:
+                    part['onHand'] = on_hand_quantities.get(part['part'], 'N/A')
+
 
             # Fetch all subcontractors for all relevant quotes in one go
             subs_sql = f"SELECT quote_id, contact_name, contact_details, cost FROM subcontractor WHERE quote_id IN ({placeholders})"
@@ -143,7 +160,7 @@ def get_service_call_data(service_call_id):
         if details:
             # --- 5a. Data exists in ERP, build from that ---
             notes_cursor = conn.execute(
-                "SELECT Record_Notes FROM sv000805_service_notes WHERE TRIM(Service_Call_ID) = ?",
+                "SELECT Record_Notes FROM sv000805_service_notes_description WHERE TRIM(Service_Call_ID) = ?",
                 (service_call_id.strip(),)
             )
             notes = notes_cursor.fetchall()
@@ -279,7 +296,7 @@ def summarize_writeup():
 
     # --- Enhanced Prompt ---
     prompt = f"""You are an expert technical writer for a generator repair company.
-    A technician provided this service call write-up. Your task is to:
+    A technician provided this service call write-up that covers what is needed for the future repair of the generator. Your task is to:
     1. Rewrite the entire write-up into a clear, professional, customer-facing description for a quote.
        Focus on the work performed and its value. Omit internal jargon. The output must be a single paragraph.
     2. Extract the following information from the write-up if present:

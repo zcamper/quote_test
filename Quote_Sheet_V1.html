@@ -973,6 +973,26 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('#parts-table .qty-input, #parts-table .unit-cost-input').forEach(input => input.addEventListener('input', updateTotals));
 
         updateTotals(); // Recalculate everything with new rates
+
+        // Populate On Hand Inventory
+        const onHandInventoryTitle = Array.from(document.querySelectorAll('h3')).find(h3 => h3.textContent === 'On Hand Inventory');
+        if (onHandInventoryTitle) {
+            const onHandInventoryList = onHandInventoryTitle.nextElementSibling;
+            onHandInventoryList.innerHTML = '';
+            if (parts && parts.length > 0) {
+                parts.forEach(part => {
+                    const onHand = part.onHand || 'N/A';
+                    const onHandClass = isNaN(parseInt(onHand)) || parseInt(onHand) > 0 ? 'text-green-600' : 'text-red-600';
+                    const listItem = document.createElement('li');
+                    listItem.className = 'flex justify-between items-center pt-2';
+                    listItem.innerHTML = `
+                        <p class="text-sm font-medium text-[var(--text-primary)]">${part.part}</p>
+                        <p class="text-sm font-medium ${onHandClass}">${onHand}</p>
+                    `;
+                    onHandInventoryList.appendChild(listItem);
+                });
+            }
+        }
     }
 
     async function handleServiceCallImport() {
@@ -1121,7 +1141,72 @@ document.addEventListener('DOMContentLoaded', function() {
     setupTabs('tab-common-parts', 'tab-service-articles', 'panel-common-parts', 'panel-service-articles');
 
     // Export buttons
-    document.getElementById('menu-item-0')?.addEventListener('click', (e) => { e.preventDefault(); exportToPdf(); });
+    function exportWithData(view) {
+        const unitLocationDiv = Array.from(document.querySelectorAll('h3')).find(h3 => h3.textContent === 'Unit Location').closest('.bg-white');
+        const unitLocationName = unitLocationDiv.querySelector('#customer-name').textContent;
+        const unitLocationCompany = unitLocationDiv.querySelector('#customer-company').textContent;
+
+        const billToDiv = Array.from(document.querySelectorAll('h3')).find(h3 => h3.textContent === 'Bill to Customer').closest('.bg-white');
+        const billToName = billToDiv.querySelector('#customer-name').textContent;
+        const billToCompany = billToDiv.querySelector('#customer-company').textContent;
+
+        const quoteData = {
+            customer: {
+                name: unitLocationName,
+                company: unitLocationCompany
+            },
+            billTo: {
+                name: billToName,
+                company: billToCompany
+            },
+            unitInfo: {
+                'generator.model': document.querySelector('[data-key="generator.model"]').textContent,
+                'generator.serial': document.querySelector('[data-key="generator.serial"]').textContent,
+                'generator.spec': document.querySelector('[data-key="generator.spec"]').textContent,
+                'generator.kw': document.querySelector('[data-key="generator.kw"]').textContent,
+                'generator.voltage': document.querySelector('[data-key="generator.voltage"]').textContent,
+                'generator.warranty': document.querySelector('[data-key="generator.warranty"]').textContent,
+                'ats.model': document.querySelector('[data-key="ats.model"]').textContent,
+                'ats.serial': document.querySelector('[data-key="ats.serial"]').textContent,
+                'engine.model': document.querySelector('[data-key="engine.model"]').textContent,
+                'engine.serial': document.querySelector('[data-key="engine.serial"]').textContent
+            },
+            description: document.getElementById('quote-description-textarea').value,
+            parts: getPartsDataForSave(),
+            labor: {
+                techCount: document.getElementById('tech-count').value,
+                techHours: document.getElementById('tech-hours').value,
+                techRate: document.getElementById('tech-labor-section').dataset.rate,
+                travelHours: document.getElementById('travel-hours').value,
+                travelRate: document.getElementById('travel-labor-section').dataset.rate
+            },
+            subcontractors: Array.from(document.querySelectorAll('#subcontractors-list > div')).map(div => {
+                return {
+                    contact_name: div.querySelector('input[id^="subcontractor-contact-"]').value,
+                    contact_details: div.querySelector('input[id^="subcontractor-details-"]').value,
+                    cost: div.querySelector('input[id^="subcontractor-cost-"]').value
+                }
+            }),
+            summary: {
+                partsTotal: document.querySelector('[data-summary="parts-total"]').textContent,
+                techLabor: document.querySelector('[data-summary="tech-labor"]').textContent,
+                travelLabor: document.querySelector('[data-summary="travel-labor"]').textContent,
+                subTotal: document.querySelector('[data-summary="sub-total"]').textContent,
+                sethFee: document.querySelector('[data-summary="seth-fee"]').textContent,
+                surcharge: document.querySelector('[data-summary="surcharge"]').textContent,
+                grandTotal: document.querySelector('[data-summary="grand-total"]').textContent
+            }
+        };
+        localStorage.setItem('quoteDataForExport', JSON.stringify(quoteData));
+        if (view) {
+            localStorage.setItem('exportView', view);
+        } else {
+            localStorage.removeItem('exportView');
+        }
+        window.open('Quote_Export_V1.html', '_blank');
+    }
+
+    document.getElementById('menu-item-0')?.addEventListener('click', (e) => { e.preventDefault(); exportWithData(); });
     document.getElementById('menu-item-1')?.addEventListener('click', (e) => { 
         e.preventDefault();
         const rows = getTableRowsForExport().map(row => row.map(cell => `"${cell}"`));
@@ -1134,6 +1219,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const quotedRows = rows.map(row => row.map(cell => `"${cell}"`));
         exportToCsv('quote-by-vendor.csv', quotedRows);
     });
+    document.getElementById('menu-item-3')?.addEventListener('click', (e) => { e.preventDefault(); exportWithData('categoryBreakdown'); });
 
     // Main action buttons
     document.getElementById('update-revision-btn')?.addEventListener('click', () => saveQuote(false));
