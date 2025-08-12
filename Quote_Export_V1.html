@@ -79,10 +79,15 @@
 <div>
 <h4 class="text-lg font-semibold text-text-primary">Customer Information</h4>
 <div class="mt-2 space-y-1 text-sm text-text-secondary">
-<p><span class="font-medium text-text-primary">Name:</span> Sarah Johnson</p>
-<p><span class="font-medium text-text-primary">Company:</span> Johnson Construction</p>
-<p><span class="font-medium text-text-primary">Email:</span> sarah.j@johnsonconstr.com</p>
-<p><span class="font-medium text-text-primary">Phone:</span> (123) 456-7890</p>
+<p><span class="font-medium text-text-primary">Name:</span></p>
+<p><span class="font-medium text-text-primary">Company:</span></p>
+</div>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-text-primary">Bill To</h4>
+<div class="mt-2 space-y-1 text-sm text-text-secondary">
+<p><span class="font-medium text-text-primary">Name:</span></p>
+<p><span class="font-medium text-text-primary">Company:</span></p>
 </div>
 </div>
 <div>
@@ -245,6 +250,16 @@
                 customerInfoDiv.innerHTML = `
                     <p><span class="font-medium text-text-primary">Name:</span> ${data.customer.name}</p>
                     <p><span class="font-medium text-text-primary">Company:</span> ${data.customer.company}</p>
+                `;
+            }
+
+            // Populate Bill To Information
+            const billToTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Bill To');
+            if(billToTitle){
+                const billToDiv = billToTitle.nextElementSibling;
+                billToDiv.innerHTML = `
+                    <p><span class="font-medium text-text-primary">Name:</span> ${data.billTo.name}</p>
+                    <p><span class="font-medium text-text-primary">Company:</span> ${data.billTo.company}</p>
                 `;
             }
 

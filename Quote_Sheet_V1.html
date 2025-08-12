@@ -1,7 +1,7 @@
 <html lang="en"><head><script type="text/javascript" src="/___vscode_livepreview_injected_script"></script><script type="text/javascript" src="/___vscode_livepreview_injected_script"></script>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Quote #QT2024-0034</title>
+    <title id="page-title">Quote Sheet</title>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -202,7 +202,7 @@
 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6">
 <div>
 <h1 class="text-3xl font-bold tracking-tight text-[var(--text-primary)]">Quote Details</h1>
-<p class="mt-1 text-sm text-[var(--text-secondary)]">Quote #QT2024-0034 - Created on July 26, 2024</p>
+<p class="mt-1 text-sm text-[var(--text-secondary)]" id="quote-header-info">Quote Details</p>
 </div>
 <div class="mt-4 lg:mt-0 flex flex-wrap gap-2">
 <button class="btn-secondary" id="clear-sheet-btn" type="button">
@@ -1010,6 +1010,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await fetchServiceCallData(serviceCallId);
             if (data && data.revisions && data.revisions.length > 0) {
                 quoteState = { serviceCallId, revisions: data.revisions, revision: null, baseData: data.baseData };
+                
+                // Update page title and header with Service Call ID
+                document.getElementById('page-title').textContent = `Quote Sheet - ${serviceCallId}`;
+                document.getElementById('quote-header-info').textContent = `Service Call ID: ${serviceCallId}`;
                 
                 const revisionSelector = document.getElementById('revision-selector');
                 revisionSelector.innerHTML = '';
