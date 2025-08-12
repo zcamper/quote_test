@@ -296,9 +296,9 @@ def summarize_writeup():
 
     # --- Enhanced Prompt ---
     prompt = f"""You are an expert technical writer for a generator repair company.
-    A technician provided this service call write-up that covers what is needed for the future repair of the generator. Your task is to:
+    A technician provided this repair write-up that covers what is needed for the future repair of the generator. Your task is to:
     1. Rewrite the entire write-up into a clear, professional, customer-facing description for a quote.
-       Focus on the work performed and its value. Omit internal jargon. The output must be a single paragraph.
+       Focus on the work to be performed once the quote is approved and its value. Omit internal jargon. The output must be a single paragraph.
     2. Extract the following information from the write-up if present:
        - Number of technicians involved (tech_count)
        - Total hours worked (tech_hours)
