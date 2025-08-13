@@ -214,9 +214,21 @@
 <button class="btn-secondary" id="save-revision-btn" type="button" disabled="">
 <span class="material-icons-outlined text-base mr-2">save_as</span> Save as New Revision
 </button>
-<button class="btn-secondary" id="preview-export-btn" type="button">
-<span class="material-icons-outlined text-base mr-2">preview</span> Preview & Export
+<div class="relative inline-block text-left">
+<div>
+<button aria-expanded="true" aria-haspopup="true" class="btn-secondary group" id="menu-button" type="button">
+<span class="material-icons-outlined text-base mr-2">download</span> Export
+                                        <span class="material-icons-outlined text-base -mr-1 ml-2 h-5 w-5 text-gray-400 group-hover:text-gray-500">expand_more</span>
 </button>
+</div>
+<div aria-labelledby="menu-button" aria-orientation="vertical" class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" tabindex="-1">
+<div class="py-1" role="none">
+<a class="text-gray-700 block px-4 py-2 text-sm" href="#" id="menu-item-0" role="menuitem" tabindex="-1">Export PDF</a>
+<a class="text-gray-700 block px-4 py-2 text-sm" href="#" id="menu-item-1" role="menuitem" tabindex="-1">Export CSV (All)</a>
+<a class="text-gray-700 block px-4 py-2 text-sm" href="#" id="menu-item-2" role="menuitem" tabindex="-1">Export CSV (By Vendor)</a>
+</div>
+</div>
+</div>
 <button class="btn-primary" id="finalize-send-btn" type="button">
 <span class="material-icons-outlined text-base mr-2">send</span> Finalize &amp; Send
                             </button>
@@ -250,13 +262,13 @@
         <h3 class="text-lg font-semibold leading-6 text-[var(--text-primary)] mb-4">Unit Location</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
             <div class="break-words">
-                <p class="text-base font-semibold text-[var(--text-primary)]" id="unit-location-name">Sophia Carter</p>
-                <p class="text-sm text-[var(--text-secondary)]" id="unit-location-company">Acme Corporation</p>
+                <p class="text-base font-semibold text-[var(--text-primary)]" id="customer-name">Sophia Carter</p>
+                <p class="text-sm text-[var(--text-secondary)]" id="customer-company">Acme Corporation</p>
             </div>
             <div class="break-words">
-                <p class="text-sm text-[var(--text-secondary)]" id="unit-location-address-1">123 Industrial Way</p>
-                <p class="text-sm text-[var(--text-secondary)]" id="unit-location-address-2">Springfield, IL 62704</p>
-                <p class="text-sm text-[var(--text-secondary)]" id="unit-location-email">scarter@acmecorp.com</p>
+                <p class="text-sm text-[var(--text-secondary)]">123 Industrial Way</p>
+                <p class="text-sm text-[var(--text-secondary)]">Springfield, IL 62704</p>
+                <p class="text-sm text-[var(--text-secondary)]">scarter@acmecorp.com</p>
             </div>
         </div>
     </div>
@@ -266,13 +278,13 @@
         <h3 class="grid grid-cols-2 md:grid-cols-2 gap-x-6 text-lg font-semibold leading-6 text-[var(--text-primary)] mb-4">Bill to Customer</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
             <div class="break-words">
-                <p class="text-base font-semibold text-[var(--text-primary)]" id="bill-to-name">Sophia Carter</p>
-                <p class="text-sm text-[var(--text-secondary)]" id="bill-to-company">Acme Corporation</p>
+                <p class="text-base font-semibold text-[var(--text-primary)]" id="customer-name">Sophia Carter</p>
+                <p class="text-sm text-[var(--text-secondary)]" id="customer-company">Acme Corporation</p>
             </div>
             <div class="break-words">
-                <p class="text-sm text-[var(--text-secondary)]" id="bill-to-address-1">123 Industrial Way</p>
-                <p class="text-sm text-[var(--text-secondary)]" id="bill-to-address-2">Springfield, IL 62704</p>
-                <p class="text-sm text-[var(--text-secondary)]" id="bill-to-email">scarter@acmecorp.com</p>
+                <p class="text-sm text-[var(--text-secondary)]">123 Industrial Way</p>
+                <p class="text-sm text-[var(--text-secondary)]">Springfield, IL 62704</p>
+                <p class="text-sm text-[var(--text-secondary)]">scarter@acmecorp.com</p>
             </div>
         </div>
     </div>
@@ -581,6 +593,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let quoteState = { serviceCallId: null, revision: null, revisions: [] };
 
     // --- HELPER FUNCTIONS ---
+
+    // Toggles the visibility of a dropdown menu
     function setupMenuButton(buttonId) {
         const menuButton = document.getElementById(buttonId);
         if (!menuButton) return;
@@ -595,6 +609,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Switches between content tabs
     function setupTabs(tab1Id, tab2Id, panel1Id, panel2Id) {
         const tab1 = document.getElementById(tab1Id);
         const tab2 = document.getElementById(tab2Id);
@@ -616,92 +631,85 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- DATA & ACTION FUNCTIONS ---
 
+    function getTableRowsForExport() {
+        return Array.from(document.querySelectorAll('#parts-table tbody tr')).map(tr => {
+            const cells = Array.from(tr.cells);
+            const getCellContent = (cellIndex, inputSelector = null) => {
+                const cell = cells[cellIndex];
+                if (!cell) return '';
+                if (inputSelector) {
+                    const input = cell.querySelector(inputSelector);
+                    if (input) return input.value;
+                }
+                return cell.textContent.trim();
+            };
+
+            return [
+                getCellContent(0, 'input'), // Part #
+                getCellContent(1, 'input'), // Description
+                getCellContent(2, 'input'), // Vendor
+                getCellContent(3), // On Hand
+                getCellContent(4, '.qty-input'), // Qty
+                `$${parseFloat(getCellContent(5, '.unit-cost-input') || '0').toFixed(2)}`, // Unit Cost
+                getCellContent(6) // Total Cost
+            ];
+        });
+    }
+
+    function exportToPdf() {
+        const doc = new jsPDF();
+        doc.text("Quote Details: #QT2024-0034", 14, 22);
+        doc.setFontSize(11);
+        doc.setTextColor(100);
+        doc.text(`Customer: ${document.querySelector('.p-6 .font-semibold').textContent}`, 14, 29);
+
+        const head = [Array.from(document.querySelectorAll('#parts-table thead th'))
+                           .map(th => th.textContent)
+                           .slice(0, -1) // Exclude delete column
+                     ];
+        const body = getTableRowsForExport();
+
+        doc.autoTable({
+            head: head,
+            body: body,
+            startY: 40,
+            headStyles: { fillColor: [12, 127, 242] }, // --primary-color
+            styles: { cellPadding: 2, fontSize: 8 },
+        });
+        doc.save('quote.pdf');
+    }
+
+    function exportToCsv(filename, rows) {
+        const table = document.getElementById('parts-table');
+        if (!table) return;
+        const headers = Array.from(table.querySelectorAll('thead th')).map(th => `"${th.textContent.trim()}"`);
+        let csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\r\n";
+        rows.forEach(rowArray => {
+            csvContent += rowArray.join(",") + "\r\n";
+        });
+        const link = document.createElement("a");
+        link.setAttribute("href", encodeURI(csvContent));
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     function getPartsDataForSave() {
         return Array.from(document.querySelectorAll('#parts-table tbody tr')).map(tr => {
             const partCell = tr.cells[0];
+            // A new row has an input for part #, existing ones have text.
             const partNumber = (partCell.querySelector('input')?.value || partCell.textContent).trim();
+
             return {
                 part: partNumber,
-                desc: tr.querySelector('.desc-input')?.value || '',
-                vendorPart: tr.querySelector('.vendor-part-input')?.value || '',
-                vendor: tr.querySelector('.vendor-input')?.value || '',
-                listPrice: tr.querySelector('.list-price-input')?.value || '0',
-                unitCost: tr.querySelector('.unit-cost-input')?.value || '0',
-                qty: tr.querySelector('.qty-input')?.value || '1',
+                desc: tr.querySelector('.desc-input')?.value,
+                vendor: tr.querySelector('.vendor-input')?.value,
+                onHand: tr.cells[3].textContent.trim(),
+                qty: tr.querySelector('.qty-input')?.value,
+                unitCost: tr.querySelector('.unit-cost-input')?.value,
             };
         });
-    }
-    
-    function openExportPreview() {
-        try {
-            const getUnitInfo = () => {
-                const info = {};
-                document.querySelectorAll('.unit-info-value').forEach(el => {
-                    const key = el.dataset.key;
-                    const value = el.textContent.trim();
-                    if (key) {
-                        const keys = key.split('.');
-                        if (keys.length === 2) {
-                            if (!info[keys[0]]) info[keys[0]] = {};
-                            info[keys[0]][keys[1]] = value;
-                        } else {
-                            info[key] = value;
-                        }
-                    }
-                });
-                return info;
-            };
-
-            const quoteData = {
-                serviceCallId: document.getElementById('service-call-id')?.value.trim() || 'N/A',
-                unitLocation: {
-                    name: document.getElementById('unit-location-name')?.textContent.trim() || '',
-                    company: document.getElementById('unit-location-company')?.textContent.trim() || '',
-                    address1: document.getElementById('unit-location-address-1')?.textContent.trim() || '',
-                    address2: document.getElementById('unit-location-address-2')?.textContent.trim() || '',
-                    email: document.getElementById('unit-location-email')?.textContent.trim() || ''
-                },
-                billTo: {
-                    name: document.getElementById('bill-to-name')?.textContent.trim() || '',
-                    company: document.getElementById('bill-to-company')?.textContent.trim() || '',
-                    address1: document.getElementById('bill-to-address-1')?.textContent.trim() || '',
-                    address2: document.getElementById('bill-to-address-2')?.textContent.trim() || '',
-                    email: document.getElementById('bill-to-email')?.textContent.trim() || ''
-                },
-                unitInfo: getUnitInfo(),
-                description: document.getElementById('quote-description-textarea')?.value.trim() || '',
-                parts: getPartsDataForSave(),
-                labor: {
-                    techCount: document.getElementById('tech-count')?.value || '0',
-                    techHours: document.getElementById('tech-hours')?.value || '0',
-                    techRate: document.getElementById('tech-labor-section')?.dataset.rate || '0',
-                    travelHours: document.getElementById('travel-hours')?.value || '0',
-                    travelRate: document.getElementById('travel-labor-section')?.dataset.rate || '0'
-                },
-                subcontractors: Array.from(document.querySelectorAll('#subcontractors-list > div')).map(div => ({
-                    contact_name: div.querySelector('input[id^="subcontractor-contact-"]')?.value || '',
-                    contact_details: div.querySelector('input[id^="subcontractor-details-"]')?.value || '',
-                    cost: div.querySelector('input[id^="subcontractor-cost-"]')?.value || '0'
-                })),
-                summary: {
-                    partsTotal: document.querySelector('[data-summary="parts-total"]')?.textContent || '$0.00',
-                    techLabor: document.querySelector('[data-summary="tech-labor"]')?.textContent || '$0.00',
-                    travelLabor: document.querySelector('[data-summary="travel-labor"]')?.textContent || '$0.00',
-                    laborTotal: document.querySelector('[data-summary="labor-total"]')?.textContent || '$0.00',
-                    subTotal: document.querySelector('[data-summary="sub-total"]')?.textContent || '$0.00',
-                    sethFee: document.querySelector('[data-summary="seth-fee"]')?.textContent || '$0.00',
-                    surcharge: document.querySelector('[data-summary="surcharge"]')?.textContent || '$0.00',
-                    grandTotal: document.querySelector('[data-summary="grand-total"]')?.textContent || '$0.00'
-                }
-            };
-
-            localStorage.setItem('quoteDataForExport', JSON.stringify(quoteData));
-            window.open('Quote_Export_V1.html', '_blank');
-
-        } catch (error) {
-            console.error("Failed to prepare data for export:", error);
-            alert("An error occurred while preparing the data for the export preview. Please check the console for details.");
-        }
     }
 
     function addSubcontractor(subData = {}) {
@@ -732,8 +740,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>`;
         list.appendChild(newSub);
+        // Add listener to the new cost input and recalculate totals.
         newSub.querySelector('input[id^="subcontractor-cost-"]').addEventListener('input', updateTotals);
-        updateTotals();
+        updateTotals(); // This is needed for both manual add and for populating
     }
 
     function addPartRow() {
@@ -742,51 +751,50 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const newRow = tableBody.insertRow();
         newRow.innerHTML = `
-            <td class="py-2 pl-4 pr-6 text-sm sm:pl-0 break-words align-top">
-                <input class="part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Part #" type="text" value="">
-                <div class="mt-1"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value=""></div>
-            </td>
-            <td class="px-6 py-2 text-sm break-words align-top">
-                <div><input class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value=""></div>
-                <div class="mt-1"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value=""></div>
-            </td>
-            <td class="px-6 py-2 text-sm text-right align-top">
-                <div><input class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="0.00"></div>
-                <div class="mt-1"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="0.00"></div>
-            </td>
-            <td class="px-6 py-2 text-sm text-right align-top">
-                <input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1">
-            </td>
-            <td class="row-total px-6 py-2 text-sm font-medium text-right text-[var(--text-primary)] align-top">$0.00</td>
-            <td class="py-2 pl-6 pr-4 text-right text-sm font-medium sm:pr-0 align-top">
-                <button class="text-red-600 hover:text-red-900 delete-part-btn" type="button"><span class="material-icons-outlined text-base">delete</span></button>
-            </td>
+            <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm sm:pl-0"><input type="text" placeholder="Part #" class="part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm"/></td>
+            <td class="whitespace-nowrap px-3 py-2 text-sm"><input type="text" placeholder="Description" class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm"/></td>
+            <td class="whitespace-nowrap px-3 py-2 text-sm"><input type="text" placeholder="Vendor" class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm"/></td>
+            <td class="whitespace-nowrap px-3 py-2 text-sm text-gray-500 font-medium">N/A</td>
+            <td class="whitespace-nowrap px-3 py-2 text-sm"><input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1"/></td>
+            <td class="whitespace-nowrap px-3 py-2 text-sm"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="0.00"/></td>
+            <td class="row-total whitespace-nowrap px-3 py-2 text-sm text-right font-medium text-[var(--text-primary)]">$0.00</td>
+            <td class="whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0"><button type="button" class="text-red-600 hover:text-red-900 delete-part-btn"><span class="material-icons-outlined text-base">delete</span></button></td>
         `;
-        newRow.querySelectorAll('input').forEach(input => input.addEventListener('input', updateTotals));
+        newRow.querySelectorAll('.qty-input, .unit-cost-input').forEach(input => input.addEventListener('input', updateTotals));
         newRow.querySelector('input').focus();
     }
 
     // --- DYNAMIC CALCULATION & UI UPDATES ---
+
     function formatCurrency(value) {
-        return `${Number(value).toFixed(2)}`;
+        return `$${Number(value).toFixed(2)}`;
+    }
+
+    function parseCurrency(value) {
+        return parseFloat(String(value).replace('$', '')) || 0;
     }
 
     function updateTotals() {
+        // 1. Calculate Parts Total
         let partsTotal = 0;
         document.querySelectorAll('#parts-table tbody tr').forEach(row => {
             const qty = parseFloat(row.querySelector('.qty-input')?.value) || 0;
             const unitCost = parseFloat(row.querySelector('.unit-cost-input')?.value) || 0;
             const rowTotal = qty * unitCost;
+            
             const totalCell = row.querySelector('.row-total');
             if (totalCell) totalCell.textContent = formatCurrency(rowTotal);
+            
             partsTotal += rowTotal;
         });
 
+        // 2. Calculate Subcontractor Total
         let subcontractorTotal = 0;
         document.querySelectorAll('#subcontractors-list input[id^="subcontractor-cost-"]').forEach(input => {
             subcontractorTotal += parseFloat(input.value) || 0;
         });
 
+        // 3. Calculate Labor Costs
         const techCount = parseFloat(document.getElementById('tech-count')?.value) || 0;
         const techHours = parseFloat(document.getElementById('tech-hours')?.value) || 0;
         const techRate = parseFloat(document.getElementById('tech-labor-section')?.dataset.rate) || 75;
@@ -798,14 +806,19 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const laborTotal = techLabor + travelLabor;
 
+        // 4. Get Fees and Surcharges from inputs
         const sethFeePercentage = parseFloat(document.getElementById('seth-fee-percentage')?.value) || 0;
         const surchargeAmount = parseFloat(document.getElementById('surcharge-amount')?.value) || 0;
 
+        // 5. Calculate derived totals
         const subtotalForFee = partsTotal + laborTotal + subcontractorTotal;
         const sethFee = subtotalForFee * (sethFeePercentage / 100);
         const grandTotal = subtotalForFee + sethFee + surchargeAmount;
 
+        // 6. Update UI
+        // Table footer
         document.querySelector('#parts-table tfoot td').textContent = formatCurrency(partsTotal);
+        // Summary section
         document.querySelector('.summary-value[data-summary="parts-total"]').textContent = formatCurrency(partsTotal);
         document.querySelector('.summary-value[data-summary="tech-labor"]').textContent = formatCurrency(techLabor);
         document.querySelector('.summary-value[data-summary="travel-labor"]').textContent = formatCurrency(travelLabor);
@@ -817,21 +830,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function resetImportedFields() {
+        // Reset state
         quoteState = { serviceCallId: null, revision: null, revisions: [] };
         const revisionSelector = document.getElementById('revision-selector');
         revisionSelector.innerHTML = '<option>No Revisions</option>';
         revisionSelector.disabled = true;
         document.getElementById('update-revision-btn').disabled = true;
         document.getElementById('save-revision-btn').disabled = true;
-        
+        // Reset customer to placeholder
         const writeupEl = document.getElementById('service-call-writeup');
-        if (writeupEl) writeupEl.value = '';
-        
-        document.getElementById('unit-location-name').textContent = 'Sophia Carter';
-        document.getElementById('unit-location-company').textContent = 'Acme Corporation';
-        document.getElementById('bill-to-name').textContent = 'Sophia Carter';
-        document.getElementById('bill-to-company').textContent = 'Acme Corporation';
+        if (writeupEl) {
+            writeupEl.value = '';
+        }
+        document.getElementById('customer-name').textContent = 'Sophia Carter';
+        document.getElementById('customer-company').textContent = 'Acme Corporation';
 
+        // Reset rates to default
         const techLaborSection = document.getElementById('tech-labor-section');
         techLaborSection.dataset.rate = '75';
         document.getElementById('tech-rate-display').textContent = '75';
@@ -839,6 +853,7 @@ document.addEventListener('DOMContentLoaded', function() {
         travelLaborSection.dataset.rate = '75';
         document.getElementById('travel-rate-display').textContent = '75';
 
+        // Reset unit info to default
         const defaultUnitInfo = {
             "generator.model": "PowerPro 2000X", "generator.serial": "PP2KX-987654",
             "generator.spec": "A", "generator.kw": "150", "generator.voltage": "480V 3P",
@@ -853,30 +868,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 el.classList.add(String(el.textContent).startsWith('Active') ? 'text-green-600' : 'text-red-600');
             }
         });
+
         updateTotals();
     }
 
     function clearSheet() {
-        if (!confirm('Are you sure you want to clear the entire quote sheet? This cannot be undone.')) return;
+        if (!confirm('Are you sure you want to clear the entire quote sheet? This cannot be undone.')) {
+            return;
+        }
         document.getElementById('quote-description-textarea').value = '';
         document.getElementById('service-call-id').value = '';
         document.getElementById('tech-count').value = '0';
         document.getElementById('tech-hours').value = '0';
         document.getElementById('travel-hours').value = '0';
         resetImportedFields();
-        document.querySelector('#parts-table tbody').innerHTML = '';
-        document.getElementById('subcontractors-list').innerHTML = '';
+        const partsTableBody = document.querySelector('#parts-table tbody');
+        if (partsTableBody) partsTableBody.innerHTML = '';
+        const subcontractorsList = document.getElementById('subcontractors-list');
+        if (subcontractorsList) subcontractoresList.innerHTML = '';
+        document.querySelectorAll('.unit-info-value').forEach(el => {
+            el.textContent = 'N/A';
+            el.classList.remove('text-green-600');
+        });
         updateTotals();
     }
 
     // --- SERVICE CALL IMPORT LOGIC ---
+
+    // This function simulates fetching data from your backend.
     async function fetchServiceCallData(id) {
         console.log(`Fetching data for Service Call ID: ${id}...`);
         try {
             const response = await fetch(`/api/service-call/${id}`);
-            if (response.status === 404) return null;
-            if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-            return await response.json();
+            if (response.status === 404) {
+                return null; // Service call not found in ERP
+            }
+            if (!response.ok) {
+                throw new Error(`API request failed with status ${response.status}`);
+            }
+            return await response.json(); // The API now returns an object { revisions: [...], baseData: ... }
         } catch (error) {
             console.error("API call failed:", error);
             alert("Could not connect to the backend service. Please ensure it is running.");
@@ -886,14 +916,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function populateBaseData(baseData) {
         const { customer, unitInfo, rates, writeup } = baseData;
-        document.getElementById('unit-location-name').textContent = customer.name;
-        document.getElementById('unit-location-company').textContent = customer.company;
-        document.getElementById('bill-to-name').textContent = customer.name; // Assuming same for now
-        document.getElementById('bill-to-company').textContent = customer.company;
 
+        // Populate customer info
+        document.getElementById('customer-name').textContent = customer.name;
+        document.getElementById('customer-company').textContent = customer.company;
+
+        // Populate write-up
         const writeupEl = document.getElementById('service-call-writeup');
-        if (writeupEl) writeupEl.value = writeup || '';
+        if (writeupEl) {
+            writeupEl.value = writeup || '';
+        }
 
+        // Populate rates
         const defaultRates = rates || { tech: 75, travel: 75 };
         const techLaborSection = document.getElementById('tech-labor-section');
         techLaborSection.dataset.rate = defaultRates.tech;
@@ -902,66 +936,88 @@ document.addEventListener('DOMContentLoaded', function() {
         travelLaborSection.dataset.rate = defaultRates.travel;
         document.getElementById('travel-rate-display').textContent = Number(defaultRates.travel).toFixed(2);
 
+        // Populate unit info
         document.querySelectorAll('.unit-info-value').forEach(el => {
             const key = el.dataset.key;
-            const value = unitInfo[key.split('.')[1]] || 'N/A'; // Simplified key access
-            el.textContent = value;
+            el.textContent = unitInfo[key] || 'N/A';
             el.classList.remove('text-green-600', 'text-red-600');
             if (key === 'generator.warranty') {
-                el.classList.add(String(value).startsWith('Active') ? 'text-green-600' : 'text-red-600');
+                el.classList.add(String(el.textContent).startsWith('Active') ? 'text-green-600' : 'text-red-600');
             }
         });
     }
 
     function populateQuoteWithData(revisionData) {
         const { parts, description, tech_count, tech_hours, travel_hours, subcontractors } = revisionData;
+
+        // Populate description
         document.getElementById('quote-description-textarea').value = description || '';
+
+        // Populate labor
         document.getElementById('tech-count').value = tech_count || 0;
         document.getElementById('tech-hours').value = tech_hours || 0;
         document.getElementById('travel-hours').value = travel_hours || 0;
 
+        // Populate parts table
         const tableBody = document.querySelector('#parts-table tbody');
-        tableBody.innerHTML = '';
-        if (parts?.length > 0) {
+        tableBody.innerHTML = ''; // Clear existing parts
+        if (parts && parts.length > 0) {
             parts.forEach(part => {
+                const onHand = part.onHand || 'N/A';
+                const onHandClass = isNaN(parseInt(onHand)) || parseInt(onHand) > 0 ? 'text-green-600' : 'text-red-600';
                 const newRow = tableBody.insertRow();
                 newRow.innerHTML = `
-                    <td class="py-2 pl-4 pr-6 text-sm sm:pl-0 break-words align-top">
-                        <div class="font-medium text-[var(--text-primary)]">${part.part || ''}</div>
-                        <div class="mt-1"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="${part.desc || ''}"></div>
-                    </td>
-                    <td class="px-6 py-2 text-sm break-words align-top">
-                        <div><input class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value="${part.vendorPart || ''}"></div>
-                        <div class="mt-1"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="${part.vendor || ''}"></div>
-                    </td>
-                    <td class="px-6 py-2 text-sm text-right align-top">
-                        <div><input class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="${Number(part.listPrice || 0).toFixed(2)}"></div>
-                        <div class="mt-1"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="${Number(part.unitCost || 0).toFixed(2)}"></div>
-                    </td>
-                    <td class="px-6 py-2 text-sm text-right align-top">
-                        <input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="${part.qty || 1}">
-                    </td>
-                    <td class="row-total px-6 py-2 text-sm font-medium text-right text-[var(--text-primary)] align-top">$0.00</td>
-                    <td class="py-2 pl-6 pr-4 text-right text-sm font-medium sm:pr-0 align-top">
-                        <button class="text-red-600 hover:text-red-900 delete-part-btn" type="button"><span class="material-icons-outlined text-base">delete</span></button>
+                    <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-[var(--text-primary)] sm:pl-0">${part.part || ''}</td>
+                    <td class="whitespace-nowrap px-3 py-2 text-sm"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" type="text" value="${part.desc || ''}" placeholder="Description"></td>
+                    <td class="whitespace-nowrap px-3 py-2 text-sm"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" type="text" value="${part.vendor || ''}" placeholder="Vendor"></td>
+                    <td class="whitespace-nowrap px-3 py-2 text-sm ${onHandClass} font-medium">${onHand}</td>
+                    <td class="whitespace-nowrap px-3 py-2 text-sm"><input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="${part.qty || 1}"/></td>
+                    <td class="whitespace-nowrap px-3 py-2 text-sm"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="${Number(part.unitCost || 0).toFixed(2)}"/></td>
+                    <td class="row-total whitespace-nowrap px-3 py-2 text-sm text-right font-medium text-[var(--text-primary)]">$0.00</td>
+                    <td class="whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                        <button type="button" class="text-red-600 hover:text-red-900 delete-part-btn"><span class="material-icons-outlined text-base">delete</span></button>
                     </td>
                 `;
             });
         }
 
+        // Populate subcontractors
         const subList = document.getElementById('subcontractors-list');
         subList.innerHTML = '';
-        if (subcontractors?.length > 0) {
+        if (subcontractors && subcontractors.length > 0) {
             subcontractors.forEach(sub => addSubcontractor(sub));
         }
 
-        document.querySelectorAll('#parts-table input').forEach(input => input.addEventListener('input', updateTotals));
-        updateTotals();
+        // Re-add listeners to new inputs
+        document.querySelectorAll('#parts-table .qty-input, #parts-table .unit-cost-input').forEach(input => input.addEventListener('input', updateTotals));
+
+        updateTotals(); // Recalculate everything with new rates
+
+        // Populate On Hand Inventory
+        const onHandInventoryTitle = Array.from(document.querySelectorAll('h3')).find(h3 => h3.textContent === 'On Hand Inventory');
+        if (onHandInventoryTitle) {
+            const onHandInventoryList = onHandInventoryTitle.nextElementSibling;
+            onHandInventoryList.innerHTML = '';
+            if (parts && parts.length > 0) {
+                parts.forEach(part => {
+                    const onHand = part.onHand || 'N/A';
+                    const onHandClass = isNaN(parseInt(onHand)) || parseInt(onHand) > 0 ? 'text-green-600' : 'text-red-600';
+                    const listItem = document.createElement('li');
+                    listItem.className = 'flex justify-between items-center pt-2';
+                    listItem.innerHTML = `
+                        <p class="text-sm font-medium text-[var(--text-primary)]">${part.part}</p>
+                        <p class="text-sm font-medium ${onHandClass}">${onHand}</p>
+                    `;
+                    onHandInventoryList.appendChild(listItem);
+                });
+            }
+        }
     }
 
     async function handleServiceCallImport() {
         const inputEl = document.getElementById('service-call-id');
         const serviceCallId = inputEl.value.trim();
+
         if (!serviceCallId) {
             alert("Please enter a Service Call ID.");
             clearSheet();
@@ -971,8 +1027,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('import-btn').classList.add('animate-pulse');
         try {
             const data = await fetchServiceCallData(serviceCallId);
-            if (data?.revisions?.length > 0) {
+            if (data && data.revisions && data.revisions.length > 0) {
                 quoteState = { serviceCallId, revisions: data.revisions, revision: null, baseData: data.baseData };
+                
+                // Update page title and header with Service Call ID
                 document.getElementById('page-title').textContent = `Quote Sheet - ${serviceCallId}`;
                 document.getElementById('quote-header-info').textContent = `Service Call ID: ${serviceCallId}`;
                 
@@ -985,19 +1043,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     revisionSelector.appendChild(option);
                 });
 
+                // Select the latest revision
                 const latestRevision = data.revisions[data.revisions.length - 1];
                 revisionSelector.value = latestRevision.revision;
                 quoteState.revision = latestRevision.revision;
                 populateBaseData(data.baseData);
                 populateQuoteWithData(latestRevision);
 
+                // Enable UI
                 revisionSelector.disabled = false;
                 document.getElementById('update-revision-btn').disabled = false;
                 document.getElementById('save-revision-btn').disabled = false;
 
-            } else if (data?.baseData) {
+            } else if (data && data.baseData) {
+                // No revisions, but ERP/base data exists.
+                // REMOVED: alert(`Service Call ID "${serviceCallId}" found. You can create the first revision.`);
                 quoteState = { serviceCallId, revisions: [], revision: 1, baseData: data.baseData };
                 populateBaseData(data.baseData);
+                
+                // Clear any existing transactional data
                 document.querySelector('#parts-table tbody').innerHTML = '';
                 document.getElementById('subcontractors-list').innerHTML = '';
                 document.getElementById('tech-count').value = '0';
@@ -1008,18 +1072,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 const revisionSelector = document.getElementById('revision-selector');
                 revisionSelector.innerHTML = '<option value="1">Rev 1</option>';
                 revisionSelector.disabled = true;
-                document.getElementById('update-revision-btn').disabled = true;
+                document.getElementById('update-revision-btn').disabled = true; // Can't update a non-existent revision
                 document.getElementById('save-revision-btn').disabled = false;
             } else {
                 alert(`Service Call ID "${serviceCallId}" not found. You can create a new quote, but customer and unit info must be entered manually.`);
-                resetImportedFields();
+                // Do not clear the whole sheet. Instead, prepare it for a new quote with the entered ID.
+                resetImportedFields(); // Clears customer/unit info and resets buttons.
                 quoteState = { serviceCallId: serviceCallId, revisions: [], revision: 1, baseData: null };
 
                 const revisionSelector = document.getElementById('revision-selector');
                 revisionSelector.innerHTML = '<option value="1">Rev 1</option>';
                 revisionSelector.disabled = true;
-                document.getElementById('update-revision-btn').disabled = true;
-                document.getElementById('save-revision-btn').disabled = false;
+                document.getElementById('update-revision-btn').disabled = true; // Can't update a non-existent revision
+                document.getElementById('save-revision-btn').disabled = false; // Allow saving as a new revision.
             }
         } catch (error) {
             console.error("Failed to fetch service call data:", error);
@@ -1038,13 +1103,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         const revisionToSave = isNewRevision ? (Math.max(0, ...quoteState.revisions.map(r => r.revision)) + 1) : quoteState.revision;
 
+        // Gather all data
         const dataToSave = {
             serviceCallId: quoteState.serviceCallId,
             revision: revisionToSave,
             description: document.getElementById('quote-description-textarea').value,
             customer: {
-                name: document.getElementById('unit-location-name').textContent,
-                company: document.getElementById('unit-location-company').textContent
+                name: document.getElementById('customer-name').textContent,
+                company: document.getElementById('customer-company').textContent
             },
             labor: {
                 techCount: document.getElementById('tech-count').value,
@@ -1054,11 +1120,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 travelRate: document.getElementById('travel-labor-section').dataset.rate
             },
             parts: getPartsDataForSave(),
-            subcontractors: Array.from(document.querySelectorAll('#subcontractors-list > div')).map(div => ({
-                contact_name: div.querySelector('input[id^="subcontractor-contact-"]')?.value,
-                contact_details: div.querySelector('input[id^="subcontractor-details-"]')?.value,
-                cost: div.querySelector('input[id^="subcontractor-cost-"]')?.value
-            }))
+            subcontractors: Array.from(document.querySelectorAll('#subcontractors-list > div')).map(div => {
+                return {
+                    contact_name: div.querySelector('input[id^="subcontractor-contact-"]')?.value,
+                    contact_details: div.querySelector('input[id^="subcontractor-details-"]')?.value,
+                    cost: div.querySelector('input[id^="subcontractor-cost-"]')?.value
+                }
+            })
         };
         
         console.log("Saving data:", JSON.stringify(dataToSave, null, 2));
@@ -1066,15 +1134,21 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             const response = await fetch('/api/quote', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(dataToSave),
             });
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.error || `Server responded with status ${response.status}`);
             }
+
             const result = await response.json();
             alert(result.message);
+            
+            // Refresh the data on the page to reflect the save
             await handleServiceCallImport();
         } catch (error) {
             console.error("Failed to save quote:", error);
@@ -1082,31 +1156,163 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
     // --- INITIALIZATION & EVENT LISTENERS ---
+
+    // Setup UI components
+    setupMenuButton('menu-button');
     setupTabs('tab-common-parts', 'tab-service-articles', 'panel-common-parts', 'panel-service-articles');
-    
-    document.getElementById('preview-export-btn')?.addEventListener('click', openExportPreview);
+
+    // Export buttons
+    function exportWithData(view) {
+        const unitLocationDiv = Array.from(document.querySelectorAll('h3')).find(h3 => h3.textContent === 'Unit Location').closest('.bg-white');
+        const unitLocationName = unitLocationDiv.querySelector('#customer-name').textContent;
+        const unitLocationCompany = unitLocationDiv.querySelector('#customer-company').textContent;
+
+        const billToDiv = Array.from(document.querySelectorAll('h3')).find(h3 => h3.textContent === 'Bill to Customer').closest('.bg-white');
+        const billToName = billToDiv.querySelector('#customer-name').textContent;
+        const billToCompany = billToDiv.querySelector('#customer-company').textContent;
+
+        const quoteData = {
+            customer: {
+                name: unitLocationName,
+                company: unitLocationCompany
+            },
+            billTo: {
+                name: billToName,
+                company: billToCompany
+            },
+            unitInfo: {
+                'generator.model': document.querySelector('[data-key="generator.model"]').textContent,
+                'generator.serial': document.querySelector('[data-key="generator.serial"]').textContent,
+                'generator.spec': document.querySelector('[data-key="generator.spec"]').textContent,
+                'generator.kw': document.querySelector('[data-key="generator.kw"]').textContent,
+                'generator.voltage': document.querySelector('[data-key="generator.voltage"]').textContent,
+                'generator.warranty': document.querySelector('[data-key="generator.warranty"]').textContent,
+                'ats.model': document.querySelector('[data-key="ats.model"]').textContent,
+                'ats.serial': document.querySelector('[data-key="ats.serial"]').textContent,
+                'engine.model': document.querySelector('[data-key="engine.model"]').textContent,
+                'engine.serial': document.querySelector('[data-key="engine.serial"]').textContent
+            },
+            description: document.getElementById('quote-description-textarea').value,
+            parts: getPartsDataForSave(),
+            labor: {
+                techCount: document.getElementById('tech-count').value,
+                techHours: document.getElementById('tech-hours').value,
+                techRate: document.getElementById('tech-labor-section').dataset.rate,
+                travelHours: document.getElementById('travel-hours').value,
+                travelRate: document.getElementById('travel-labor-section').dataset.rate
+            },
+            subcontractors: Array.from(document.querySelectorAll('#subcontractors-list > div')).map(div => {
+                return {
+                    contact_name: div.querySelector('input[id^="subcontractor-contact-"]').value,
+                    contact_details: div.querySelector('input[id^="subcontractor-details-"]').value,
+                    cost: div.querySelector('input[id^="subcontractor-cost-"]').value
+                }
+            }),
+            summary: {
+                partsTotal: document.querySelector('[data-summary="parts-total"]').textContent,
+                techLabor: document.querySelector('[data-summary="tech-labor"]').textContent,
+                travelLabor: document.querySelector('[data-summary="travel-labor"]').textContent,
+                laborTotal: document.querySelector('[data-summary="labor-total"]').textContent,
+                subTotal: document.querySelector('[data-summary="sub-total"]').textContent,
+                sethFee: document.querySelector('[data-summary="seth-fee"]').textContent,
+                surcharge: document.querySelector('[data-summary="surcharge"]').textContent,
+                grandTotal: document.querySelector('[data-summary="grand-total"]').textContent
+            }
+        };
+        localStorage.setItem('quoteDataForExport', JSON.stringify(quoteData));
+        if (view) {
+            localStorage.setItem('exportView', view);
+        } else {
+            localStorage.removeItem('exportView');
+        }
+        window.open('Quote_Export_V1.html', '_blank');
+    }
+
+    document.getElementById('menu-item-0')?.addEventListener('click', (e) => { e.preventDefault(); exportWithData(); });
+    document.getElementById('menu-item-1')?.addEventListener('click', (e) => { 
+        e.preventDefault();
+        const rows = getTableRowsForExport().map(row => row.map(cell => `"${cell}"`));
+        exportToCsv('quote-all.csv', rows);
+    });
+    document.getElementById('menu-item-2')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const rows = getTableRowsForExport();
+        rows.sort((a, b) => a[2].localeCompare(b[2])); // Sort by vendor (column index 2)
+        const quotedRows = rows.map(row => row.map(cell => `"${cell}"`));
+        exportToCsv('quote-by-vendor.csv', quotedRows);
+    });
+    document.getElementById('menu-item-3')?.addEventListener('click', (e) => { e.preventDefault(); exportWithData('categoryBreakdown'); });
+
+    // Main action buttons
     document.getElementById('update-revision-btn')?.addEventListener('click', () => saveQuote(false));
     document.getElementById('save-revision-btn')?.addEventListener('click', () => saveQuote(true));
+    
     document.getElementById('finalize-send-btn')?.addEventListener('click', () => {
-        if (confirm('Are you sure you want to finalize and send this quote?')) alert('Quote has been sent!');
+        if (confirm('Are you sure you want to finalize and send this quote?')) {
+            alert('Quote has been sent!');
+        }
     });
+
+    // Template buttons
     document.getElementById('save-template-btn')?.addEventListener('click', () => {
         const templateData = getPartsDataForSave();
         console.log("Saving template:", JSON.stringify(templateData, null, 2));
-        alert('Template data has been logged to the console.');
+        alert('Template data (from the parts table) has been logged to the console.');
     });
-    document.getElementById('load-template-btn')?.addEventListener('click', () => alert('Load from template not implemented.'));
+    document.getElementById('load-template-btn')?.addEventListener('click', () => alert('Loading from a template would be implemented here, likely by fetching data and populating the parts table.'));
+
+    // Add buttons
     document.getElementById('add-subcontractor-btn')?.addEventListener('click', addSubcontractor);
     document.getElementById('add-part-btn')?.addEventListener('click', addPartRow);
-    document.getElementById('parts-table')?.addEventListener('click', (e) => {
-        const deleteBtn = e.target.closest('.delete-part-btn');
-        if (deleteBtn) {
-            deleteBtn.closest('tr').remove();
+
+    document.querySelectorAll('.add-to-quote-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const partContainer = btn.closest('li');
+            const partNumber = partContainer.querySelector('p.font-medium').textContent;
+            const description = partContainer.querySelector('p.text-sm:not(.font-medium)').textContent;
+
+            const tableBody = document.querySelector('#parts-table tbody');
+            if (!tableBody) return;
+
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `
+                <td class="whitespace-nowrap py-2 pl-4 pr-3 text-sm font-medium text-[var(--text-primary)] sm:pl-0">${partNumber}</td>
+                <td class="whitespace-nowrap px-3 py-2 text-sm"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" type="text" value="${description}" placeholder="Description"></td>
+                <td class="whitespace-nowrap px-3 py-2 text-sm"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" type="text" value="" placeholder="Vendor"></td>
+                <td class="whitespace-nowrap px-3 py-2 text-sm text-red-600 font-medium">N/A</td>
+                <td class="whitespace-nowrap px-3 py-2 text-sm"><input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1"/></td>
+                <td class="whitespace-nowrap px-3 py-2 text-sm"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="0.00"/></td>
+                <td class="row-total whitespace-nowrap px-3 py-2 text-sm text-right font-medium text-[var(--text-primary)]">$0.00</td>
+                <td class="whitespace-nowrap py-2 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    <button type="button" class="text-red-600 hover:text-red-900 delete-part-btn"><span class="material-icons-outlined text-base">delete</span></button>
+                </td>
+            `;
+            
+            newRow.querySelectorAll('.qty-input, .unit-cost-input').forEach(input => {
+                input.addEventListener('input', updateTotals);
+            });
+
             updateTotals();
-        }
+            newRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
     });
+
+    // Listener for deleting part rows (using event delegation)
+    const partsTable = document.getElementById('parts-table');
+    partsTable?.addEventListener('click', (e) => {
+        const deleteBtn = e.target.closest('.delete-part-btn');
+        if (!deleteBtn) return;
+        deleteBtn.closest('tr').remove();
+        updateTotals();
+    });
+
+    // Clear sheet button
     document.getElementById('clear-sheet-btn')?.addEventListener('click', clearSheet);
+
+    // Service Call ID import listener
     document.getElementById('import-btn')?.addEventListener('click', handleServiceCallImport);
     document.getElementById('revision-selector')?.addEventListener('change', (e) => {
         const selectedRevision = parseInt(e.target.value);
@@ -1115,14 +1321,64 @@ document.addEventListener('DOMContentLoaded', function() {
         populateQuoteWithData(revisionData);
     });
 
-    document.querySelectorAll('.labor-input, #parts-table input, #subcontractors-list input, .fee-input').forEach(input => {
+    // Add listeners to all cost/qty inputs on page load
+    document.querySelectorAll('.labor-input, #parts-table .qty-input, #parts-table .unit-cost-input, #subcontractors-list input[id^="subcontractor-cost-"], .fee-input').forEach(input => {
         input.addEventListener('input', updateTotals);
     });
 
+    // --- AI SUMMARY GENERATION ---
+    const generateSummaryBtn = document.getElementById('generate-summary-btn');
+    if (generateSummaryBtn) {
+        generateSummaryBtn.addEventListener('click', async () => {
+            const writeUpEl = document.getElementById('service-call-writeup');
+            const quoteDescEl = document.getElementById('quote-description-textarea');
+            const writeUpText = writeUpEl.value;
+
+            if (!writeUpText.trim()) {
+                alert('Please import a service call with a write-up first.');
+                return;
+            }
+
+            generateSummaryBtn.disabled = true;
+            generateSummaryBtn.innerHTML = `<span class="material-icons-outlined text-base mr-2 animate-spin">sync</span>Generating...`;
+
+            try {
+                const response = await fetch('/summarize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ writeup: writeUpText }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `API Error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                const suggestedDescription = data.customer_description;
+                const techCount = data.tech_count;
+                const techHours = data.tech_hours;
+
+                const useSuggestion = confirm(`Suggested Description:\n\n${suggestedDescription}\n\nDo you want to use this?`);
+                if (useSuggestion) {
+                    quoteDescEl.value = suggestedDescription || '';
+                    if (typeof techCount !== 'undefined') document.getElementById('tech-count').value = techCount;
+                    if (typeof techHours !== 'undefined') document.getElementById('tech-hours').value = techHours;
+                    updateTotals();
+                }
+            } catch (error) {
+                console.error('Error generating summary:', error);
+                alert(`Failed to generate description: ${error.message}`);
+            } finally {
+                generateSummaryBtn.disabled = false;
+                generateSummaryBtn.innerHTML = `<span class="material-icons-outlined text-base mr-2">auto_awesome</span>Generate with AI`;
+            }
+        });
+    }
+
+    // Initial calculation on page load
     updateTotals();
 });
 </script>
-
-<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></body></html>
 
 <grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></body></html>

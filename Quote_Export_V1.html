@@ -1,267 +1,634 @@
-<html>
-<head>
-    <meta charset="utf-8" />
-    <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
-    <link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B600%3B700&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <title>Quote Export</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-    <style type="text/tailwindcss">
-        :root {
-            --primary: #0b80ee;
-            --text-primary: #111518;
-            --text-secondary: #60768a;
-        }
-        body {
-            font-family: 'Inter', 'Noto Sans', sans-serif;
-        }
+<html><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B600%3B700&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<title>Stitch Design</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary: #0b80ee;
+        --secondary: #f0f2f5;
+        --text-primary: #111518;
+        --text-secondary: #60768a;
+      }
+      body {
+        font-family: 'Inter', 'Noto Sans', sans-serif;
+      }
     </style>
 </head>
 <body>
-    <div class="relative flex size-full min-h-screen flex-col bg-gray-50 group/design-root overflow-x-hidden">
-        <div class="layout-container flex h-full grow flex-col">
-            <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 bg-white px-6 py-3">
-                <div class="flex items-center gap-4 text-text-primary">
-                    <div class="size-8 text-[var(--primary)]">
-                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                            <path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <h1 class="text-text-primary text-xl font-semibold leading-tight">Service Quotes</h1>
+<div class="relative flex size-full min-h-screen flex-col bg-gray-50 group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 bg-white px-6 py-3">
+<div class="flex items-center gap-4 text-text-primary">
+<div class="size-8 text-[var(--primary)]">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h1 class="text-text-primary text-xl font-semibold leading-tight">Service Quotes</h1>
+</div>
+<nav class="hidden items-center gap-8 lg:flex">
+<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Dashboard</a>
+<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Quotes</a>
+<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Customers</a>
+<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Units</a>
+<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Parts</a>
+<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAIUH3xVYOaxZ0LylGeKn_Z7ChKdknub1FIyp2YWJHK8mBgk92jUUUAjzSPcM6Glhle5-dnQs0XGYSEWcjAX3cnDeitu5pd3txnAU1ghu4mjVph5kgzBWIzZqzmyWai4yhtG3zCh_3t3oQRO3C7WtfW08L3zWcUrlQuGCP2U7wapvxHWlXPTrOhdZ641xuGmXBnHQzkwlycPj4sK3I_sRH2A6VuqizPqF66pzcZYSJHyPZjNlcU9I4zgDEQZ5pp7hKfXDcqF7MvoE");'></div>
+<button class="lg:hidden">
+<span class="material-symbols-outlined"> menu </span>
+</button>
+</div>
+</header>
+<main class="flex-1 px-4 py-8 md:px-6">
+<div class="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-3">
+<div class="lg:col-span-2">
+<div class="mb-6">
+<div class="flex items-center gap-2 text-sm text-text-secondary">
+<a class="hover:text-[var(--primary)]" href="#">Quotes</a>
+<span>/</span>
+<a class="hover:text-[var(--primary)]" href="#" id="quote-number-link">Quote #</a>
+<span>/</span>
+<span class="font-medium text-text-primary">Export Preview</span>
+</div>
+</div>
+<div class="mb-8">
+<h2 class="text-3xl font-bold text-text-primary">Export Preview</h2>
+<p class="mt-2 text-text-secondary">Customize the display of pricing information before exporting.</p>
+</div>
+<div class="rounded-lg border border-gray-200 bg-white shadow-sm" id="quote-preview">
+<div class="p-6">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-xl font-semibold text-text-primary" id="quote-number-display">Quote #12345</h3>
+<p class="mt-1 text-sm text-text-secondary">Date: 2024-01-15</p>
+</div>
+<div class="text-right">
+<p class="font-semibold text-text-primary">Main Branch</p>
+<p class="text-sm text-text-secondary">123 Industrial Way, Anytown, USA</p>
+</div>
+</div>
+<div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<h4 class="text-lg font-semibold text-text-primary">Customer Information</h4>
+<div class="mt-2 space-y-1 text-sm text-text-secondary">
+<p><span class="font-medium text-text-primary">Name:</span></p>
+<p><span class="font-medium text-text-primary">Company:</span></p>
+</div>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-text-primary">Bill To</h4>
+<div class="mt-2 space-y-1 text-sm text-text-secondary">
+<p><span class="font-medium text-text-primary">Name:</span></p>
+<p><span class="font-medium text-text-primary">Company:</span></p>
+</div>
+</div>
+<div>
+<h4 class="text-lg font-semibold text-text-primary">Unit Information</h4>
+<div class="mt-2 space-y-1 text-sm text-text-secondary">
+<p><span class="font-medium text-text-primary">Unit:</span> Excavator</p>
+<p><span class="font-medium text-text-primary">Model:</span> CAT 336</p>
+<p><span class="font-medium text-text-primary">Serial #:</span> XYZ123456</p>
+<p><span class="font-medium text-text-primary">Hours:</span> 4,500</p>
+</div>
+</div>
+</div>
+<div class="mt-6">
+<h4 class="text-lg font-semibold text-text-primary">Description of Work</h4>
+<p class="mt-2 text-text-secondary">
+                      Comprehensive maintenance and repair services for the excavator, including engine overhaul, hydraulic system repairs, and replacement of worn-out parts. The work
+                      ensures optimal performance and extends the lifespan of the equipment.
+                    </p>
+</div>
+</div>
+<div class="border-t border-gray-200">
+<div class="overflow-x-auto">
+<table class="w-full text-left" id="quote-table">
+<thead class="bg-gray-50">
+<tr>
+<th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">Item</th>
+<th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">Description</th>
+<th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-secondary">Quantity</th>
+<th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-secondary">Unit Price</th>
+<th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-secondary">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-200 bg-white">
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">Engine Overhaul</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">Complete engine overhaul with new pistons, rings, and bearings.</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">1</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">$5,000.00</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">$5,000.00</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">Hydraulic System Repair</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">Repair and replacement of hydraulic hoses and seals.</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">1</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">$2,500.00</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">$2,500.00</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">Parts Replacement</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">Replacement of worn-out parts including filters and belts.</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">1</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">$1,500.00</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">$1,500.00</td>
+</tr>
+<tr>
+<td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">Labor</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">Skilled technician labor for all repair and maintenance tasks.</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">40 hours</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">$100.00/hour</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">$4,000.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="border-t border-gray-200 bg-gray-50 px-6 py-4 flex justify-between items-end">
+<div class="flex items-center gap-4">
+<img alt="QR Code for Quote Approval" class="w-32 h-32" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE-4At60OdXh3jWLXFyyITk45e36haD8-rCqwzWTGYlVakpbPp8kJLyEPrWflGWMwCCy0ltxXAZMe4-Q-s6BYFXKDLJIpPeuDyLU_xM3ir6Os_QzsQ82RdGskkpYFOm8xHcdRKqw1yO-9YPD96I7b1swDpu4g4bZs_FDY5UnvOPhl3zsNISIhu4MA-gmvajC7FyGvXLY34TWc0xnRb7W3NyoyTvofm91ZljYINyTTvIXf-6uyPxkezlGWQNGzFCq9ZmwAMld9apq0"/>
+<div class="text-sm text-text-secondary">
+<p class="font-semibold text-text-primary">Scan to Approve</p>
+<p>Initiates an email to:</p>
+<p class="font-medium text-text-primary">mainbranch.approvals@example.com</p>
+</div>
+</div>
+<div class="text-right">
+                    <p class="text-sm font-medium text-text-secondary">Subtotal: <span class="ml-2 font-semibold text-text-primary">$850.00</span></p>
+                    <p class="text-sm font-medium text-text-secondary">Tax (8%): <span class="ml-2 font-semibold text-text-primary">$44.32</span></p>
+                    <p class="mt-2 text-lg font-bold text-text-primary">Total: <span class="ml-2 text-[var(--primary)]">$3074.32</span></p>
                 </div>
-                <div class="flex items-center gap-4">
-                    <button class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-text-primary shadow-sm hover:bg-gray-100" id="back-btn">
-                        <span class="material-symbols-outlined">edit</span>
-                        Back to Editing
-                    </button>
-                    <button class="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700" id="export-btn">
-                        <span class="material-symbols-outlined">download</span>
-                        Export Quote
-                    </button>
-                </div>
-            </header>
-            <main class="flex-1 px-4 py-8 md:px-6">
-                <div class="mx-auto grid max-w-7xl grid-cols-1 gap-8 lg:grid-cols-3">
-                    <div class="lg:col-span-2">
-                        <div class="mb-6">
-                            <div class="flex items-center gap-2 text-sm text-text-secondary">
-                                <a class="hover:text-[var(--primary)]" href="#">Quotes</a>
-                                <span>/</span>
-                                <a class="hover:text-[var(--primary)]" href="#" id="quote-number-link"></a>
-                                <span>/</span>
-                                <span class="font-medium text-text-primary">Export Preview</span>
-                            </div>
-                        </div>
-                        <div class="mb-8">
-                            <h2 class="text-3xl font-bold text-text-primary">Export Preview</h2>
-                            <p class="mt-2 text-text-secondary">Customize the display of pricing information before exporting.</p>
-                        </div>
-                        <div class="rounded-lg border border-gray-200 bg-white shadow-sm" id="quote-preview">
-                            <div class="p-6">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h3 class="text-xl font-semibold text-text-primary" id="quote-number-display"></h3>
-                                        <p class="mt-1 text-sm text-text-secondary" id="quote-date"></p>
-                                    </div>
-                                </div>
-                                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div id="customer-info">
-                                        <h4 class="text-lg font-semibold text-text-primary">Customer Information</h4>
-                                        <div class="mt-2 space-y-1 text-sm text-text-secondary"></div>
-                                    </div>
-                                    <div id="bill-to-info">
-                                        <h4 class="text-lg font-semibold text-text-primary">Bill To</h4>
-                                        <div class="mt-2 space-y-1 text-sm text-text-secondary"></div>
-                                    </div>
-                                    <div id="unit-info">
-                                        <h4 class="text-lg font-semibold text-text-primary">Unit Information</h4>
-                                        <div class="mt-2 space-y-1 text-sm text-text-secondary"></div>
-                                    </div>
-                                </div>
-                                <div class="mt-6">
-                                    <h4 class="text-lg font-semibold text-text-primary">Description of Work</h4>
-                                    <p class="mt-2 text-text-secondary" id="work-description"></p>
-                                </div>
-                            </div>
-                            <div class="border-t border-gray-200">
-                                <div class="overflow-x-auto">
-                                    <table class="w-full text-left" id="quote-table">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">Item</th>
-                                                <th class="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-text-secondary">Description</th>
-                                                <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-secondary">Quantity</th>
-                                                <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-secondary">Unit Price</th>
-                                                <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-text-secondary">Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-gray-200 bg-white" id="quote-table-body">
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="border-t border-gray-200 bg-gray-50 px-6 py-4 flex justify-end">
-                                <div class="text-right" id="summary-details"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <aside class="space-y-8">
-                        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                            <h3 class="text-lg font-semibold text-text-primary">Display Options</h3>
-                            <div class="mt-4 space-y-4">
-                                <label class="flex items-center gap-3 rounded-lg border border-gray-200 p-4 has-[:checked]:border-[var(--primary)] has-[:checked]:bg-blue-50">
-                                    <input checked="" class="h-4 w-4 border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" name="display_option" type="radio" value="single_total" />
-                                    <span class="text-sm font-medium text-text-primary">Show Single Total</span>
-                                </label>
-                                <label class="flex items-center gap-3 rounded-lg border border-gray-200 p-4 has-[:checked]:border-[var(--primary)] has-[:checked]:bg-blue-50">
-                                    <input class="h-4 w-4 border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" name="display_option" type="radio" value="category_breakdown" />
-                                    <span class="text-sm font-medium text-text-primary">Show Breakdown by Category</span>
-                                </label>
-                            </div>
-                        </div>
-                    </aside>
-                </div>
-            </main>
-        </div>
+</div>
+</div>
+<div id="subcontractors-section" class="border-t border-gray-200 mt-6 pt-6">
+    <h4 class="text-lg font-semibold text-text-primary">Subcontractors</h4>
+    <div id="subcontractors-list" class="mt-2 space-y-2">
+        <!-- Subcontractor items will be populated here by JS -->
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const quoteDataString = localStorage.getItem('quoteDataForExport');
-            if (!quoteDataString) {
-                document.body.innerHTML = '<p>No quote data found. Please go back and export a quote first.</p>';
-                return;
-            }
-            const quoteData = JSON.parse(quoteDataString);
-            populatePage(quoteData);
-
-            document.querySelectorAll('input[name="display_option"]').forEach(radio => {
-                radio.addEventListener('change', () => populatePage(quoteData));
-            });
-            document.getElementById('back-btn').addEventListener('click', () => window.close());
-            document.getElementById('export-btn').addEventListener('click', () => exportToPdf(quoteData));
-        });
-
-        function populatePage(data) {
-            // --- Populate Header ---
-            document.getElementById('quote-number-link').textContent = `Quote #${data.serviceCallId || 'N/A'}`;
-            document.getElementById('quote-number-display').textContent = `Quote #${data.serviceCallId || 'N/A'}`;
-            document.getElementById('quote-date').textContent = `Date: ${new Date().toLocaleDateString()}`;
-
-            // --- Populate Customer Info ---
-            const customerInfoDiv = document.querySelector('#customer-info > div');
-            customerInfoDiv.innerHTML = `
-                <p><span class="font-medium text-text-primary">Name:</span> ${data.unitLocation.name}</p>
-                <p><span class="font-medium text-text-primary">Company:</span> ${data.unitLocation.company}</p>
-                <p>${data.unitLocation.address1}</p>
-                <p>${data.unitLocation.address2}</p>
-                <p>${data.unitLocation.email}</p>
-            `;
-
-            // --- Populate Bill To Info ---
-            const billToDiv = document.querySelector('#bill-to-info > div');
-            billToDiv.innerHTML = `
-                <p><span class="font-medium text-text-primary">Name:</span> ${data.billTo.name}</p>
-                <p><span class="font-medium text-text-primary">Company:</span> ${data.billTo.company}</p>
-                <p>${data.billTo.address1}</p>
-                <p>${data.billTo.address2}</p>
-                <p>${data.billTo.email}</p>
-            `;
-
-            // --- Populate Unit Info ---
-            const unitInfoDiv = document.querySelector('#unit-info > div');
-            let unitInfoHtml = '';
-            for (const [key, value] of Object.entries(data.unitInfo)) {
-                unitInfoHtml += `<p><span class="font-medium text-text-primary">${key.replace('.', ' ')}:</span> ${value}</p>`;
-            }
-            unitInfoDiv.innerHTML = unitInfoHtml;
-
-            // --- Populate Description ---
-            document.getElementById('work-description').textContent = data.description;
-
-            // --- Populate Table ---
-            const displayOption = document.querySelector('input[name="display_option"]:checked').value;
-            if (displayOption === 'single_total') {
-                renderSingleTotal(data);
-            } else {
-                renderCategoryBreakdown(data);
-            }
-
-            // --- Populate Summary ---
-            const summaryDiv = document.getElementById('summary-details');
-            summaryDiv.innerHTML = `
-                <p class="text-sm font-medium text-text-secondary">Subtotal: <span class="ml-2 font-semibold text-text-primary">${data.summary.subTotal}</span></p>
-                <p class="text-sm font-medium text-text-secondary">Fees: <span class="ml-2 font-semibold text-text-primary">${data.summary.sethFee}</span></p>
-                <p class="text-sm font-medium text-text-secondary">Surcharge: <span class="ml-2 font-semibold text-text-primary">${data.summary.surcharge}</span></p>
-                <p class="mt-2 text-lg font-bold text-text-primary">Grand Total: <span class="ml-2 text-[var(--primary)]">${data.summary.grandTotal}</span></p>
-            `;
+</div>
+<div class="mt-6" id="labor-tech-section">
+    <h4 class="text-lg font-semibold text-text-primary">Labor & Techs</h4>
+    <div class="mt-2 space-y-1 text-sm text-text-secondary">
+        <p><span class="font-medium text-text-primary">Labor Hours:</span> <span id="display-labor-hours"></span></p>
+        <p><span class="font-medium text-text-primary">Number of Techs:</span> <span id="display-num-techs"></span></p>
+    </div>
+</div>
+</div>
+<aside class="space-y-8">
+<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+<h3 class="text-lg font-semibold text-text-primary">Display Options</h3>
+<div class="mt-4 space-y-4">
+<label class="flex items-center gap-3 rounded-lg border border-gray-200 p-4 has-[:checked]:border-[var(--primary)] has-[:checked]:bg-blue-50">
+<input checked="" class="h-4 w-4 border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" name="display_option" type="radio"/>
+<span class="text-sm font-medium text-text-primary">Show Single Total</span>
+</label>
+<label class="flex items-center gap-3 rounded-lg border border-gray-200 p-4 has-[:checked]:border-[var(--primary)] has-[:checked]:bg-blue-50">
+<input class="h-4 w-4 border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" name="display_option" type="radio"/>
+<span class="text-sm font-medium text-text-primary">Show Breakdown by Category</span>
+</label>
+<div class="border-t border-gray-200 pt-4">
+<h4 class="text-base font-semibold text-text-primary">Included Items</h4>
+<div class="mt-3 space-y-3">
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-parts"/>
+<span class="text-sm text-text-primary">Show Parts</span>
+</label>
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-subcontractors"/>
+<span class="text-sm text-text-primary">Show Subcontractors</span>
+</label>
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-labor-hours"/>
+<span class="text-sm text-text-primary">Show Labor Hours</span>
+</label>
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-num-techs"/>
+<span class="text-sm text-text-primary">Show Number of Techs</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="exclude-surcharge"/>
+<span class="text-sm text-text-primary">Exclude Fuel & Material Surcharge</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+<h3 class="text-lg font-semibold text-text-primary">Export Formats</h3>
+<div class="mt-4 space-y-3">
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" id="check-pdf" type="checkbox"/>
+<span class="text-sm text-text-primary">PDF</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" id="check-csv" type="checkbox"/>
+<span class="text-sm text-text-primary">CSV</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" id="check-excel" type="checkbox"/>
+<span class="text-sm text-text-primary">Excel</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<button class="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700" id="export-btn">
+<span class="material-symbols-outlined"> download </span>
+                  Export Quote
+                </button>
+<button class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-text-primary shadow-sm hover:bg-gray-100" id="back-btn">
+<span class="material-symbols-outlined"> edit </span>
+                  Back to Editing
+                </button>
+</div>
+</aside>
+</div>
+</main>
+</div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quoteDataString = localStorage.getItem('quoteDataForExport');
+        let quoteData;
+        if (quoteDataString) {
+            quoteData = JSON.parse(quoteDataString);
+            populateQuoteData(quoteData);
         }
 
-        function renderSingleTotal(data) {
-            const tableBody = document.getElementById('quote-table-body');
-            let tableHtml = '';
-            if (data.parts) {
-                data.parts.forEach(part => {
-                    const total = (parseFloat(part.qty) || 0) * (parseFloat(part.unitCost) || 0);
-                    tableHtml += `
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">${part.part}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">${part.desc}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${part.qty}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">$${parseFloat(part.unitCost || 0).toFixed(2)}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">$${total.toFixed(2)}</td>
-                        </tr>
+        function populateQuoteData(data) {
+            // Populate Customer Information
+            const customerInfoTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Customer Information');
+            if(customerInfoTitle){
+                const customerInfoDiv = customerInfoTitle.nextElementSibling;
+                customerInfoDiv.innerHTML = `
+                    <p><span class="font-medium text-text-primary">Name:</span> ${data.customer.name}</p>
+                    <p><span class="font-medium text-text-primary">Company:</span> ${data.customer.company}</p>
+                `;
+            }
+
+            // Populate Bill To Information
+            const billToTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Bill To');
+            if(billToTitle){
+                const billToDiv = billToTitle.nextElementSibling;
+                billToDiv.innerHTML = `
+                    <p><span class="font-medium text-text-primary">Name:</span> ${data.billTo.name}</p>
+                    <p><span class="font-medium text-text-primary">Company:</span> ${data.billTo.company}</p>
+                `;
+            }
+
+            // Populate Unit Information
+            const unitInfoTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Unit Information');
+            if(unitInfoTitle){
+                const unitInfoDiv = unitInfoTitle.nextElementSibling;
+                unitInfoDiv.innerHTML = `
+                    <p><span class="font-medium text-text-primary">Generator Model:</span> ${data.unitInfo['generator.model']}</p>
+                    <p><span class="font-medium text-text-primary">Generator Serial:</span> ${data.unitInfo['generator.serial']}</p>
+                    <p><span class="font-medium text-text-primary">ATS Model:</span> ${data.unitInfo['ats.model']}</p>
+                    <p><span class="font-medium text-text-primary">ATS Serial:</span> ${data.unitInfo['ats.serial']}</p>
+                    <p><span class="font-medium text-text-primary">Engine Model:</span> ${data.unitInfo['engine.model']}</p>
+                    <p><span class="font-medium text-text-primary">Engine Serial:</span> ${data.unitInfo['engine.serial']}</p>
+                `;
+            }
+
+            // Populate Description of Work
+            const descTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Description of Work');
+            if(descTitle){
+                descTitle.nextElementSibling.textContent = data.description;
+            }
+
+            // Populate Labor & Techs
+            populateLaborTechs(data);
+            // Populate Subcontractors
+            populateSubcontractors(data);
+
+            // Render based on display options
+            updateDisplay();
+
+            // Populate Summary
+            const summaryDiv = document.querySelector('.text-right');
+            if(summaryDiv && data.summary){
+                summaryDiv.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Parts Sub Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="parts-total">${data.summary.partsTotal}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Technician Labor</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="tech-labor">${data.summary.techLabor}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Travel Subtotal</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="travel-labor">${data.summary.travelLabor}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Labor Sub Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="labor-total">${data.summary.laborTotal}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Sub Contractor Subtotal</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="sub-total">${data.summary.subTotal}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">S.E.T.H. Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="seth-fee">${data.summary.sethFee}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Fuel & Material Surcharge</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="surcharge">${data.summary.surcharge}</p>
+                        </div>
+                        <div class="flex justify-between items-center pt-4 border-t border-dashed border-gray-300">
+                            <p class="text-base font-semibold text-[var(--text-primary)]">Grand Total</p>
+                            <p class="summary-value text-2xl font-bold text-[var(--primary-color)]" data-summary="grand-total">${data.summary.grandTotal}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function formatCurrency(value) {
+            return `${Number(value).toFixed(2)}`;
+        }
+
+        function renderSingleTotal() {
+            const tableBody = document.querySelector('#quote-table tbody');
+            tableBody.innerHTML = '';
+            const showParts = document.getElementById('show-parts').checked;
+
+            if (showParts && quoteData.parts) {
+                quoteData.parts.forEach(part => {
+                    const row = tableBody.insertRow();
+                    const total = part.qty * part.unitCost;
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">${part.part}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">${part.desc}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${part.qty}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${formatCurrency(part.unitCost)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${formatCurrency(total)}</td>
                     `;
                 });
             }
-            tableBody.innerHTML = tableHtml;
         }
 
         function renderCategoryBreakdown(data) {
-            const tableBody = document.getElementById('quote-table-body');
-            let tableHtml = '';
-            
+            const tableBody = document.querySelector('#quote-table tbody');
             const categories = {
-                'Parts': data.summary.partsTotal,
-                'Labor': data.summary.laborTotal,
-                'Subcontractors': data.summary.subTotal
+                'Parts': [],
+                'Labor': [],
+                'Subcontractor': [],
+                'Fees & Surcharges': []
             };
 
-            for (const [category, total] of Object.entries(categories)) {
-                if (total && total !== '$0.00') {
-                     tableHtml += `
+            // Categorize Parts
+            if (data.parts) {
+                data.parts.forEach(part => {
+                    const qty = parseFloat(part.qty) || 0;
+                    const unitCost = parseFloat(part.unitCost) || 0;
+                    categories['Parts'].push({
+                        description: `${part.part} - ${part.desc}`,
+                        amount: qty * unitCost
+                    });
+                });
+            }
+
+            // Categorize Labor
+            if (data.labor) {
+                const techLaborTotal = (parseFloat(data.labor.techCount) * parseFloat(data.labor.techHours) * parseFloat(data.labor.techRate));
+                if (techLaborTotal > 0) {
+                    categories['Labor'].push({
+                        description: `Technician Labor (${data.labor.techCount} tech(s) @ ${data.labor.techHours} hrs)`,
+                        amount: techLaborTotal
+                    });
+                }
+
+                const travelLaborTotal = (parseFloat(data.labor.travelHours) * parseFloat(data.labor.travelRate));
+                if (travelLaborTotal > 0) {
+                    categories['Labor'].push({
+                        description: `Travel Labor (${data.labor.travelHours} hrs)`,
+                        amount: travelLaborTotal
+                    });
+                }
+            }
+
+            // Categorize Subcontractors
+            if (data.subcontractors) {
+                data.subcontractors.forEach(sub => {
+                    const cost = parseFloat(sub.cost);
+                    if (cost > 0) {
+                        categories['Subcontractor'].push({
+                            description: sub.contact_name,
+                            amount: cost
+                        });
+                    }
+                });
+            }
+
+            // Categorize Fees
+            if (data.summary) {
+                const parseCurrency = (val) => parseFloat(String(val).replace('$', '').replace(',', '')) || 0;
+                const sethFee = parseCurrency(data.summary.sethFee);
+                const surcharge = parseCurrency(data.summary.surcharge);
+                if (sethFee > 0) {
+                    categories['Fees & Surcharges'].push({ description: 'S.E.TH Fee (1.5%)', amount: sethFee });
+                }
+                if (surcharge > 0) {
+                    categories['Fees & Surcharges'].push({ description: 'Fuel & Material Surcharge', amount: surcharge });
+                }
+            }
+
+            // Build HTML String
+            let html = '';
+            for (const category in categories) {
+                if (categories[category].length > 0) {
+                    let categoryTotal = 0;
+                    html += `
+                        <tr class="bg-gray-100 font-semibold">
+                            <td class="px-6 py-3 text-left" colspan="4">${category}</td>
+                            <td class="px-6 py-3 text-right"></td>
+                        </tr>
+                    `;
+                    categories[category].forEach(item => {
+                        html += `
                         <tr>
-                            <td class="px-6 py-4 text-sm font-semibold text-text-primary" colspan="4">${category}</td>
-                            <td class="px-6 py-4 text-right text-sm font-semibold text-text-primary">${total}</td>
+                            <td class="px-6 py-3 text-left text-gray-700" colspan="4">${item.description}</td>
+                            <td class="px-6 py-3 text-right font-medium">${item.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
+                        </tr>
+                        `;
+                        categoryTotal += item.amount;
+                    });
+                    html += `
+                        <tr class="font-semibold border-b-2 border-gray-200">
+                            <td class="px-6 py-3 text-left" colspan="4">Total for ${category}</td>
+                            <td class="px-6 py-3 text-right">${categoryTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
                         </tr>
                     `;
                 }
             }
-            tableBody.innerHTML = tableHtml;
+            tableBody.innerHTML = html;
         }
-        
-        function exportToPdf(data) {
+
+        function populateSubcontractors(data) {
+            const subcontractorsListDiv = document.getElementById('subcontractors-list');
+            subcontractorsListDiv.innerHTML = ''; // Clear previous content
+
+            if (data.subcontractors && data.subcontractors.length > 0) {
+                data.subcontractors.forEach(sub => {
+                    const subDiv = document.createElement('div');
+                    subDiv.className = 'flex justify-between items-center pt-2';
+                    subDiv.innerHTML = `
+                        <p class="text-sm font-medium text-text-primary">${sub.contact_name || 'N/A'}</p>
+                        <p class="text-sm text-text-secondary">${sub.contact_details || ''} - ${formatCurrency(sub.cost || 0)}</p>
+                    `;
+                    subcontractorsListDiv.appendChild(subDiv);
+                });
+            } else {
+                subcontractorsListDiv.innerHTML = '<p class="text-sm text-text-secondary">No subcontractors listed.</p>';
+            }
+        }
+
+        function populateLaborTechs(data) {
+            const laborHoursSpan = document.getElementById('display-labor-hours');
+            const numTechsSpan = document.getElementById('display-num-techs');
+
+            if (data.labor) {
+                laborHoursSpan.textContent = `${data.labor.techHours || 0} hours`;
+                numTechsSpan.textContent = `${data.labor.techCount || 0} techs`;
+            } else {
+                laborHoursSpan.textContent = 'N/A';
+                numTechsSpan.textContent = 'N/A';
+            }
+        }
+
+        function updateDisplay() {
+            const showParts = document.getElementById('show-parts').checked;
+            const showSubcontractors = document.getElementById('show-subcontractors').checked;
+            const showLaborHours = document.getElementById('show-labor-hours').checked;
+            const showNumTechs = document.getElementById('show-num-techs').checked;
+
+            // Toggle visibility of sections
+            document.getElementById('quote-table').closest('.border-t').style.display = showParts ? '' : 'none';
+            document.getElementById('subcontractors-section').style.display = showSubcontractors ? '' : 'none';
+            document.getElementById('labor-tech-section').style.display = (showLaborHours || showNumTechs) ? '' : 'none';
+
+            // Update content based on display options
+            const displayOptionRadios = document.querySelectorAll('input[name="display_option"]');
+            let selectedDisplayOption = 'Show Single Total'; // Default
+            displayOptionRadios.forEach(radio => {
+                if (radio.checked) {
+                    selectedDisplayOption = radio.nextElementSibling.textContent;
+                }
+            });
+
+            if (selectedDisplayOption === 'Show Single Total') {
+                renderSingleTotal();
+            } else if (selectedDisplayOption === 'Show Breakdown by Category') {
+                renderCategoryBreakdown(quoteData);
+            }
+
+            // Specific visibility for labor hours and number of techs within their section
+            document.getElementById('display-labor-hours').closest('p').style.display = showLaborHours ? '' : 'none';
+            document.getElementById('display-num-techs').closest('p').style.display = showNumTechs ? '' : 'none';
+        }
+
+        // --- EVENT LISTENERS ---
+
+        document.querySelectorAll('input[name="display_option"]').forEach(radio => {
+            radio.addEventListener('change', (event) => {
+                updateDisplay(); // Call updateDisplay on radio change
+            });
+        });
+
+        document.getElementById('exclude-surcharge').addEventListener('change', () => {
+            updateDisplay(); // Call updateDisplay on checkbox change
+        });
+
+        // New event listeners for the added checkboxes
+        document.getElementById('show-parts').addEventListener('change', updateDisplay);
+        document.getElementById('show-subcontractors').addEventListener('change', updateDisplay);
+        document.getElementById('show-labor-hours').addEventListener('change', updateDisplay);
+        document.getElementById('show-num-techs').addEventListener('change', updateDisplay);
+
+        // --- EXPORT FUNCTIONS ---
+
+        function exportToPdf() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
+            const quotePreview = document.getElementById('quote-preview');
+            const quoteTitle = quotePreview.querySelector('h3').textContent;
+            const quoteDate = quotePreview.querySelector('p.mt-1').textContent;
+
             doc.setFontSize(18);
-            doc.text(`Quote #${data.serviceCallId || 'N/A'}`, 14, 22);
+            doc.text(quoteTitle, 14, 22);
             doc.setFontSize(11);
             doc.setTextColor(100);
-            doc.text(`Date: ${new Date().toLocaleDateString()}`, 14, 29);
+            doc.text(quoteDate, 14, 29);
 
             doc.autoTable({
                 html: '#quote-table',
                 startY: 40,
                 theme: 'grid',
                 headStyles: {
-                    fillColor: [11, 128, 238]
+                    fillColor: [11, 128, 238] // var(--primary)
                 },
             });
 
-            doc.save(`quote_${data.serviceCallId || 'export'}.pdf`);
+            doc.save(`${quoteTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`);
         }
-    </script>
-</body>
-</html>
+
+        function getTableDataForCsv() {
+            const table = document.getElementById('quote-table');
+            const data = [];
+            const headers = [];
+            table.querySelectorAll('thead th').forEach(th => {
+                headers.push(`"${th.textContent.trim()}"`);
+            });
+            data.push(headers.join(','));
+
+            table.querySelectorAll('tbody tr').forEach(tr => {
+                const row = [];
+                tr.querySelectorAll('td').forEach(td => {
+                    row.push(`"${td.textContent.trim().replace(/"/g, '""')}"`);
+                });
+                data.push(row.join(','));
+            });
+            return data.join('\r\n');
+        }
+
+        function exportToCsv() {
+            const csvContent = getTableDataForCsv();
+            const quoteTitle = document.querySelector('#quote-preview h3').textContent;
+            const filename = `${quoteTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.csv`;
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        document.getElementById('export-btn').addEventListener('click', () => {
+            if (document.getElementById('check-pdf').checked) {
+                exportToPdf();
+            }
+            if (document.getElementById('check-csv').checked) {
+                exportToCsv();
+            }
+            if (document.getElementById('check-excel').checked) {
+                alert('Excel export is not yet implemented. For now, you can open the CSV file in Excel.');
+            }
+        });
+
+        document.getElementById('back-btn').addEventListener('click', () => {
+            window.history.back();
+        });
+    });
+</script>
+</body></html>
