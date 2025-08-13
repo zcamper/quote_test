@@ -273,8 +273,8 @@
         </div>
     </div>
 </div>
-<div class="bg-white shadow-sm rounded-lg" id="bill-to-card">
-    <div class="p-6">
+<div class="bg-white shadow-sm rounded-lg">
+    <div class="p-6" id="bill-to-card">
         <h3 class="grid grid-cols-2 md:grid-cols-2 gap-x-6 text-lg font-semibold leading-6 text-[var(--text-primary)] mb-4">Bill to Customer</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
             <div class="break-words">
@@ -842,8 +842,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (writeupEl) {
             writeupEl.value = '';
         }
-        document.querySelectorAll('.customer-name').forEach(el => el.textContent = 'Sophia Carter');
-        document.querySelectorAll('.customer-company').forEach(el => el.textContent = 'Acme Corporation');
+        document.getElementById('customer-name').textContent = 'Sophia Carter';
+        document.getElementById('customer-company').textContent = 'Acme Corporation';
 
         // Reset rates to default
         const techLaborSection = document.getElementById('tech-labor-section');
@@ -918,8 +918,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const { customer, unitInfo, rates, writeup } = baseData;
 
         // Populate customer info
-        document.querySelectorAll('.customer-name').forEach(el => el.textContent = customer.name);
-        document.querySelectorAll('.customer-company').forEach(el => el.textContent = customer.company);
+        document.getElementById('customer-name').textContent = customer.name;
+        document.getElementById('customer-company').textContent = customer.company;
 
         // Populate write-up
         const writeupEl = document.getElementById('service-call-writeup');
@@ -1103,16 +1103,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         const revisionToSave = isNewRevision ? (Math.max(0, ...quoteState.revisions.map(r => r.revision)) + 1) : quoteState.revision;
 
-        const unitLocationCard = document.getElementById('unit-location-card');
-
         // Gather all data
         const dataToSave = {
             serviceCallId: quoteState.serviceCallId,
             revision: revisionToSave,
             description: document.getElementById('quote-description-textarea').value,
             customer: {
-                name: unitLocationCard.querySelector('.customer-name').textContent,
-                company: unitLocationCard.querySelector('.customer-company').textContent
+                name: document.getElementById('customer-name').textContent,
+                company: document.getElementById('customer-company').textContent
             },
             labor: {
                 techCount: document.getElementById('tech-count').value,
@@ -1167,23 +1165,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Export buttons
     function exportWithData(view) {
-        const unitLocationCard = document.getElementById('unit-location-card');
-        const billToCard = document.getElementById('bill-to-card');
+        const unitLocationDiv = Array.from(document.querySelectorAll('h3')).find(h3 => h3.textContent === 'Unit Location').closest('.bg-white');
+        const unitLocationName = unitLocationDiv.querySelector('#customer-name').textContent;
+        const unitLocationCompany = unitLocationDiv.querySelector('#customer-company').textContent;
 
-        if (!unitLocationCard || !billToCard) {
-            console.error('Could not find unit location or bill-to card. Export aborted.');
-            alert('Error: Could not find customer information cards. Export failed.');
-            return;
-        }
-
-        const unitLocationName = unitLocationCard.querySelector('.customer-name').textContent;
-        const unitLocationCompany = unitLocationCard.querySelector('.customer-company').textContent;
-        const billToName = billToCard.querySelector('.customer-name').textContent;
-        const billToCompany = billToCard.querySelector('.customer-company').textContent;
+        const billToDiv = Array.from(document.querySelectorAll('h3')).find(h3 => h3.textContent === 'Bill to Customer').closest('.bg-white');
+        const billToName = billToDiv.querySelector('#customer-name').textContent;
+        const billToCompany = billToDiv.querySelector('#customer-company').textContent;
 
         const quoteData = {
-            customer: { name: unitLocationName, company: unitLocationCompany },
-            billTo: { name: billToName, company: billToCompany },
+            customer: {
+                name: unitLocationName,
+                company: unitLocationCompany
+            },
+            billTo: {
+                name: billToName,
+                company: billToCompany
+            },
             unitInfo: {
                 'generator.model': document.querySelector('[data-key="generator.model"]').textContent,
                 'generator.serial': document.querySelector('[data-key="generator.serial"]').textContent,
