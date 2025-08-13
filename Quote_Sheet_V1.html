@@ -1,5 +1,7 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en"><head><script type="text/javascript" src="/___vscode_livepreview_injected_script"></script><script type="text/javascript" src="/___vscode_livepreview_injected_script"></script>
     <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-eval' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com;">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title id="page-title">Quote Sheet</title>
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -222,7 +224,6 @@
 </div>
 </div>
 </div>
-</div>
 
 <div class="lg:col-span-3 space-y-6">
 <div class="bg-[var(--card-background)] shadow-sm rounded-lg overflow-hidden">
@@ -296,7 +297,7 @@
 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 <span class="material-icons-outlined text-gray-400">search</span>
 </div>
-<input class="block w-full rounded-md border-gray-300 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Search by Part # or Name" type="text">
+<input id="parts-search" name="parts-search" class="block w-full rounded-md border-gray-300 pl-10 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Search by Part # or Name" type="text">
 </div>
 </div>
 <div class="flow-root">
@@ -317,18 +318,18 @@
     <tr>
         <td class="py-2 pl-4 pr-6 text-sm sm:pl-0 break-words align-top">
             <div class="font-medium text-[var(--text-primary)]">CM-203A</div>
-            <div class="mt-1"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Compressor Motor"></div>
+            <div class="mt-1"><input id="desc-1" name="desc-1" class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Compressor Motor"></div>
         </td>
         <td class="px-6 py-2 text-sm break-words align-top">
-            <div><input class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value=""></div>
-            <div class="mt-1"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="Global Parts"></div>
+            <div><input id="vendor-part-1" name="vendor-part-1" class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value=""></div>
+            <div class="mt-1"><input id="vendor-1" name="vendor-1" class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="Global Parts"></div>
         </td>
         <td class="px-6 py-2 text-sm text-right align-top">
-            <div><input class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="500.00"></div>
-            <div class="mt-1"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="450.00"></div>
+            <div><input id="list-price-1" name="list-price-1" class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="500.00"></div>
+            <div class="mt-1"><input id="unit-cost-1" name="unit-cost-1" class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="450.00"></div>
         </td>
         <td class="px-6 py-2 text-sm text-right align-top">
-            <input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1">
+            <input id="qty-1" name="qty-1" class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1">
         </td>
         <td class="row-total px-6 py-2 text-sm font-medium text-right text-[var(--text-primary)] align-top">$450.00</td>
         <td class="py-2 pl-6 pr-4 text-right text-sm font-medium sm:pr-0 align-top">
@@ -338,18 +339,18 @@
     <tr>
         <td class="py-2 pl-4 pr-6 text-sm sm:pl-0 break-words align-top">
             <div class="font-medium text-[var(--text-primary)]">FLT-55B</div>
-            <div class="mt-1"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Filter Drier"></div>
+            <div class="mt-1"><input id="desc-2" name="desc-2" class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Filter Drier"></div>
         </td>
         <td class="px-6 py-2 text-sm break-words align-top">
-            <div><input class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value=""></div>
-            <div class="mt-1"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="ACME Filters"></div>
+            <div><input id="vendor-part-2" name="vendor-part-2" class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value=""></div>
+            <div class="mt-1"><input id="vendor-2" name="vendor-2" class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="ACME Filters"></div>
         </td>
         <td class="px-6 py-2 text-sm text-right align-top">
-            <div><input class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="45.00"></div>
-            <div class="mt-1"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="35.00"></div>
+            <div><input id="list-price-2" name="list-price-2" class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="45.00"></div>
+            <div class="mt-1"><input id="unit-cost-2" name="unit-cost-2" class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="35.00"></div>
         </td>
         <td class="px-6 py-2 text-sm text-right align-top">
-            <input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1">
+            <input id="qty-2" name="qty-2" class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1">
         </td>
         <td class="row-total px-6 py-2 text-sm font-medium text-right text-[var(--text-primary)] align-top">$35.00</td>
         <td class="py-2 pl-6 pr-4 text-right text-sm font-medium sm:pr-0 align-top">
@@ -359,18 +360,18 @@
     <tr>
         <td class="py-2 pl-4 pr-6 text-sm sm:pl-0 break-words align-top">
             <div class="font-medium text-[var(--text-primary)]">REF-R410A</div>
-            <div class="mt-1"><input class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Refrigerant (10 lbs)"></div>
+            <div class="mt-1"><input id="desc-3" name="desc-3" class="desc-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Description" type="text" value="Refrigerant (10 lbs)"></div>
         </td>
         <td class="px-6 py-2 text-sm break-words align-top">
-            <div><input class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value=""></div>
-            <div class="mt-1"><input class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="Global Parts"></div>
+            <div><input id="vendor-part-3" name="vendor-part-3" class="vendor-part-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor Part #" type="text" value=""></div>
+            <div class="mt-1"><input id="vendor-3" name="vendor-3" class="vendor-input w-full rounded-md border-gray-300 shadow-sm sm:text-sm" placeholder="Vendor" type="text" value="Global Parts"></div>
         </td>
         <td class="px-6 py-2 text-sm text-right align-top">
-            <div><input class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="150.00"></div>
-            <div class="mt-1"><input class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="120.00"></div>
+            <div><input id="list-price-3" name="list-price-3" class="list-price-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="150.00"></div>
+            <div class="mt-1"><input id="unit-cost-3" name="unit-cost-3" class="unit-cost-input w-24 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" step="0.01" type="number" value="120.00"></div>
         </td>
         <td class="px-6 py-2 text-sm text-right align-top">
-            <input class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1">
+            <input id="qty-3" name="qty-3" class="qty-input w-20 rounded-md border-gray-300 text-right shadow-sm sm:text-sm" type="number" value="1">
         </td>
         <td class="row-total px-6 py-2 text-sm font-medium text-right text-[var(--text-primary)] align-top">$120.00</td>
         <td class="py-2 pl-6 pr-4 text-right text-sm font-medium sm:pr-0 align-top">
@@ -413,8 +414,7 @@
 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 <span class="text-gray-500 sm:text-sm">$</span>
 </div>
-<input class="block w-full rounded-md border-gray-300 pl-7 pr-12 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" id="subcontractor-cost-1" placeholder="0.00" type="text" value="850.00">
-</div>
+<input class="block w-full rounded-md border-gray-300 pl-7 pr-12 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" id="subcontractor-cost-1" name="subcontractor-cost-1" placeholder="0.00" type="text" value="850.00">
 </div>
 </div>
 </div>
@@ -429,34 +429,31 @@
 <h3 class="text-lg font-semibold leading-6 text-[var(--text-primary)] mb-4">Quote Summary</h3>
 <div class="space-y-3">
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Parts Sub Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="parts-total">$0.00</p>
+<p class="text-sm text-[var(--text-secondary)]">Parts Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="parts-total">$605.00</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Technician Labor</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="tech-labor">$0.00</p>
+<p class="text-sm text-[var(--text-secondary)]">Technician Labor</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="tech-labor">$1200.00</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Travel Subtotal</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="travel-labor">$0.00</p>
+<p class="text-sm text-[var(--text-secondary)]">Travel Labor</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="travel-labor">$300.00</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Labor Sub Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="labor-total">$0.00</p>
+<p class="text-sm text-[var(--text-secondary)]">Subcontractor Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="sub-total">$850.00</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Sub Contractor Subtotal</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="sub-total">$0.00</p>
+<p class="text-sm text-[var(--text-secondary)]">S.E.TH Fee (1.5%)</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="seth-fee">$44.32</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">S.E.T.H. Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="seth-fee">$0.00</p>
-</div>
-<div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Fuel & Material Surcharge</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="surcharge">$0.00</p>
+<p class="text-sm text-[var(--text-secondary)]">Fuel &amp; Material Surcharge</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="surcharge">$75.00</p>
 </div>
 <div class="flex justify-between items-center pt-4 border-t border-dashed border-gray-300">
 <p class="text-base font-semibold text-[var(--text-primary)]">Grand Total</p>
-<p class="summary-value text-2xl font-bold text-[var(--primary-color)]" data-summary="grand-total">$0.00</p>
+<p class="summary-value text-2xl font-bold text-[var(--primary-color)]" data-summary="grand-total">$3074.32</p>
 </div>
 </div>
 </div>
 </div>
-
+</div>
 <div class="bg-white shadow-sm rounded-lg">
     <div class="p-6">
         <h3 class="text-lg font-semibold leading-6 text-[var(--text-primary)]">On Hand Inventory</h3>
@@ -476,9 +473,6 @@
         </ul>
     </div>
 </div>
-
-</div>
-
 </div>
 </div>
 </div>
@@ -556,7 +550,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function exportToPdf() {
         const doc = new jsPDF();
-        doc.text("Quote Details: #QT2024-0034", 14, 22);
+        doc.text("Quote Details: #"+(quoteState.serviceCallId || 'N/A'), 14, 22);
         doc.setFontSize(11);
         doc.setTextColor(100);
         doc.text(`Customer: ${document.querySelector('.p-6 .font-semibold').textContent}`, 14, 29);
@@ -634,7 +628,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <label class="text-sm font-medium text-[var(--text-secondary)]" for="subcontractor-cost-${count}">Cost</label>
                 <div class="relative mt-1">
                     <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"><span class="text-gray-500 sm:text-sm">$</span></div>
-                    <input class="block w-full rounded-md border-gray-300 pl-7 pr-12 shadow-sm sm:text-sm" id="subcontractor-cost-${count}" placeholder="0.00" type="text" value="${cost}"/>
+                    <input class="block w-full rounded-md border-gray-300 pl-7 pr-12 shadow-sm sm:text-sm" id="subcontractor-cost-${count}" name="subcontractor-cost-${count}" placeholder="0.00" type="text" value="${cost}"/>
                 </div>
             </div>`;
         list.appendChild(newSub);
@@ -701,29 +695,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const travelHours = parseFloat(document.getElementById('travel-hours')?.value) || 0;
         const travelRate = parseFloat(document.getElementById('travel-labor-section')?.dataset.rate) || 75;
         const travelLabor = travelHours * travelRate;
-        
-        const laborTotal = techLabor + travelLabor;
 
-        // 4. Get Fees and Surcharges from inputs
-        const sethFeePercentage = parseFloat(document.getElementById('seth-fee-percentage')?.value) || 0;
-        const surchargeAmount = parseFloat(document.getElementById('surcharge-amount')?.value) || 0;
+        const surcharge = parseCurrency(document.querySelector('.summary-value[data-summary="surcharge"]')?.textContent);
 
-        // 5. Calculate derived totals
-        const subtotalForFee = partsTotal + laborTotal + subcontractorTotal;
-        const sethFee = subtotalForFee * (sethFeePercentage / 100);
-        const grandTotal = subtotalForFee + sethFee + surchargeAmount;
+        // 4. Calculate derived totals
+        const subtotalForFee = partsTotal + techLabor + travelLabor + subcontractorTotal;
+        const sethFee = subtotalForFee * 0.015;
+        const grandTotal = subtotalForFee + sethFee + surcharge;
 
-        // 6. Update UI
+        // 5. Update UI
         // Table footer
         document.querySelector('#parts-table tfoot td').textContent = formatCurrency(partsTotal);
         // Summary section
         document.querySelector('.summary-value[data-summary="parts-total"]').textContent = formatCurrency(partsTotal);
         document.querySelector('.summary-value[data-summary="tech-labor"]').textContent = formatCurrency(techLabor);
         document.querySelector('.summary-value[data-summary="travel-labor"]').textContent = formatCurrency(travelLabor);
-        document.querySelector('.summary-value[data-summary="labor-total"]').textContent = formatCurrency(laborTotal);
         document.querySelector('.summary-value[data-summary="sub-total"]').textContent = formatCurrency(subcontractorTotal);
         document.querySelector('.summary-value[data-summary="seth-fee"]').textContent = formatCurrency(sethFee);
-        document.querySelector('.summary-value[data-summary="surcharge"]').textContent = formatCurrency(surchargeAmount);
         document.querySelector('.summary-value[data-summary="grand-total"]').textContent = formatCurrency(grandTotal);
     }
 
@@ -1062,86 +1050,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupTabs('tab-common-parts', 'tab-service-articles', 'panel-common-parts', 'panel-service-articles');
 
     // Export buttons
-    function exportWithData(view) {
-        const unitLocationDiv = Array.from(document.querySelectorAll('h3')).find(h3 => h3.textContent === 'Unit Location').closest('.bg-white');
-        const unitLocationName = unitLocationDiv.querySelector('#unit-location-name').textContent;
-        const unitLocationCompany = unitLocationDiv.querySelector('#unit-location-company').textContent;
-
-        const billToDiv = Array.from(document.querySelectorAll('h3')).find(h3 => h3.textContent === 'Bill to Customer').closest('.bg-white');
-        const billToName = billToDiv.querySelector('#bill-to-name').textContent;
-        const billToCompany = billToDiv.querySelector('#bill-to-company').textContent;
-
-        const quoteData = {
-            customer: {
-                name: unitLocationName,
-                company: unitLocationCompany
-            },
-            billTo: {
-                name: billToName,
-                company: billToCompany
-            },
-            unitInfo: {
-                'generator.model': document.querySelector('[data-key="generator.model"]').textContent,
-                'generator.serial': document.querySelector('[data-key="generator.serial"]').textContent,
-                'generator.spec': document.querySelector('[data-key="generator.spec"]').textContent,
-                'generator.kw': document.querySelector('[data-key="generator.kw"]').textContent,
-                'generator.voltage': document.querySelector('[data-key="generator.voltage"]').textContent,
-                'generator.warranty': document.querySelector('[data-key="generator.warranty"]').textContent,
-                'ats.model': document.querySelector('[data-key="ats.model"]').textContent,
-                'ats.serial': document.querySelector('[data-key="ats.serial"]').textContent,
-                'engine.model': document.querySelector('[data-key="engine.model"]').textContent,
-                'engine.serial': document.querySelector('[data-key="engine.serial"]').textContent
-            },
-            description: document.getElementById('quote-description-textarea').value,
-            parts: getPartsDataForSave(),
-            labor: {
-                techCount: document.getElementById('tech-count').value,
-                techHours: document.getElementById('tech-hours').value,
-                techRate: document.getElementById('tech-labor-section').dataset.rate,
-                travelHours: document.getElementById('travel-hours').value,
-                travelRate: document.getElementById('travel-labor-section').dataset.rate
-            },
-            subcontractors: Array.from(document.querySelectorAll('#subcontractors-list > div')).map(div => {
-                return {
-                    contact_name: div.querySelector('input[id^="subcontractor-contact-"]').value,
-                    contact_details: div.querySelector('input[id^="subcontractor-details-"]').value,
-                    cost: div.querySelector('input[id^="subcontractor-cost-"]').value
-                }
-            }),
-            summary: {
-                partsTotal: document.querySelector('[data-summary="parts-total"]').textContent,
-                techLabor: document.querySelector('[data-summary="tech-labor"]').textContent,
-                travelLabor: document.querySelector('[data-summary="travel-labor"]').textContent,
-                laborTotal: document.querySelector('[data-summary="labor-total"]').textContent,
-                subTotal: document.querySelector('[data-summary="sub-total"]').textContent,
-                sethFee: document.querySelector('[data-summary="seth-fee"]').textContent,
-                surcharge: document.querySelector('[data-summary="surcharge"]').textContent,
-                grandTotal: document.querySelector('[data-summary="grand-total"]').textContent
-            }
-        };
-        localStorage.setItem('quoteDataForExport', JSON.stringify(quoteData));
-        if (view) {
-            localStorage.setItem('exportView', view);
-        } else {
-            localStorage.removeItem('exportView');
-        }
-        window.open('Quote_Export_V1.html', '_blank');
-    }
-
-    document.getElementById('menu-item-0')?.addEventListener('click', (e) => { e.preventDefault(); exportWithData(); });
-    document.getElementById('menu-item-1')?.addEventListener('click', (e) => { 
-        e.preventDefault();
-        const rows = getTableRowsForExport().map(row => row.map(cell => `"${cell}"`));
-        exportToCsv('quote-all.csv', rows);
-    });
-    document.getElementById('menu-item-2')?.addEventListener('click', (e) => {
-        e.preventDefault();
-        const rows = getTableRowsForExport();
-        rows.sort((a, b) => a[2].localeCompare(b[2])); // Sort by vendor (column index 2)
-        const quotedRows = rows.map(row => row.map(cell => `"${cell}"`));
-        exportToCsv('quote-by-vendor.csv', quotedRows);
-    });
-    document.getElementById('menu-item-3')?.addEventListener('click', (e) => { e.preventDefault(); exportWithData('categoryBreakdown'); });
+    document.getElementById('preview-export-btn')?.addEventListener('click', (e) => { e.preventDefault(); openExportPreview(); });
 
     // Main action buttons
     document.getElementById('update-revision-btn')?.addEventListener('click', () => saveQuote(false));
@@ -1220,7 +1129,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Add listeners to all cost/qty inputs on page load
-    document.querySelectorAll('.labor-input, #parts-table .qty-input, #parts-table .unit-cost-input, #subcontractors-list input[id^="subcontractor-cost-"], .fee-input').forEach(input => {
+    document.querySelectorAll('.labor-input, #parts-table .qty-input, #parts-table .unit-cost-input, #subcontractors-list input[id^="subcontractor-cost-"]').forEach(input => {
         input.addEventListener('input', updateTotals);
     });
 
@@ -1278,3 +1187,5 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTotals();
 });
 </script>
+
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></body></html>
