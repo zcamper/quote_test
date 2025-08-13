@@ -299,7 +299,12 @@ def summarize_writeup():
     A technician provided this repair write-up that covers what is needed for the future repair of the generator. Your task is to:
     1. Rewrite the entire write-up into a clear, professional, customer-facing description for a quote.
        Focus on the work to be performed once the quote is approved and its value. Omit internal jargon. The output must be a single paragraph.
-    2. Extract the following information from the write-up if present:
+    2. The quote should follow the format of "quote to remove and replace [part] with [new part] and [additional work]".
+       For example: "quote to remove and replace the fuel pump with a new fuel pump and replace the fuel filter".
+       If no specific part is mentioned, use "quote to perform maintenance on the generator".
+       If the write-up is too vague, use "quote to perform maintenance on the generator" as a fallback.
+       If the write-up is too short or unclear, use "quote to perform maintenance on the generator" as a fallback.
+    3. Extract the following information from the write-up if present:
        - Number of technicians involved (tech_count)
        - Total hours worked (tech_hours)
        - Days spent (travel_days) or number of days (if not specified, default to 0)

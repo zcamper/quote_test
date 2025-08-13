@@ -54,7 +54,7 @@
 <div class="flex items-center gap-2 text-sm text-text-secondary">
 <a class="hover:text-[var(--primary)]" href="#">Quotes</a>
 <span>/</span>
-<a class="hover:text-[var(--primary)]" href="#">Quote #12345</a>
+<a class="hover:text-[var(--primary)]" href="#" id="quote-number-link">Quote #</a>
 <span>/</span>
 <span class="font-medium text-text-primary">Export Preview</span>
 </div>
@@ -67,7 +67,7 @@
 <div class="p-6">
 <div class="flex justify-between items-start">
 <div>
-<h3 class="text-xl font-semibold text-text-primary">Quote #12345</h3>
+<h3 class="text-xl font-semibold text-text-primary" id="quote-number-display">Quote #12345</h3>
 <p class="mt-1 text-sm text-text-secondary">Date: 2024-01-15</p>
 </div>
 <div class="text-right">
@@ -163,11 +163,24 @@
 </div>
 </div>
 <div class="text-right">
-<p class="text-sm font-medium text-text-secondary">Subtotal: <span class="ml-2 font-semibold text-text-primary">$13,000.00</span></p>
-<p class="text-sm font-medium text-text-secondary">Tax (8%): <span class="ml-2 font-semibold text-text-primary">$1,040.00</span></p>
-<p class="mt-2 text-lg font-bold text-text-primary">Total: <span class="ml-2 text-[var(--primary)]">$14,040.00</span></p>
+                    <p class="text-sm font-medium text-text-secondary">Subtotal: <span class="ml-2 font-semibold text-text-primary">$850.00</span></p>
+                    <p class="text-sm font-medium text-text-secondary">Tax (8%): <span class="ml-2 font-semibold text-text-primary">$44.32</span></p>
+                    <p class="mt-2 text-lg font-bold text-text-primary">Total: <span class="ml-2 text-[var(--primary)]">$3074.32</span></p>
+                </div>
 </div>
 </div>
+<div id="subcontractors-section" class="border-t border-gray-200 mt-6 pt-6">
+    <h4 class="text-lg font-semibold text-text-primary">Subcontractors</h4>
+    <div id="subcontractors-list" class="mt-2 space-y-2">
+        <!-- Subcontractor items will be populated here by JS -->
+    </div>
+</div>
+<div class="mt-6" id="labor-tech-section">
+    <h4 class="text-lg font-semibold text-text-primary">Labor & Techs</h4>
+    <div class="mt-2 space-y-1 text-sm text-text-secondary">
+        <p><span class="font-medium text-text-primary">Labor Hours:</span> <span id="display-labor-hours"></span></p>
+        <p><span class="font-medium text-text-primary">Number of Techs:</span> <span id="display-num-techs"></span></p>
+    </div>
 </div>
 </div>
 <aside class="space-y-8">
@@ -186,12 +199,20 @@
 <h4 class="text-base font-semibold text-text-primary">Included Items</h4>
 <div class="mt-3 space-y-3">
 <label class="flex items-center gap-3">
-<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox"/>
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-parts"/>
 <span class="text-sm text-text-primary">Show Parts</span>
 </label>
 <label class="flex items-center gap-3">
-<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox"/>
-<span class="text-sm text-text-primary">Show Labor</span>
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-subcontractors"/>
+<span class="text-sm text-text-primary">Show Subcontractors</span>
+</label>
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-labor-hours"/>
+<span class="text-sm text-text-primary">Show Labor Hours</span>
+</label>
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-num-techs"/>
+<span class="text-sm text-text-primary">Show Number of Techs</span>
 </label>
 <label class="flex items-center gap-3">
 <input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="exclude-surcharge"/>
@@ -283,23 +304,59 @@
                 descTitle.nextElementSibling.textContent = data.description;
             }
 
-            renderSingleTotal();
+            // Populate Labor & Techs
+            populateLaborTechs(data);
+            // Populate Subcontractors
+            populateSubcontractors(data);
+
+            // Render based on display options
+            updateDisplay();
 
             // Populate Summary
             const summaryDiv = document.querySelector('.text-right');
             if(summaryDiv && data.summary){
                 summaryDiv.innerHTML = `
-                    <p class="text-sm font-medium text-text-secondary">Subtotal: <span class="ml-2 font-semibold text-text-primary">${data.summary.subTotal}</span></p>
-                    <p class="text-sm font-medium text-text-secondary">Tax (8%): <span class="ml-2 font-semibold text-text-primary">${data.summary.sethFee}</span></p>
-                    <p class="mt-2 text-lg font-bold text-text-primary">Total: <span class="ml-2 text-[var(--primary)]">${data.summary.grandTotal}</span></p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Parts Sub Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="parts-total">${data.summary.partsTotal}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Technician Labor</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="tech-labor">${data.summary.techLabor}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Travel Subtotal</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="travel-labor">${data.summary.travelLabor}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Labor Sub Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="labor-total">${data.summary.laborTotal}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Sub Contractor Subtotal</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="sub-total">${data.summary.subTotal}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">S.E.T.H. Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="seth-fee">${data.summary.sethFee}</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <p class="text-sm text-[var(--text-secondary)]">Fuel & Material Surcharge</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="surcharge">${data.summary.surcharge}</p>
+                        </div>
+                        <div class="flex justify-between items-center pt-4 border-t border-dashed border-gray-300">
+                            <p class="text-base font-semibold text-[var(--text-primary)]">Grand Total</p>
+                            <p class="summary-value text-2xl font-bold text-[var(--primary-color)]" data-summary="grand-total">${data.summary.grandTotal}</p>
+                        </div>
+                    </div>
                 `;
             }
+        }
+
+        function formatCurrency(value) {
+            return `${Number(value).toFixed(2)}`;
         }
 
         function renderSingleTotal() {
             const tableBody = document.querySelector('#quote-table tbody');
             tableBody.innerHTML = '';
-            if(quoteData.parts){
+            const showParts = document.getElementById('show-parts').checked;
+
+            if (showParts && quoteData.parts) {
                 quoteData.parts.forEach(part => {
                     const row = tableBody.insertRow();
                     const total = part.qty * part.unitCost;
@@ -307,60 +364,190 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">${part.part}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">${part.desc}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${part.qty}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${part.unitCost}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${!isNaN(total) ? total.toFixed(2) : '0.00'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${formatCurrency(part.unitCost)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${formatCurrency(total)}</td>
                     `;
                 });
             }
         }
 
-        function renderCategoryBreakdown() {
+        function renderCategoryBreakdown(data) {
             const tableBody = document.querySelector('#quote-table tbody');
-            tableBody.innerHTML = '';
+            const categories = {
+                'Parts': [],
+                'Labor': [],
+                'Subcontractor': [],
+                'Fees & Surcharges': []
+            };
 
-            const categories = [
-                { name: 'Parts Total', value: quoteData.summary.partsTotal },
-                { name: 'Technician Labor', value: quoteData.summary.techLabor },
-                { name: 'Travel Labor', value: quoteData.summary.travelLabor },
-                { name: 'Subcontractor Total', value: quoteData.summary.subTotal }
-            ];
-
-            if (!document.getElementById('exclude-surcharge').checked) {
-                categories.push({ name: 'S.E.TH Fee (1.5%)', value: quoteData.summary.sethFee });
-                categories.push({ name: 'Fuel & Material Surcharge', value: quoteData.summary.surcharge });
+            // Categorize Parts
+            if (data.parts) {
+                data.parts.forEach(part => {
+                    const qty = parseFloat(part.qty) || 0;
+                    const unitCost = parseFloat(part.unitCost) || 0;
+                    categories['Parts'].push({
+                        description: `${part.part} - ${part.desc}`,
+                        amount: qty * unitCost
+                    });
+                });
             }
 
-            categories.forEach(category => {
-                const row = tableBody.insertRow();
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">${category.name}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary"></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary"></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary"></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${category.value}</td>
-                `;
+            // Categorize Labor
+            if (data.labor) {
+                const techLaborTotal = (parseFloat(data.labor.techCount) * parseFloat(data.labor.techHours) * parseFloat(data.labor.techRate));
+                if (techLaborTotal > 0) {
+                    categories['Labor'].push({
+                        description: `Technician Labor (${data.labor.techCount} tech(s) @ ${data.labor.techHours} hrs)`,
+                        amount: techLaborTotal
+                    });
+                }
+
+                const travelLaborTotal = (parseFloat(data.labor.travelHours) * parseFloat(data.labor.travelRate));
+                if (travelLaborTotal > 0) {
+                    categories['Labor'].push({
+                        description: `Travel Labor (${data.labor.travelHours} hrs)`,
+                        amount: travelLaborTotal
+                    });
+                }
+            }
+
+            // Categorize Subcontractors
+            if (data.subcontractors) {
+                data.subcontractors.forEach(sub => {
+                    const cost = parseFloat(sub.cost);
+                    if (cost > 0) {
+                        categories['Subcontractor'].push({
+                            description: sub.contact_name,
+                            amount: cost
+                        });
+                    }
+                });
+            }
+
+            // Categorize Fees
+            if (data.summary) {
+                const parseCurrency = (val) => parseFloat(String(val).replace('$', '').replace(',', '')) || 0;
+                const sethFee = parseCurrency(data.summary.sethFee);
+                const surcharge = parseCurrency(data.summary.surcharge);
+                if (sethFee > 0) {
+                    categories['Fees & Surcharges'].push({ description: 'S.E.TH Fee (1.5%)', amount: sethFee });
+                }
+                if (surcharge > 0) {
+                    categories['Fees & Surcharges'].push({ description: 'Fuel & Material Surcharge', amount: surcharge });
+                }
+            }
+
+            // Build HTML String
+            let html = '';
+            for (const category in categories) {
+                if (categories[category].length > 0) {
+                    let categoryTotal = 0;
+                    html += `
+                        <tr class="bg-gray-100 font-semibold">
+                            <td class="px-6 py-3 text-left" colspan="4">${category}</td>
+                            <td class="px-6 py-3 text-right"></td>
+                        </tr>
+                    `;
+                    categories[category].forEach(item => {
+                        html += `
+                        <tr>
+                            <td class="px-6 py-3 text-left text-gray-700" colspan="4">${item.description}</td>
+                            <td class="px-6 py-3 text-right font-medium">${item.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
+                        </tr>
+                        `;
+                        categoryTotal += item.amount;
+                    });
+                    html += `
+                        <tr class="font-semibold border-b-2 border-gray-200">
+                            <td class="px-6 py-3 text-left" colspan="4">Total for ${category}</td>
+                            <td class="px-6 py-3 text-right">${categoryTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
+                        </tr>
+                    `;
+                }
+            }
+            tableBody.innerHTML = html;
+        }
+
+        function populateSubcontractors(data) {
+            const subcontractorsListDiv = document.getElementById('subcontractors-list');
+            subcontractorsListDiv.innerHTML = ''; // Clear previous content
+
+            if (data.subcontractors && data.subcontractors.length > 0) {
+                data.subcontractors.forEach(sub => {
+                    const subDiv = document.createElement('div');
+                    subDiv.className = 'flex justify-between items-center pt-2';
+                    subDiv.innerHTML = `
+                        <p class="text-sm font-medium text-text-primary">${sub.contact_name || 'N/A'}</p>
+                        <p class="text-sm text-text-secondary">${sub.contact_details || ''} - ${formatCurrency(sub.cost || 0)}</p>
+                    `;
+                    subcontractorsListDiv.appendChild(subDiv);
+                });
+            } else {
+                subcontractorsListDiv.innerHTML = '<p class="text-sm text-text-secondary">No subcontractors listed.</p>';
+            }
+        }
+
+        function populateLaborTechs(data) {
+            const laborHoursSpan = document.getElementById('display-labor-hours');
+            const numTechsSpan = document.getElementById('display-num-techs');
+
+            if (data.labor) {
+                laborHoursSpan.textContent = `${data.labor.techHours || 0} hours`;
+                numTechsSpan.textContent = `${data.labor.techCount || 0} techs`;
+            } else {
+                laborHoursSpan.textContent = 'N/A';
+                numTechsSpan.textContent = 'N/A';
+            }
+        }
+
+        function updateDisplay() {
+            const showParts = document.getElementById('show-parts').checked;
+            const showSubcontractors = document.getElementById('show-subcontractors').checked;
+            const showLaborHours = document.getElementById('show-labor-hours').checked;
+            const showNumTechs = document.getElementById('show-num-techs').checked;
+
+            // Toggle visibility of sections
+            document.getElementById('quote-table').closest('.border-t').style.display = showParts ? '' : 'none';
+            document.getElementById('subcontractors-section').style.display = showSubcontractors ? '' : 'none';
+            document.getElementById('labor-tech-section').style.display = (showLaborHours || showNumTechs) ? '' : 'none';
+
+            // Update content based on display options
+            const displayOptionRadios = document.querySelectorAll('input[name="display_option"]');
+            let selectedDisplayOption = 'Show Single Total'; // Default
+            displayOptionRadios.forEach(radio => {
+                if (radio.checked) {
+                    selectedDisplayOption = radio.nextElementSibling.textContent;
+                }
             });
+
+            if (selectedDisplayOption === 'Show Single Total') {
+                renderSingleTotal();
+            } else if (selectedDisplayOption === 'Show Breakdown by Category') {
+                renderCategoryBreakdown(quoteData);
+            }
+
+            // Specific visibility for labor hours and number of techs within their section
+            document.getElementById('display-labor-hours').closest('p').style.display = showLaborHours ? '' : 'none';
+            document.getElementById('display-num-techs').closest('p').style.display = showNumTechs ? '' : 'none';
         }
 
         // --- EVENT LISTENERS ---
 
         document.querySelectorAll('input[name="display_option"]').forEach(radio => {
             radio.addEventListener('change', (event) => {
-                const selectedLabel = event.target.nextElementSibling.textContent;
-                if (selectedLabel === 'Show Single Total') {
-                    renderSingleTotal();
-                } else if (selectedLabel === 'Show Breakdown by Category'){
-                    renderCategoryBreakdown();
-                }
+                updateDisplay(); // Call updateDisplay on radio change
             });
         });
 
         document.getElementById('exclude-surcharge').addEventListener('change', () => {
-            const breakdownRadio = document.querySelector('input[value="Show Breakdown by Category"]');
-            if(breakdownRadio.checked){
-                renderCategoryBreakdown();
-            }
+            updateDisplay(); // Call updateDisplay on checkbox change
         });
+
+        // New event listeners for the added checkboxes
+        document.getElementById('show-parts').addEventListener('change', updateDisplay);
+        document.getElementById('show-subcontractors').addEventListener('change', updateDisplay);
+        document.getElementById('show-labor-hours').addEventListener('change', updateDisplay);
+        document.getElementById('show-num-techs').addEventListener('change', updateDisplay);
 
         // --- EXPORT FUNCTIONS ---
 

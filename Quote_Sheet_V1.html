@@ -364,6 +364,16 @@
 </div>
 </div>
 </div>
+<div class="border-t border-[var(--border-color)] grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+<div>
+<h3 class="text-sm font-medium text-[var(--text-secondary)]">S.E.T.H. Fee (%)</h3>
+<input class="fee-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" id="seth-fee-percentage" type="number" value="1.5">
+</div>
+<div>
+<h3 class="text-sm font-medium text-[var(--text-secondary)]">Fuel & Material Surcharge ($)</h3>
+<input class="fee-input mt-1 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm" id="surcharge-amount" type="number" value="75.00">
+</div>
+</div>
 <div class="border-t border-[var(--border-color)]">
 <div class="px-6 pt-5 pb-4">
 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
@@ -520,26 +530,29 @@
 <h3 class="text-lg font-semibold leading-6 text-[var(--text-primary)] mb-4">Quote Summary</h3>
 <div class="space-y-3">
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Parts Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="parts-total">$605.00</p>
+<p class="text-sm text-[var(--text-secondary)]">Parts Sub Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="parts-total">$0.00</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Technician Labor</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="tech-labor">$1200.00</p>
+<p class="text-sm text-[var(--text-secondary)]">Technician Labor</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="tech-labor">$0.00</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Travel Labor</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="travel-labor">$300.00</p>
+<p class="text-sm text-[var(--text-secondary)]">Travel Subtotal</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="travel-labor">$0.00</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Subcontractor Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="sub-total">$850.00</p>
+<p class="text-sm text-[var(--text-secondary)]">Labor Sub Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="labor-total">$0.00</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">S.E.TH Fee (1.5%)</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="seth-fee">$44.32</p>
+<p class="text-sm text-[var(--text-secondary)]">Sub Contractor Subtotal</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="sub-total">$0.00</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="text-sm text-[var(--text-secondary)]">Fuel &amp; Material Surcharge</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="surcharge">$75.00</p>
+<p class="text-sm text-[var(--text-secondary)]">S.E.T.H. Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="seth-fee">$0.00</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-sm text-[var(--text-secondary)]">Fuel & Material Surcharge</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="surcharge">$0.00</p>
 </div>
 <div class="flex justify-between items-center pt-4 border-t border-dashed border-gray-300">
 <p class="text-base font-semibold text-[var(--text-primary)]">Grand Total</p>
-<p class="summary-value text-2xl font-bold text-[var(--primary-color)]" data-summary="grand-total">$3074.32</p>
+<p class="summary-value text-2xl font-bold text-[var(--primary-color)]" data-summary="grand-total">$0.00</p>
 </div>
 </div>
 </div>
@@ -790,23 +803,29 @@ document.addEventListener('DOMContentLoaded', function() {
         const travelHours = parseFloat(document.getElementById('travel-hours')?.value) || 0;
         const travelRate = parseFloat(document.getElementById('travel-labor-section')?.dataset.rate) || 75;
         const travelLabor = travelHours * travelRate;
+        
+        const laborTotal = techLabor + travelLabor;
 
-        const surcharge = parseCurrency(document.querySelector('.summary-value[data-summary="surcharge"]')?.textContent);
+        // 4. Get Fees and Surcharges from inputs
+        const sethFeePercentage = parseFloat(document.getElementById('seth-fee-percentage')?.value) || 0;
+        const surchargeAmount = parseFloat(document.getElementById('surcharge-amount')?.value) || 0;
 
-        // 4. Calculate derived totals
-        const subtotalForFee = partsTotal + techLabor + travelLabor + subcontractorTotal;
-        const sethFee = subtotalForFee * 0.015;
-        const grandTotal = subtotalForFee + sethFee + surcharge;
+        // 5. Calculate derived totals
+        const subtotalForFee = partsTotal + laborTotal + subcontractorTotal;
+        const sethFee = subtotalForFee * (sethFeePercentage / 100);
+        const grandTotal = subtotalForFee + sethFee + surchargeAmount;
 
-        // 5. Update UI
+        // 6. Update UI
         // Table footer
         document.querySelector('#parts-table tfoot td').textContent = formatCurrency(partsTotal);
         // Summary section
         document.querySelector('.summary-value[data-summary="parts-total"]').textContent = formatCurrency(partsTotal);
         document.querySelector('.summary-value[data-summary="tech-labor"]').textContent = formatCurrency(techLabor);
         document.querySelector('.summary-value[data-summary="travel-labor"]').textContent = formatCurrency(travelLabor);
+        document.querySelector('.summary-value[data-summary="labor-total"]').textContent = formatCurrency(laborTotal);
         document.querySelector('.summary-value[data-summary="sub-total"]').textContent = formatCurrency(subcontractorTotal);
         document.querySelector('.summary-value[data-summary="seth-fee"]').textContent = formatCurrency(sethFee);
+        document.querySelector('.summary-value[data-summary="surcharge"]').textContent = formatCurrency(surchargeAmount);
         document.querySelector('.summary-value[data-summary="grand-total"]').textContent = formatCurrency(grandTotal);
     }
 
@@ -1195,6 +1214,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 partsTotal: document.querySelector('[data-summary="parts-total"]').textContent,
                 techLabor: document.querySelector('[data-summary="tech-labor"]').textContent,
                 travelLabor: document.querySelector('[data-summary="travel-labor"]').textContent,
+                laborTotal: document.querySelector('[data-summary="labor-total"]').textContent,
                 subTotal: document.querySelector('[data-summary="sub-total"]').textContent,
                 sethFee: document.querySelector('[data-summary="seth-fee"]').textContent,
                 surcharge: document.querySelector('[data-summary="surcharge"]').textContent,
@@ -1302,7 +1322,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Add listeners to all cost/qty inputs on page load
-    document.querySelectorAll('.labor-input, #parts-table .qty-input, #parts-table .unit-cost-input, #subcontractors-list input[id^="subcontractor-cost-"]').forEach(input => {
+    document.querySelectorAll('.labor-input, #parts-table .qty-input, #parts-table .unit-cost-input, #subcontractors-list input[id^="subcontractor-cost-"], .fee-input').forEach(input => {
         input.addEventListener('input', updateTotals);
     });
 

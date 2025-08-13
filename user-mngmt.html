@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
+<link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+      :root {
+        --primary-color: #4484bf;
+        --secondary-color: #f1f2f4;
+        --text-primary: #121416;
+        --text-secondary: #6a7681;
+        --background-color: #ffffff;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+      .status-badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+      }
+      .status-active {
+        @apply bg-green-100 text-green-800;
+      }
+      .status-inactive {
+        @apply bg-gray-100 text-gray-800;
+      }
+      .role-badge {
+        @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+      }
+      .role-admin {
+        @apply bg-blue-100 text-blue-800;
+      }
+      .role-editor {
+        @apply bg-indigo-100 text-indigo-800;
+      }
+      .role-viewer {
+        @apply bg-purple-100 text-purple-800;
+      }
+    </style>
+<title>User Management</title>
+</head>
+<body class="bg-gray-50">
+<div class="relative flex size-full min-h-screen flex-col bg-gray-50 group/design-root overflow-x-hidden" style="font-family: Inter, 'Noto Sans', sans-serif;">
+<div class="flex flex-row min-h-screen">
+<aside class="w-64 bg-[var(--background-color)] shadow-md flex flex-col justify-between p-4">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2 p-2 text-2xl font-bold text-[var(--text-primary)]">
+<span class="material-symbols-outlined text-[var(--primary-color)] text-3xl"> miscellaneous_services </span>
+<span>QuoteTool</span>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 text-[var(--text-secondary)] hover:bg-[var(--secondary-color)] hover:text-[var(--text-primary)] rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[var(--text-secondary)] hover:bg-[var(--secondary-color)] hover:text-[var(--text-primary)] rounded-lg" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-sm font-medium">Quotes</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[var(--text-secondary)] hover:bg-[var(--secondary-color)] hover:text-[var(--text-primary)] rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Customers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-[var(--secondary-color)] text-[var(--text-primary)] rounded-lg" href="#">
+<span class="material-symbols-outlined">manage_accounts</span>
+<span class="text-sm font-medium">Users</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-[var(--text-secondary)] hover:bg-[var(--secondary-color)] hover:text-[var(--text-primary)] rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 text-[var(--text-secondary)] hover:bg-[var(--secondary-color)] hover:text-[var(--text-primary)] rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium">Logout</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 p-8">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h1 class="text-3xl font-bold text-[var(--text-primary)]">User Management</h1>
+<p class="text-[var(--text-secondary)] mt-1">Manage user accounts, roles, and permissions within the system.</p>
+</div>
+<button class="flex items-center gap-2 min-w-[84px] cursor-pointer justify-center overflow-hidden rounded-full h-10 px-6 bg-[var(--primary-color)] text-white text-sm font-bold shadow-sm hover:bg-blue-600 transition-colors">
+<span class="material-symbols-outlined">add</span>
+<span class="truncate">Add User</span>
+</button>
+</div>
+<div class="bg-[var(--background-color)] rounded-xl shadow-sm">
+<div class="p-6 border-b border-gray-200">
+<h2 class="text-xl font-semibold text-[var(--text-primary)]">User Accounts</h2>
+<p class="text-sm text-[var(--text-secondary)] mt-1">
+                Domain authentication is enabled for streamlined logins.
+              </p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left text-[var(--text-secondary)]">
+<thead class="text-xs text-[var(--text-secondary)] uppercase bg-gray-50">
+<tr>
+<th class="px-6 py-3 font-medium" scope="col">Name</th>
+<th class="px-6 py-3 font-medium" scope="col">Email</th>
+<th class="px-6 py-3 font-medium" scope="col">Role</th>
+<th class="px-6 py-3 font-medium" scope="col">Status</th>
+<th class="px-6 py-3 font-medium text-right" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-[var(--background-color)] border-b border-gray-200 hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-[var(--text-primary)] whitespace-nowrap">Ethan Carter</td>
+<td class="px-6 py-4">ethan.carter@example.com</td>
+<td class="px-6 py-4"><span class="role-badge role-admin">Admin</span></td>
+<td class="px-6 py-4"><span class="status-badge status-active">Active</span></td>
+<td class="px-6 py-4 text-right">
+<button class="font-medium text-[var(--primary-color)] hover:underline">Edit</button>
+<button class="font-medium text-red-600 hover:underline ml-4">Deactivate</button>
+</td>
+</tr>
+<tr class="bg-[var(--background-color)] border-b border-gray-200 hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-[var(--text-primary)] whitespace-nowrap">Olivia Bennett</td>
+<td class="px-6 py-4">olivia.bennett@example.com</td>
+<td class="px-6 py-4"><span class="role-badge role-editor">Editor</span></td>
+<td class="px-6 py-4"><span class="status-badge status-active">Active</span></td>
+<td class="px-6 py-4 text-right">
+<button class="font-medium text-[var(--primary-color)] hover:underline">Edit</button>
+<button class="font-medium text-red-600 hover:underline ml-4">Deactivate</button>
+</td>
+</tr>
+<tr class="bg-[var(--background-color)] border-b border-gray-200 hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-[var(--text-primary)] whitespace-nowrap">Noah Thompson</td>
+<td class="px-6 py-4">noah.thompson@example.com</td>
+<td class="px-6 py-4"><span class="role-badge role-viewer">Viewer</span></td>
+<td class="px-6 py-4"><span class="status-badge status-active">Active</span></td>
+<td class="px-6 py-4 text-right">
+<button class="font-medium text-[var(--primary-color)] hover:underline">Edit</button>
+<button class="font-medium text-red-600 hover:underline ml-4">Deactivate</button>
+</td>
+</tr>
+<tr class="bg-[var(--background-color)] border-b border-gray-200 hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-[var(--text-primary)] whitespace-nowrap">Ava Harper</td>
+<td class="px-6 py-4">ava.harper@example.com</td>
+<td class="px-6 py-4"><span class="role-badge role-editor">Editor</span></td>
+<td class="px-6 py-4"><span class="status-badge status-inactive">Inactive</span></td>
+<td class="px-6 py-4 text-right">
+<button class="font-medium text-[var(--primary-color)] hover:underline">Edit</button>
+<button class="font-medium text-green-600 hover:underline ml-4">Activate</button>
+</td>
+</tr>
+<tr class="bg-[var(--background-color)] hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-[var(--text-primary)] whitespace-nowrap">Liam Foster</td>
+<td class="px-6 py-4">liam.foster@example.com</td>
+<td class="px-6 py-4"><span class="role-badge role-viewer">Viewer</span></td>
+<td class="px-6 py-4"><span class="status-badge status-active">Active</span></td>
+<td class="px-6 py-4 text-right">
+<button class="font-medium text-[var(--primary-color)] hover:underline">Edit</button>
+<button class="font-medium text-red-600 hover:underline ml-4">Deactivate</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="mt-12 bg-[var(--background-color)] rounded-xl shadow-sm">
+<div class="p-6 border-b border-gray-200">
+<h2 class="text-xl font-semibold text-[var(--text-primary)]">Roles and Permissions</h2>
+<p class="text-sm text-[var(--text-secondary)] mt-1">Control access to actions like deleting or archiving quotes.</p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left text-[var(--text-secondary)]">
+<thead class="text-xs text-[var(--text-secondary)] uppercase bg-gray-50">
+<tr>
+<th class="px-6 py-3 font-medium" scope="col">Role Name</th>
+<th class="px-6 py-3 font-medium" scope="col">Description</th>
+<th class="px-6 py-3 font-medium" scope="col">Permissions</th>
+<th class="px-6 py-3 font-medium text-right" scope="col">Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-[var(--background-color)] border-b border-gray-200 hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-[var(--text-primary)] whitespace-nowrap">Admin</td>
+<td class="px-6 py-4 max-w-sm">Full access to all features, settings, and user management.</td>
+<td class="px-6 py-4">
+<span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">All</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="font-medium text-[var(--primary-color)] hover:underline">Edit</button>
+</td>
+</tr>
+<tr class="bg-[var(--background-color)] border-b border-gray-200 hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-[var(--text-primary)] whitespace-nowrap">Editor</td>
+<td class="px-6 py-4 max-w-sm">Can create, edit, and manage quotes and customers. Cannot change settings or manage users.</td>
+<td class="px-6 py-4">
+<span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Create</span>
+<span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Edit</span>
+<span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Manage Quotes</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="font-medium text-[var(--primary-color)] hover:underline">Edit</button>
+</td>
+</tr>
+<tr class="bg-[var(--background-color)] hover:bg-gray-50">
+<td class="px-6 py-4 font-medium text-[var(--text-primary)] whitespace-nowrap">Viewer</td>
+<td class="px-6 py-4 max-w-sm">Read-only access to quotes and customer data. Cannot make any changes.</td>
+<td class="px-6 py-4">
+<span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Read-only</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="font-medium text-[var(--primary-color)] hover:underline">Edit</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+</body></html>
