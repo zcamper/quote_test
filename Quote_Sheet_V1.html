@@ -607,44 +607,113 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function exportToPdf() {
-        const quoteDataForExport = {
-            customer: {
-                name: document.getElementById('unit-location-name').textContent,
-                company: document.getElementById('unit-location-company').textContent,
-            },
-            billTo: {
-                name: document.getElementById('bill-to-name').textContent,
-                company: document.getElementById('bill-to-company').textContent,
-            },
-            unitInfo: {
-                'generator.model': document.querySelector('[data-key="generator.model"]').textContent,
-                'generator.serial': document.querySelector('[data-key="generator.serial"]').textContent,
-                'ats.model': document.querySelector('[data-key="ats.model"]').textContent,
-                'ats.serial': document.querySelector('[data-key="ats.serial"]').textContent,
-                'engine.model': document.querySelector('[data-key="engine.model"]').textContent,
-                'engine.serial': document.querySelector('[data-key="engine.serial"]').textContent,
-            },
-            description: document.getElementById('quote-description-textarea').value,
-            parts: getPartsDataForSave(),
-            labor: {
-                techCount: document.getElementById('tech-count').value,
-                techHours: document.getElementById('tech-hours').value,
-                techRate: document.getElementById('tech-labor-section').dataset.rate,
-                travelHours: document.getElementById('travel-hours').value,
-                travelRate: document.getElementById('travel-labor-section').dataset.rate,
-            },
-            subcontractors: Array.from(document.querySelectorAll('#subcontractors-list > div')).map(div => {
-                return {
-                    contact_name: div.querySelector('input[id^="subcontractor-contact-"]').value,
-                    contact_details: div.querySelector('input[id^="subcontractor-details-"]').value,
-                    cost: div.querySelector('input[id^="subcontractor-cost-"]').value
-                }
-            }),
-            summary: {
-                partsTotal: document.querySelector('[data-summary="parts-total"]').textContent,
-                techLabor: document.querySelector('[data-summary="tech-labor"]').textContent,
-                travelLabor: document.querySelector('[data-summary="travel-labor"]').textContent,
-                laborTotal: (parseFloat(document.querySelector('[data-summary="tech-labor"]').textContent.replace('
+    // Ensure the jsPDF and autoTable objects are available
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert('Error: jsPDF library is not loaded.');
+        return;
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // 1. --- Gather Data from the Page ---
+    const serviceCallId = document.getElementById('service-call-id').value.trim() || 'N/A';
+    const quoteDesc = document.getElementById('quote-description-textarea').value;
+    
+    // Customer and Unit Info
+    const billToName = document.getElementById('bill-to-name').textContent;
+    const billToCompany = document.getElementById('bill-to-company').textContent;
+    const billToAddress1 = document.getElementById('bill-to-address-1').textContent;
+    const billToAddress2 = document.getElementById('bill-to-address-2').textContent;
+    const genModel = document.querySelector('[data-key="generator.model"]').textContent;
+    const genSerial = document.querySelector('[data-key="generator.serial"]').textContent;
+    
+    // Parts Data for the table
+    const partsTableBody = [];
+    document.querySelectorAll('#parts-table tbody tr').forEach(tr => {
+        const kpsNumber = tr.cells[0]?.textContent.trim();
+        const description = tr.querySelector('.desc-input')?.value.trim();
+        const qty = tr.querySelector('.qty-input')?.value.trim();
+        const unitCost = tr.querySelector('.unit-cost-input')?.value.trim();
+        const total = tr.querySelector('.row-total')?.textContent.trim();
+        
+        partsTableBody.push([
+            kpsNumber,
+            description,
+            qty,
+            `$${parseFloat(unitCost).toFixed(2)}`,
+            total
+        ]);
+    });
+
+    // 2. --- Build the PDF Document ---
+    
+    // Header
+    doc.setFontSize(20);
+    doc.text("Quote", 14, 22);
+    doc.setFontSize(12);
+    doc.text(`Service Call ID: ${serviceCallId}`, 14, 30);
+
+    // Customer and Unit Info Tables
+    doc.autoTable({
+        startY: 35,
+        head: [['Bill To', 'Unit Information']],
+        body: [
+            [`${billToName}\n${billToCompany}\n${billToAddress1}\n${billToAddress2}`, `Generator Model: ${genModel}\nGenerator Serial: ${genSerial}`],
+        ],
+        theme: 'grid',
+        headStyles: { fillColor: [76, 117, 163] }, // A blue header
+    });
+    
+    // Quote Description
+    doc.autoTable({
+        startY: doc.previousAutoTable.finalY + 5,
+        head: [['Quote Description']],
+        body: [[quoteDesc]],
+        theme: 'grid',
+        headStyles: { fillColor: [76, 117, 163] },
+        didParseCell: function(data) {
+            if (data.section === 'body') {
+                data.cell.styles.halign = 'left';
+            }
+        }
+    });
+
+    // Parts Table
+    doc.autoTable({
+        startY: doc.previousAutoTable.finalY + 5,
+        head: [['Part #', 'Description', 'Qty', 'Unit Cost', 'Total']],
+        body: partsTableBody,
+        theme: 'striped',
+        headStyles: { fillColor: [76, 117, 163] },
+    });
+    
+    // Summary Section
+    const summaryData = [
+        ['Parts Total', document.querySelector('[data-summary="parts-total"]').textContent],
+        ['Technician Labor', document.querySelector('[data-summary="tech-labor"]').textContent],
+        ['Travel Labor', document.querySelector('[data-summary="travel-labor"]').textContent],
+        ['Subcontractor Total', document.querySelector('[data-summary="sub-total"]').textContent],
+        ['S.E.TH Fee', document.querySelector('[data-summary="seth-fee"]').textContent],
+        ['Fuel & Material Surcharge', document.querySelector('[data-summary="surcharge"]').textContent],
+        // Adding a separator line for the grand total
+        [{ content: '', colSpan: 2, styles: { cellPadding: { top: 2, bottom: 0 }, minCellHeight: 1 } }],
+        [{ content: 'Grand Total', styles: { fontStyle: 'bold', fontSize: 12 } }, { content: document.querySelector('[data-summary="grand-total"]').textContent, styles: { fontStyle: 'bold', fontSize: 12 } }]
+    ];
+
+    doc.autoTable({
+        startY: doc.previousAutoTable.finalY + 2,
+        body: summaryData,
+        theme: 'plain',
+        styles: { fontSize: 10 },
+        columnStyles: {
+            0: { halign: 'right', cellWidth: 150 },
+            1: { halign: 'right' }
+        },
+    });
+
+    // 3. --- Save the PDF ---
+    doc.save(`Quote-${serviceCallId}.pdf`);
+}
 
     function exportToCsv(filename, rows) {
         const table = document.getElementById('parts-table');
