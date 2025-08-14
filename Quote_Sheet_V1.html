@@ -607,113 +607,90 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function exportToPdf() {
-    // Ensure the jsPDF and autoTable objects are available
-    if (!window.jspdf || !window.jspdf.jsPDF) {
-        alert('Error: jsPDF library is not loaded.');
-        return;
-    }
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const quotePreview = document.getElementById('quote-preview');
 
-    // 1. --- Gather Data from the Page ---
-    const serviceCallId = document.getElementById('service-call-id').value.trim() || 'N/A';
-    const quoteDesc = document.getElementById('quote-description-textarea').value;
-    
-    // Customer and Unit Info
-    const billToName = document.getElementById('bill-to-name').textContent;
-    const billToCompany = document.getElementById('bill-to-company').textContent;
-    const billToAddress1 = document.getElementById('bill-to-address-1').textContent;
-    const billToAddress2 = document.getElementById('bill-to-address-2').textContent;
-    const genModel = document.querySelector('[data-key="generator.model"]').textContent;
-    const genSerial = document.querySelector('[data-key="generator.serial"]').textContent;
-    
-    // Parts Data for the table
-    const partsTableBody = [];
-    document.querySelectorAll('#parts-table tbody tr').forEach(tr => {
-        const kpsNumber = tr.cells[0]?.textContent.trim();
-        const description = tr.querySelector('.desc-input')?.value.trim();
-        const qty = tr.querySelector('.qty-input')?.value.trim();
-        const unitCost = tr.querySelector('.unit-cost-input')?.value.trim();
-        const total = tr.querySelector('.row-total')?.textContent.trim();
-        
-        partsTableBody.push([
-            kpsNumber,
-            description,
-            qty,
-            `$${parseFloat(unitCost).toFixed(2)}`,
-            total
-        ]);
-    });
+            // --- 1. Gather All Data from the Preview ---
+            const quoteTitle = quotePreview.querySelector('h3').textContent.trim();
+            const quoteDate = quotePreview.querySelector('p.text-sm').textContent.trim();
+            const branchName = quotePreview.querySelector('.text-right p.font-semibold').textContent.trim();
+            const branchAddress = quotePreview.querySelector('.text-right p.text-sm').textContent.trim();
 
-    // 2. --- Build the PDF Document ---
-    
-    // Header
-    doc.setFontSize(20);
-    doc.text("Quote", 14, 22);
-    doc.setFontSize(12);
-    doc.text(`Service Call ID: ${serviceCallId}`, 14, 30);
+            const customerInfo = quotePreview.querySelector('div.grid > div:nth-child(1) div').innerText;
+            const unitInfo = quotePreview.querySelector('div.grid > div:nth-child(2) div').innerText;
+            const description = quotePreview.querySelector('.mt-6 p').textContent.trim();
+            
+            const subtotal = quotePreview.querySelector('p:nth-child(1) span').textContent.trim();
+            const tax = quotePreview.querySelector('p:nth-child(2) span').textContent.trim();
+            const grandTotal = quotePreview.querySelector('p.text-lg span').textContent.trim();
 
-    // Customer and Unit Info Tables
-    doc.autoTable({
-        startY: 35,
-        head: [['Bill To', 'Unit Information']],
-        body: [
-            [`${billToName}\n${billToCompany}\n${billToAddress1}\n${billToAddress2}`, `Generator Model: ${genModel}\nGenerator Serial: ${genSerial}`],
-        ],
-        theme: 'grid',
-        headStyles: { fillColor: [76, 117, 163] }, // A blue header
-    });
-    
-    // Quote Description
-    doc.autoTable({
-        startY: doc.previousAutoTable.finalY + 5,
-        head: [['Quote Description']],
-        body: [[quoteDesc]],
-        theme: 'grid',
-        headStyles: { fillColor: [76, 117, 163] },
-        didParseCell: function(data) {
-            if (data.section === 'body') {
-                data.cell.styles.halign = 'left';
-            }
+
+            // --- 2. Build the PDF Document ---
+            
+            // Main Title and Branch Info (Top Section)
+            doc.setFontSize(20);
+            doc.setTextColor('#111518');
+            doc.text(quoteTitle, 14, 22);
+            doc.setFontSize(10);
+            doc.setTextColor('#60768a');
+            doc.text(quoteDate, 14, 28);
+            
+            doc.setFontSize(10);
+            doc.setTextColor('#111518');
+            doc.text(branchName, 200, 22, { align: 'right' });
+            doc.setTextColor('#60768a');
+            doc.text(branchAddress, 200, 28, { align: 'right' });
+
+
+            // Customer and Unit Info in a two-column table
+            doc.autoTable({
+                startY: 40,
+                head: [['Customer Information', 'Unit Information']],
+                body: [[customerInfo, unitInfo]],
+                theme: 'grid',
+                headStyles: { fillColor: '#f0f2f5', textColor: '#111518', fontStyle: 'semibold' }
+            });
+
+            // Description of Work
+            doc.autoTable({
+                startY: doc.previousAutoTable.finalY + 5,
+                head: [['Description of Work']],
+                body: [[description]],
+                theme: 'grid',
+                headStyles: { fillColor: '#f0f2f5', textColor: '#111518', fontStyle: 'semibold' }
+            });
+
+            // Main Items Table
+            doc.autoTable({
+                html: '#quote-table',
+                startY: doc.previousAutoTable.finalY + 5,
+                theme: 'striped',
+                headStyles: { fillColor: '#f0f2f5', textColor: '#60768a', fontStyle: 'normal' },
+                styles: { cellPadding: 2.5 }
+            });
+
+            // Totals Section (using a table for alignment)
+            const summaryData = [
+                ['Subtotal:', subtotal],
+                ['Tax (8%):', tax],
+                [{content: 'Total:', styles: {fontStyle: 'bold', fontSize: 12}}, {content: grandTotal, styles: {fontStyle: 'bold', fontSize: 12, textColor: '#0b80ee'}}]
+            ];
+            
+            doc.autoTable({
+                startY: doc.previousAutoTable.finalY + 5,
+                body: summaryData,
+                theme: 'plain',
+                columnStyles: { 
+                    0: { halign: 'right' },
+                    1: { halign: 'right', cellWidth: 30 }
+                }
+            });
+
+            // --- 3. Save the PDF ---
+            const filename = `${quoteTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`;
+            doc.save(filename);
         }
-    });
-
-    // Parts Table
-    doc.autoTable({
-        startY: doc.previousAutoTable.finalY + 5,
-        head: [['Part #', 'Description', 'Qty', 'Unit Cost', 'Total']],
-        body: partsTableBody,
-        theme: 'striped',
-        headStyles: { fillColor: [76, 117, 163] },
-    });
-    
-    // Summary Section
-    const summaryData = [
-        ['Parts Total', document.querySelector('[data-summary="parts-total"]').textContent],
-        ['Technician Labor', document.querySelector('[data-summary="tech-labor"]').textContent],
-        ['Travel Labor', document.querySelector('[data-summary="travel-labor"]').textContent],
-        ['Subcontractor Total', document.querySelector('[data-summary="sub-total"]').textContent],
-        ['S.E.TH Fee', document.querySelector('[data-summary="seth-fee"]').textContent],
-        ['Fuel & Material Surcharge', document.querySelector('[data-summary="surcharge"]').textContent],
-        // Adding a separator line for the grand total
-        [{ content: '', colSpan: 2, styles: { cellPadding: { top: 2, bottom: 0 }, minCellHeight: 1 } }],
-        [{ content: 'Grand Total', styles: { fontStyle: 'bold', fontSize: 12 } }, { content: document.querySelector('[data-summary="grand-total"]').textContent, styles: { fontStyle: 'bold', fontSize: 12 } }]
-    ];
-
-    doc.autoTable({
-        startY: doc.previousAutoTable.finalY + 2,
-        body: summaryData,
-        theme: 'plain',
-        styles: { fontSize: 10 },
-        columnStyles: {
-            0: { halign: 'right', cellWidth: 150 },
-            1: { halign: 'right' }
-        },
-    });
-
-    // 3. --- Save the PDF ---
-    doc.save(`Quote-${serviceCallId}.pdf`);
-}
 
     function exportToCsv(filename, rows) {
         const table = document.getElementById('parts-table');
