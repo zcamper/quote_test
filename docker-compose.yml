@@ -23,6 +23,7 @@ services:
       - "8080:80"
     volumes:
       - ./Quote_Sheet_V1.html:/usr/share/nginx/html/index.html
+      - ./Quote_Export_V1.html:/usr/share/nginx/html/Quote_Export_V1.html
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - api
