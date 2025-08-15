@@ -1,0 +1,12 @@
+/* inspection.css */
+body {
+    font-family: 'Inter', 'Noto Sans', sans-serif;
+}
+
+.user-avatar-mgmnt {
+    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAKyCLZ6hRJVmJ_4CEfuN_PKIsHDyIul8s9U3WteLAl-IyyZDbdh_GyQORb81Z6jsI5WtiHRHMfLCauJJ1cbH3GeAPeiS2ri6Bwm5zUV3JVYHpjkKGjExJIS3JUE_eAVf-Km-P4GRNYMdfbKgPyPfnYkS5KtZva-0KPUOJ8DZgbYUA9BtRP3xFZhn3olNOO_iCzY5y46jQhUkBB1SVAxD9Sk1cZeCTiP9OOaIGWbYWx8YTMxQ6J1uLevehUE-rgzOyCcLBpgV06mbA');
+}
+
+.user-avatar-form {
+    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDORURPqk2Vc5ZvsjC76ToApz9c_80JGhe9FWYnQElCgKATS16W04TsvRjJvc8Ow5a7UrOBGVSSeExPb6k83AuPqJiVRhDCcSmYp9eT4M5IDTkvuc7syiUgcjgHYRIim2LaJDNxeLGbqQdH3D1OpJyIfxsUZzPUUWPT0HxBtVWXD4p650tqE54pjctCnXy1PDMg6Uc2sdveSzooIG5aHVP_tjHC8rKxTgcQXtupJmL1vskYX9ewvfVS8JfyHh2CCKIYScqpsDpRWwQ');
+}
