@@ -334,6 +334,9 @@
                 descTitle.nextElementSibling.textContent = data.description;
             }
 
+            // Populate Parts Table
+            renderSingleTotal();
+
             // Populate Labor & Techs
             populateLaborTechs(data);
             // Populate Subcontractors
@@ -342,38 +345,15 @@
             // Render based on display options
             updateDisplay();
 
-            // Populate Summary
-            const summaryDiv = document.querySelector('.text-right');
-            if(summaryDiv && data.summary){
-                summaryDiv.innerHTML = `
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center">
-                            <p class="text-sm text-[var(--text-secondary)]">Parts Sub Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="parts-total">${data.summary.partsTotal}</p>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-sm text-[var(--text-secondary)]">Technician Labor</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="tech-labor">${data.summary.techLabor}</p>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-sm text-[var(--text-secondary)]">Travel Subtotal</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="travel-labor">${data.summary.travelLabor}</p>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-sm text-[var(--text-secondary)]">Labor Sub Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="labor-total">${data.summary.laborTotal}</p>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-sm text-[var(--text-secondary)]">Sub Contractor Subtotal</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="sub-total">${data.summary.subTotal}</p>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-sm text-[var(--text-secondary)]">S.E.T.H. Total</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="seth-fee">${data.summary.sethFee}</p>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <p class="text-sm text-[var(--text-secondary)]">Fuel & Material Surcharge</p><p class="summary-value text-sm font-medium text-[var(--text-primary)]" data-summary="surcharge">${data.summary.surcharge}</p>
-                        </div>
-                        <div class="flex justify-between items-center pt-4 border-t border-dashed border-gray-300">
-                            <p class="text-base font-semibold text-[var(--text-primary)]">Grand Total</p>
-                            <p class="summary-value text-2xl font-bold text-[var(--primary-color)]" data-summary="grand-total">${data.summary.grandTotal}</p>
-                        </div>
-                    </div>
-                `;
+            // Populate Quote Summary
+            if (data.summary) {
+                document.querySelector('[data-summary="parts-total"]').textContent = data.summary.partsTotal;
+                document.querySelector('[data-summary="tech-labor"]').textContent = data.summary.techLabor;
+                document.querySelector('[data-summary="travel-labor"]').textContent = data.summary.travelLabor;
+                document.querySelector('[data-summary="sub-total"]').textContent = data.summary.subTotal;
+                document.querySelector('[data-summary="seth-fee"]').textContent = data.summary.sethFee;
+                document.querySelector('[data-summary="surcharge"]').textContent = data.summary.surcharge;
+                document.querySelector('[data-summary="grand-total"]').textContent = data.summary.grandTotal;
             }
         }
 
