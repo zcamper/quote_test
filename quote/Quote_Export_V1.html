@@ -163,94 +163,7 @@
 <p>Initiates an email to:</p>
 <p class="font-medium text-text-primary">mainbranch.approvals@example.com</p>
 </div>
-</div>
-</div>
-<div id="subcontractors-section" class="border-t border-gray-200 mt-6 pt-6">
-    <h4 class="text-lg font-semibold text-text-primary">Subcontractors</h4>
-    <div id="subcontractors-list" class="mt-2 space-y-2">
-        <!-- Subcontractor items will be populated here by JS -->
-    </div>
-</div>
-<div class="mt-6" id="labor-tech-section">
-    <h4 class="text-lg font-semibold text-text-primary">Labor & Techs</h4>
-    <div class="mt-2 space-y-1 text-sm text-text-secondary">
-        <p><span class="font-medium text-text-primary">Labor Hours:</span> <span id="display-labor-hours"></span></p>
-        <p><span class="font-medium text-text-primary">Number of Techs:</span> <span id="display-num-techs"></span></p>
-    </div>
-</div>
-</div>
-<aside class="space-y-8">
-<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-<h3 class="text-lg font-semibold text-text-primary">Display Options</h3>
-<div class="mt-4 space-y-4">
-<label class="flex items-center gap-3 rounded-lg border border-gray-200 p-4 has-[:checked]:border-[var(--primary)] has-[:checked]:bg-blue-50">
-<input checked="" class="h-4 w-4 border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" name="display_option" type="radio"/>
-<span class="text-sm font-medium text-text-primary">Show Single Total</span>
-</label>
-<label class="flex items-center gap-3 rounded-lg border border-gray-200 p-4 has-[:checked]:border-[var(--primary)] has-[:checked]:bg-blue-50">
-<input class="h-4 w-4 border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" name="display_option" type="radio"/>
-<span class="text-sm font-medium text-text-primary">Show Breakdown by Category</span>
-</label>
-<div class="border-t border-gray-200 pt-4">
-<h4 class="text-base font-semibold text-text-primary">Included Items</h4>
-<div class="mt-3 space-y-3">
-<label class="flex items-center gap-3">
-<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-parts"/>
-<span class="text-sm text-text-primary">Show Parts</span>
-</label>
-<label class="flex items-center gap-3">
-<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-subcontractors"/>
-<span class="text-sm text-text-primary">Show Subcontractors</span>
-</label>
-<label class="flex items-center gap-3">
-<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-labor-hours"/>
-<span class="text-sm text-text-primary">Show Labor Hours</span>
-</label>
-<label class="flex items-center gap-3">
-<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-num-techs"/>
-<span class="text-sm text-text-primary">Show Number of Techs</span>
-</label>
-<label class="flex items-center gap-3">
-<input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="exclude-surcharge"/>
-<span class="text-sm text-text-primary">Exclude Fuel & Material Surcharge</span>
-</label>
-</div>
-</div>
-</div>
-</div>
-<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-<h3 class="text-lg font-semibold text-text-primary">Export Formats</h3>
-<div class="mt-4 space-y-3">
-<label class="flex items-center gap-3">
-<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" id="check-pdf" type="checkbox"/>
-<span class="text-sm text-text-primary">PDF</span>
-</label>
-<label class="flex items-center gap-3">
-<input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" id="check-csv" type="checkbox"/>
-<span class="text-sm text-text-primary">CSV</span>
-</label>
-<label class="flex items-center gap-3">
-<input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" id="check-excel" type="checkbox"/>
-<span class="text-sm text-text-primary">Excel</span>
-</label>
-</div>
-</div>
-<div class="flex flex-col gap-4">
-<button class="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700" id="export-btn">
-<span class="material-symbols-outlined"> download </span>
-                  Export Quote
-                </button>
-<button class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-text-primary shadow-sm hover:bg-gray-100" id="back-btn">
-<span class="material-symbols-outlined"> edit </span>
-                  Back to Editing
-                </button>
-</div>
-</aside>
-</div>
-<!-- Replace old totals section with new quote summary -->
-<div id="quote-summary-section" class="border-t border-gray-200 bg-gray-50 px-6 py-4">
-  <h3 class="text-lg font-semibold text-text-primary mb-4">Quote Summary</h3>
-  <div class="space-y-3">
+<div class="space-y-3">
     <div class="flex justify-between items-center">
       <p class="text-sm text-text-secondary">Parts Total</p>
       <p class="summary-value text-sm font-medium text-text-primary" data-summary="parts-total"></p>
@@ -272,13 +185,95 @@
       <p class="summary-value text-sm font-medium text-text-primary" data-summary="seth-fee"></p>
     </div>
     <div class="flex justify-between items-center">
-      <p class="text-sm text-text-secondary">Fuel & Material Surcharge</p>
+      <p class="text-sm text-text-secondary">Fuel &amp; Material Surcharge</p>
       <p class="summary-value text-sm font-medium text-text-primary" data-summary="surcharge"></p>
     </div>
     <div class="flex justify-between items-center pt-4 border-t border-dashed border-gray-300">
       <p class="text-base font-semibold text-text-primary">Grand Total</p>
       <p class="summary-value text-2xl font-bold text-[var(--primary)]" data-summary="grand-total"></p>
     </div>
+  </div>
+</div>
+</div>
+
+</div>
+
+
+</aside>
+</div>
+<!-- Replace old totals section with new options -->
+<div id="options" class="border-t border-gray-200 bg-gray-50 px-6 py-4">
+  <h3 class="text-lg font-semibold text-text-primary mb-4">Options</h3>
+  <div class="space-y-3">
+    <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+<h3 class="text-lg font-semibold text-text-primary">Display Options</h3>
+<div class="mt-4 space-y-4">
+<label class="flex items-center gap-3 rounded-lg border border-gray-200 p-4 has-[:checked]:border-[var(--primary)] has-[:checked]:bg-blue-50">
+<input checked="" class="h-4 w-4 border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" name="display_option" type="radio" value="single">
+<span class="text-sm font-medium text-text-primary">Show Single Total</span>
+</label>
+<label class="flex items-center gap-3 rounded-lg border border-gray-200 p-4 has-[:checked]:border-[var(--primary)] has-[:checked]:bg-blue-50">
+<input class="h-4 w-4 border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" name="display_option" type="radio" value="category">
+<span class="text-sm font-medium text-text-primary">Show Breakdown by Category</span>
+</label>
+<div class="border-t border-gray-200 pt-4">
+<h4 class="text-base font-semibold text-text-primary">Included Items</h4>
+<div class="mt-3 space-y-3">
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-parts">
+<span class="text-sm text-text-primary">Show Parts</span>
+</label>
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-subcontractors">
+<span class="text-sm text-text-primary">Show Subcontractors</span>
+</label>
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-labor-hours">
+<span class="text-sm text-text-primary">Show Labor Hours</span>
+</label>
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="show-num-techs">
+<span class="text-sm text-text-primary">Show Number of Techs</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="exclude-surcharge">
+<span class="text-sm text-text-primary">Exclude Fuel &amp; Material Surcharge</span>
+</label>
+</div>
+<aside class="space-y-8">
+
+<div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+<h3 class="text-lg font-semibold text-text-primary">Export Formats</h3>
+<div class="mt-4 space-y-3">
+<label class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" id="check-pdf" type="checkbox">
+<span class="text-sm text-text-primary">PDF</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" id="check-csv" type="checkbox">
+<span class="text-sm text-text-primary">CSV</span>
+</label>
+<label class="flex items-center gap-3">
+<input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" id="check-excel" type="checkbox">
+<span class="text-sm text-text-primary">Excel</span>
+</label>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<button class="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--primary)] px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700" id="export-btn">
+<span class="material-symbols-outlined"> download </span>
+                  Export Quote
+                </button>
+<button class="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-text-primary shadow-sm hover:bg-gray-100" id="back-btn">
+<span class="material-symbols-outlined"> edit </span>
+                  Back to Editing
+                </button>
+</div>
+</aside>
+</div>
+</div>
+</div>
+</div>
   </div>
 </div>
 </main>
@@ -288,92 +283,100 @@
     document.addEventListener('DOMContentLoaded', function() {
         const quoteDataString = localStorage.getItem('quoteDataForExport');
         let quoteData;
+
         if (quoteDataString) {
             quoteData = JSON.parse(quoteDataString);
-            populateQuoteData(quoteData);
+            populateStaticData(quoteData);
+            setupEventListeners();
+            updateDisplay(); // Initial render
+        } else {
+            console.error('Quote data not found in localStorage.');
+            // Optionally, display a message to the user
         }
 
-        function populateQuoteData(data) {
+        function populateStaticData(data) {
+            // Update Quote Number
+            const quoteNumber = data.quoteNumber || 'N/A';
+            document.getElementById('quote-number-link').textContent = `Quote #${quoteNumber}`;
+            document.getElementById('quote-number-display').textContent = `Quote #${quoteNumber}`;
+
             // Populate Customer Information
             const customerInfoTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Customer Information');
-            if(customerInfoTitle){
+            if(customerInfoTitle && data.customer){
                 const customerInfoDiv = customerInfoTitle.nextElementSibling;
                 customerInfoDiv.innerHTML = `
-                    <p><span class="font-medium text-text-primary">Name:</span> ${data.customer.name}</p>
-                    <p><span class="font-medium text-text-primary">Company:</span> ${data.customer.company}</p>
+                    <p><span class="font-medium text-text-primary">Name:</span> ${data.customer.name || 'N/A'}</p>
+                    <p><span class="font-medium text-text-primary">Company:</span> ${data.customer.company || 'N/A'}</p>
                 `;
             }
 
             // Populate Bill To Information
             const billToTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Bill To');
-            if(billToTitle){
+            if(billToTitle && data.billTo){
                 const billToDiv = billToTitle.nextElementSibling;
                 billToDiv.innerHTML = `
-                    <p><span class="font-medium text-text-primary">Name:</span> ${data.billTo.name}</p>
-                    <p><span class="font-medium text-text-primary">Company:</span> ${data.billTo.company}</p>
+                    <p><span class="font-medium text-text-primary">Name:</span> ${data.billTo.name || 'N/A'}</p>
+                    <p><span class="font-medium text-text-primary">Company:</span> ${data.billTo.company || 'N/A'}</p>
                 `;
             }
 
             // Populate Unit Information
             const unitInfoTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Unit Information');
-            if(unitInfoTitle){
+            if(unitInfoTitle && data.unitInfo){
                 const unitInfoDiv = unitInfoTitle.nextElementSibling;
                 unitInfoDiv.innerHTML = `
-                    <p><span class="font-medium text-text-primary">Generator Model:</span> ${data.unitInfo['generator.model']}</p>
-                    <p><span class="font-medium text-text-primary">Generator Serial:</span> ${data.unitInfo['generator.serial']}</p>
-                    <p><span class="font-medium text-text-primary">ATS Model:</span> ${data.unitInfo['ats.model']}</p>
-                    <p><span class="font-medium text-text-primary">ATS Serial:</span> ${data.unitInfo['ats.serial']}</p>
-                    <p><span class="font-medium text-text-primary">Engine Model:</span> ${data.unitInfo['engine.model']}</p>
-                    <p><span class="font-medium text-text-primary">Engine Serial:</span> ${data.unitInfo['engine.serial']}</p>
+                    <p><span class="font-medium text-text-primary">Generator Model:</span> ${data.unitInfo['generator.model'] || 'N/A'}</p>
+                    <p><span class="font-medium text-text-primary">Generator Serial:</span> ${data.unitInfo['generator.serial'] || 'N/A'}</p>
+                    <p><span class="font-medium text-text-primary">ATS Model:</span> ${data.unitInfo['ats.model'] || 'N/A'}</p>
+                    <p><span class="font-medium text-text-primary">ATS Serial:</span> ${data.unitInfo['ats.serial'] || 'N/A'}</p>
+                    <p><span class="font-medium text-text-primary">Engine Model:</span> ${data.unitInfo['engine.model'] || 'N/A'}</p>
+                    <p><span class="font-medium text-text-primary">Engine Serial:</span> ${data.unitInfo['engine.serial'] || 'N/A'}</p>
                 `;
             }
 
             // Populate Description of Work
             const descTitle = Array.from(document.querySelectorAll('h4')).find(h4 => h4.textContent === 'Description of Work');
-            if(descTitle){
+            if(descTitle && data.description){
                 descTitle.nextElementSibling.textContent = data.description;
-            }
-
-            // Populate Parts Table
-            renderSingleTotal();
-
-            // Populate Labor & Techs
-            populateLaborTechs(data);
-            // Populate Subcontractors
-            populateSubcontractors(data);
-
-            // Render based on display options
-            updateDisplay();
-
-            // Populate Quote Summary
-            if (data.summary) {
-                document.querySelector('[data-summary="parts-total"]').textContent = data.summary.partsTotal;
-                document.querySelector('[data-summary="tech-labor"]').textContent = data.summary.techLabor;
-                document.querySelector('[data-summary="travel-labor"]').textContent = data.summary.travelLabor;
-                document.querySelector('[data-summary="sub-total"]').textContent = data.summary.subTotal;
-                document.querySelector('[data-summary="seth-fee"]').textContent = data.summary.sethFee;
-                document.querySelector('[data-summary="surcharge"]').textContent = data.summary.surcharge;
-                document.querySelector('[data-summary="grand-total"]').textContent = data.summary.grandTotal;
             }
         }
 
+        function setupEventListeners() {
+            // Attach event listeners to all display option checkboxes and radios
+            document.querySelectorAll('#show-parts, #show-subcontractors, #show-labor-hours, #show-num-techs, #exclude-surcharge').forEach(checkbox => {
+                checkbox.addEventListener('change', updateDisplay);
+            });
+            document.querySelectorAll('input[name="display_option"]').forEach(radio => {
+                radio.addEventListener('change', updateDisplay);
+            });
+
+            // Export and Back buttons
+            document.getElementById('export-btn').addEventListener('click', handleExport);
+            document.getElementById('back-btn').addEventListener('click', () => window.history.back());
+        }
+
         function formatCurrency(value) {
-            return `${Number(value).toFixed(2)}`;
+            const number = Number(value);
+            return isNaN(number) ? '$0.00' : number.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        }
+
+        function parseCurrency(value) {
+            if (typeof value === 'number') return value;
+            if (typeof value !== 'string') return 0;
+            return parseFloat(value.replace(/[^0-9.-]+/g, '')) || 0;
         }
 
         function renderSingleTotal() {
             const tableBody = document.querySelector('#quote-table tbody');
             tableBody.innerHTML = '';
-            const showParts = document.getElementById('show-parts').checked;
-
-            if (showParts && quoteData.parts) {
+            if (quoteData.parts) {
                 quoteData.parts.forEach(part => {
                     const row = tableBody.insertRow();
-                    const total = part.qty * part.unitCost;
+                    const total = (part.qty || 0) * (part.unitCost || 0);
                     row.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">${part.part}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">${part.desc}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${part.qty}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-primary">${part.part || ''}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">${part.desc || ''}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${part.qty || 0}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${formatCurrency(part.unitCost)}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-text-secondary">${formatCurrency(total)}</td>
                     `;
@@ -381,8 +384,9 @@
             }
         }
 
-        function renderCategoryBreakdown(data) {
+        function renderCategoryBreakdown() {
             const tableBody = document.querySelector('#quote-table tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
             const categories = {
                 'Parts': [],
                 'Labor': [],
@@ -391,104 +395,86 @@
             };
 
             // Categorize Parts
-            if (data.parts) {
-                data.parts.forEach(part => {
-                    const qty = parseFloat(part.qty) || 0;
-                    const unitCost = parseFloat(part.unitCost) || 0;
+            if (quoteData.parts) {
+                quoteData.parts.forEach(part => {
                     categories['Parts'].push({
                         description: `${part.part} - ${part.desc}`,
-                        amount: qty * unitCost
+                        amount: (parseFloat(part.qty) || 0) * (parseFloat(part.unitCost) || 0)
                     });
                 });
             }
 
             // Categorize Labor
-            if (data.labor) {
-                const techLaborTotal = (parseFloat(data.labor.techCount) * parseFloat(data.labor.techHours) * parseFloat(data.labor.techRate));
+            if (quoteData.labor) {
+                const techLaborTotal = (parseFloat(quoteData.labor.techCount) || 0) * (parseFloat(quoteData.labor.techHours) || 0) * (parseFloat(quoteData.labor.techRate) || 0);
                 if (techLaborTotal > 0) {
                     categories['Labor'].push({
-                        description: `Technician Labor (${data.labor.techCount} tech(s) @ ${data.labor.techHours} hrs)`,
+                        description: `Technician Labor (${quoteData.labor.techCount} tech(s) @ ${quoteData.labor.techHours} hrs)`,
                         amount: techLaborTotal
                     });
                 }
-
-                const travelLaborTotal = (parseFloat(data.labor.travelHours) * parseFloat(data.labor.travelRate));
+                const travelLaborTotal = (parseFloat(quoteData.labor.travelHours) || 0) * (parseFloat(quoteData.labor.travelRate) || 0);
                 if (travelLaborTotal > 0) {
                     categories['Labor'].push({
-                        description: `Travel Labor (${data.labor.travelHours} hrs)`,
+                        description: `Travel Labor (${quoteData.labor.travelHours} hrs)`,
                         amount: travelLaborTotal
                     });
                 }
             }
 
             // Categorize Subcontractors
-            if (data.subcontractors) {
-                data.subcontractors.forEach(sub => {
-                    const cost = parseFloat(sub.cost);
-                    if (cost > 0) {
-                        categories['Subcontractor'].push({
-                            description: sub.contact_name,
-                            amount: cost
-                        });
-                    }
+            if (quoteData.subcontractors) {
+                quoteData.subcontractors.forEach(sub => {
+                    categories['Subcontractor'].push({
+                        description: sub.contact_name,
+                        amount: parseFloat(sub.cost) || 0
+                    });
                 });
             }
 
             // Categorize Fees
-            if (data.summary) {
-                const parseCurrency = (val) => parseFloat(String(val).replace('$', '').replace(',', '')) || 0;
-                const sethFee = parseCurrency(data.summary.sethFee);
-                const surcharge = parseCurrency(data.summary.surcharge);
-                if (sethFee > 0) {
-                    categories['Fees & Surcharges'].push({ description: 'S.E.TH Fee (1.5%)', amount: sethFee });
-                }
-                if (surcharge > 0) {
-                    categories['Fees & Surcharges'].push({ description: 'Fuel & Material Surcharge', amount: surcharge });
+            if (quoteData.summary) {
+                const sethFee = parseCurrency(quoteData.summary.sethFee);
+                const surcharge = parseCurrency(quoteData.summary.surcharge);
+                if (sethFee > 0) categories['Fees & Surcharges'].push({ description: 'S.E.TH Fee (1.5%)', amount: sethFee });
+                if (surcharge > 0 && !document.getElementById('exclude-surcharge').checked) {
+                     categories['Fees & Surcharges'].push({ description: 'Fuel & Material Surcharge', amount: surcharge });
                 }
             }
 
-            // Build HTML String
             let html = '';
             for (const category in categories) {
                 if (categories[category].length > 0) {
                     let categoryTotal = 0;
-                    html += `
-                        <tr class="bg-gray-100 font-semibold">
-                            <td class="px-6 py-3 text-left" colspan="4">${category}</td>
-                            <td class="px-6 py-3 text-right"></td>
-                        </tr>
-                    `;
+                    html += `<tr class="bg-gray-100 font-semibold"><td class="px-6 py-3 text-left" colspan="5">${category}</td></tr>`;
                     categories[category].forEach(item => {
                         html += `
                         <tr>
                             <td class="px-6 py-3 text-left text-gray-700" colspan="4">${item.description}</td>
-                            <td class="px-6 py-3 text-right font-medium">${item.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
-                        </tr>
-                        `;
+                            <td class="px-6 py-3 text-right font-medium">${formatCurrency(item.amount)}</td>
+                        </tr>`;
                         categoryTotal += item.amount;
                     });
                     html += `
                         <tr class="font-semibold border-b-2 border-gray-200">
                             <td class="px-6 py-3 text-left" colspan="4">Total for ${category}</td>
-                            <td class="px-6 py-3 text-right">${categoryTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
-                        </tr>
-                    `;
+                            <td class="px-6 py-3 text-right">${formatCurrency(categoryTotal)}</td>
+                        </tr>`;
                 }
             }
             tableBody.innerHTML = html;
         }
 
-        function populateSubcontractors(data) {
+        function populateSubcontractors() {
             const subcontractorsListDiv = document.getElementById('subcontractors-list');
-            subcontractorsListDiv.innerHTML = ''; // Clear previous content
-
-            if (data.subcontractors && data.subcontractors.length > 0) {
-                data.subcontractors.forEach(sub => {
+            subcontractorsListDiv.innerHTML = '';
+            if (quoteData.subcontractors && quoteData.subcontractors.length > 0) {
+                quoteData.subcontractors.forEach(sub => {
                     const subDiv = document.createElement('div');
                     subDiv.className = 'flex justify-between items-center pt-2';
                     subDiv.innerHTML = `
                         <p class="text-sm font-medium text-text-primary">${sub.contact_name || 'N/A'}</p>
-                        <p class="text-sm text-text-secondary">${sub.contact_details || ''} - ${formatCurrency(sub.cost || 0)}</p>
+                        <p class="text-sm text-text-secondary">${sub.contact_details || ''} - ${formatCurrency(sub.cost)}</p>
                     `;
                     subcontractorsListDiv.appendChild(subDiv);
                 });
@@ -497,59 +483,76 @@
             }
         }
 
-        function populateLaborTechs(data) {
-            const laborHoursSpan = document.getElementById('display-labor-hours');
-            const numTechsSpan = document.getElementById('display-num-techs');
-
-            if (data.labor) {
-                laborHoursSpan.textContent = `${data.labor.techHours || 0} hours`;
-                numTechsSpan.textContent = `${data.labor.techCount || 0} techs`;
-            } else {
-                laborHoursSpan.textContent = 'N/A';
-                numTechsSpan.textContent = 'N/A';
-            }
+        function populateLaborTechs() {
+            document.getElementById('display-labor-hours').textContent = `${quoteData.labor?.techHours || 0} hours`;
+            document.getElementById('display-num-techs').textContent = `${quoteData.labor?.techCount || 0} techs`;
         }
 
         function updateDisplay() {
-            // Show/hide sections based on checkboxes
-            document.getElementById('quote-table').closest('.border-t').style.display = document.getElementById('show-parts').checked ? '' : 'none';
-            document.getElementById('subcontractors-section').style.display = document.getElementById('show-subcontractors').checked ? '' : 'none';
-            document.getElementById('labor-tech-section').style.display = (document.getElementById('show-labor-hours').checked || document.getElementById('show-num-techs').checked) ? '' : 'none';
-            document.getElementById('quote-summary-section').style.display = '';
+            if (!quoteData) return;
 
-            // Exclude surcharge if checked
-            let surcharge = quoteData.summary.surcharge;
-            if (document.getElementById('exclude-surcharge').checked) {
-                surcharge = '$0.00';
+            // 1. Update content of dynamic sections
+            populateSubcontractors();
+            populateLaborTechs();
+
+            // 2. Decide which table view to render
+            const categoryBreakdownRadio = document.querySelector('input[name="display_option"][value="category"]');
+            if (categoryBreakdownRadio && categoryBreakdownRadio.checked) {
+                renderCategoryBreakdown();
+            } else {
+                renderSingleTotal();
             }
-            document.querySelector('[data-summary="surcharge"]').textContent = surcharge;
 
-            // Recalculate grand total if needed
-            let grandTotal = parseFloat(quoteData.summary.partsTotal.replace('$','')) +
-                parseFloat(quoteData.summary.techLabor.replace('$','')) +
-                parseFloat(quoteData.summary.travelLabor.replace('$','')) +
-                parseFloat(quoteData.summary.subTotal.replace('$','')) +
-                parseFloat(quoteData.summary.sethFee.replace('$','')) +
-                parseFloat(surcharge.replace('$',''));
-            document.querySelector('[data-summary="grand-total"]').textContent = '$' + grandTotal.toFixed(2);
+            // 3. Show/hide sections based on checkboxes
+            const showParts = document.getElementById('show-parts').checked;
+            const showSubcontractors = document.getElementById('show-subcontractors').checked;
+            const showLabor = document.getElementById('show-labor-hours').checked;
+            const showTechs = document.getElementById('show-num-techs').checked;
+
+            document.getElementById('quote-table').closest('.border-t').style.display = showParts ? '' : 'none';
+            document.getElementById('subcontractors-section').style.display = showSubcontractors ? '' : 'none';
+            document.getElementById('labor-tech-section').style.display = (showLabor || showTechs) ? '' : 'none';
+            document.getElementById('display-labor-hours').parentElement.style.display = showLabor ? '' : 'none';
+            document.getElementById('display-num-techs').parentElement.style.display = showTechs ? '' : 'none';
+
+            // 4. Update the main summary totals
+            if (quoteData.summary) {
+                const excludeSurcharge = document.getElementById('exclude-surcharge').checked;
+                const surchargeAmount = excludeSurcharge ? 0 : parseCurrency(quoteData.summary.surcharge);
+
+                const totals = {
+                    parts: parseCurrency(quoteData.summary.partsTotal),
+                    tech: parseCurrency(quoteData.summary.techLabor),
+                    travel: parseCurrency(quoteData.summary.travelLabor),
+                    sub: parseCurrency(quoteData.summary.subTotal),
+                    seth: parseCurrency(quoteData.summary.sethFee),
+                    surcharge: surchargeAmount
+                };
+
+                document.querySelector('[data-summary="parts-total"]').textContent = formatCurrency(totals.parts);
+                document.querySelector('[data-summary="tech-labor"]').textContent = formatCurrency(totals.tech);
+                document.querySelector('[data-summary="travel-labor"]').textContent = formatCurrency(totals.travel);
+                document.querySelector('[data-summary="sub-total"]').textContent = formatCurrency(totals.sub);
+                document.querySelector('[data-summary="seth-fee"]').textContent = formatCurrency(totals.seth);
+                document.querySelector('[data-summary="surcharge"]').textContent = formatCurrency(totals.surcharge);
+
+                const grandTotal = Object.values(totals).reduce((sum, value) => sum + value, 0);
+                document.querySelector('[data-summary="grand-total"]').textContent = formatCurrency(grandTotal);
+            }
         }
 
-        // Attach event listeners to all display option checkboxes and radios
-        document.getElementById('show-parts').addEventListener('change', updateDisplay);
-        document.getElementById('show-subcontractors').addEventListener('change', updateDisplay);
-        document.getElementById('show-labor-hours').addEventListener('change', updateDisplay);
-        document.getElementById('show-num-techs').addEventListener('change', updateDisplay);
-        document.getElementById('exclude-surcharge').addEventListener('change', updateDisplay);
-        document.querySelectorAll('input[name="display_option"]').forEach(radio => {
-            radio.addEventListener('change', updateDisplay);
-        });
-
         // --- EXPORT FUNCTIONS ---
+        function handleExport() {
+            if (document.getElementById('check-pdf').checked) exportToPdf();
+            if (document.getElementById('check-csv').checked) exportToCsv();
+            if (document.getElementById('check-excel').checked) {
+                alert('Excel export is not yet implemented. For now, you can open the CSV file in Excel.');
+            }
+        }
 
         function exportToPdf() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
             const quotePreview = document.getElementById('quote-preview');
             const quoteTitle = quotePreview.querySelector('h3').textContent;
             const quoteDate = quotePreview.querySelector('p.mt-1').textContent;
@@ -560,14 +563,27 @@
             doc.setTextColor(100);
             doc.text(quoteDate, 14, 29);
 
+            // Temporarily show all sections for PDF export
+            const originalDisplays = {
+                table: document.getElementById('quote-table').closest('.border-t').style.display,
+                sub: document.getElementById('subcontractors-section').style.display,
+                labor: document.getElementById('labor-tech-section').style.display
+            };
+            document.getElementById('quote-table').closest('.border-t').style.display = 'block';
+            document.getElementById('subcontractors-section').style.display = 'block';
+            document.getElementById('labor-tech-section').style.display = 'block';
+
             doc.autoTable({
                 html: '#quote-table',
                 startY: 40,
                 theme: 'grid',
-                headStyles: {
-                    fillColor: [11, 128, 238] // var(--primary)
-                },
+                headStyles: { fillColor: [11, 128, 238] },
             });
+            
+            // Restore original display settings
+            document.getElementById('quote-table').closest('.border-t').style.display = originalDisplays.table;
+            document.getElementById('subcontractors-section').style.display = originalDisplays.sub;
+            document.getElementById('labor-tech-section').style.display = originalDisplays.labor;
 
             doc.save(`${quoteTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`);
         }
@@ -576,16 +592,12 @@
             const table = document.getElementById('quote-table');
             const data = [];
             const headers = [];
-            table.querySelectorAll('thead th').forEach(th => {
-                headers.push(`"${th.textContent.trim()}"`);
-            });
+            table.querySelectorAll('thead th').forEach(th => headers.push(`"${th.textContent.trim()}"`));
             data.push(headers.join(','));
 
             table.querySelectorAll('tbody tr').forEach(tr => {
                 const row = [];
-                tr.querySelectorAll('td').forEach(td => {
-                    row.push(`"${td.textContent.trim().replace(/"/g, '""')}"`);
-                });
+                tr.querySelectorAll('td').forEach(td => row.push(`"${td.textContent.trim().replace(/"/g, '""')}"`));
                 data.push(row.join(','));
             });
             return data.join('\r\n');
@@ -595,7 +607,6 @@
             const csvContent = getTableDataForCsv();
             const quoteTitle = document.querySelector('#quote-preview h3').textContent;
             const filename = `${quoteTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.csv`;
-
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             if (link.download !== undefined) {
@@ -608,22 +619,6 @@
                 document.body.removeChild(link);
             }
         }
-
-        document.getElementById('export-btn').addEventListener('click', () => {
-            if (document.getElementById('check-pdf').checked) {
-                exportToPdf();
-            }
-            if (document.getElementById('check-csv').checked) {
-                exportToCsv();
-            }
-            if (document.getElementById('check-excel').checked) {
-                alert('Excel export is not yet implemented. For now, you can open the CSV file in Excel.');
-            }
-        });
-
-        document.getElementById('back-btn').addEventListener('click', () => {
-            window.history.back();
-        });
     });
 </script>
 </body></html>

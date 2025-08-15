@@ -277,6 +277,180 @@ def save_quote():
     finally:
         conn.close()
 
+# --- INSPECTION API V2 (with multiple checklists) ---
+
+# Checklist Management
+@app.route('/api/checklists', methods=['GET'])
+def get_checklists():
+    """Fetches all checklists."""
+    conn = get_db_connection()
+    try:
+        checklists = conn.execute("SELECT id, name, description FROM checklists ORDER BY name ASC").fetchall()
+        return jsonify([dict(c) for c in checklists])
+    finally:
+        conn.close()
+
+@app.route('/api/checklists', methods=['POST'])
+def create_checklist():
+    """Creates a new checklist."""
+    data = request.json
+    conn = get_db_connection()
+    try:
+        with conn:
+            cursor = conn.execute(
+                "INSERT INTO checklists (name, description) VALUES (?, ?)",
+                (data['name'], data.get('description', ''))
+            )
+            new_id = cursor.lastrowid
+        return jsonify({"message": "Checklist created.", "id": new_id}), 201
+    except sqlite3.IntegrityError:
+        return jsonify({"error": "A checklist with this name already exists."}), 409
+    finally:
+        conn.close()
+
+@app.route('/api/checklists/<int:checklist_id>', methods=['PUT'])
+def update_checklist(checklist_id):
+    """Updates a checklist's name and description."""
+    data = request.json
+    conn = get_db_connection()
+    try:
+        with conn:
+            conn.execute(
+                "UPDATE checklists SET name = ?, description = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?",
+                (data['name'], data.get('description', ''), checklist_id)
+            )
+        return jsonify({"message": f"Checklist {checklist_id} updated."}), 200
+    except sqlite3.IntegrityError:
+        return jsonify({"error": "Another checklist with this name already exists."}), 409
+    finally:
+        conn.close()
+
+@app.route('/api/checklists/<int:checklist_id>', methods=['DELETE'])
+def delete_checklist(checklist_id):
+    """Deletes a checklist and all its associated items (due to ON DELETE CASCADE)."""
+    conn = get_db_connection()
+    try:
+        with conn:
+            conn.execute("DELETE FROM checklists WHERE id = ?", (checklist_id,))
+        return jsonify({"message": f"Checklist {checklist_id} and its items deleted."}), 200
+    finally:
+        conn.close()
+
+# Checklist Item Management (now nested under a specific checklist)
+@app.route('/api/checklists/<int:checklist_id>/items', methods=['GET'])
+def get_checklist_items(checklist_id):
+    """Fetches all items for a specific checklist."""
+    conn = get_db_connection()
+    try:
+        items = conn.execute(
+            "SELECT id, item_text, category, is_required, display_order FROM inspection_checklist_items WHERE checklist_id = ? ORDER BY display_order ASC, id ASC",
+            (checklist_id,)
+        ).fetchall()
+        return jsonify([dict(item) for item in items])
+    finally:
+        conn.close()
+
+@app.route('/api/checklists/<int:checklist_id>/items', methods=['POST'])
+def create_checklist_item(checklist_id):
+    """Creates a new item within a specific checklist."""
+    data = request.json
+    conn = get_db_connection()
+    try:
+        with conn:
+            cursor = conn.execute(
+                "INSERT INTO inspection_checklist_items (checklist_id, item_text, category, is_required, display_order) VALUES (?, ?, ?, ?, ?)",
+                (checklist_id, data['item_text'], data.get('category'), data.get('is_required', True), data.get('display_order'))
+            )
+            new_id = cursor.lastrowid
+        return jsonify({"message": "Checklist item created.", "id": new_id}), 201
+    finally:
+        conn.close()
+
+@app.route('/api/checklist-items/<int:item_id>', methods=['PUT'])
+def update_checklist_item(item_id):
+    """Updates a specific checklist item."""
+    data = request.json
+    conn = get_db_connection()
+    try:
+        with conn:
+            conn.execute(
+                """UPDATE inspection_checklist_items 
+                   SET item_text = ?, category = ?, is_required = ?, display_order = ?, updated_at = CURRENT_TIMESTAMP
+                   WHERE id = ?""",
+                (data['item_text'], data.get('category'), data.get('is_required'), data.get('display_order'), item_id)
+            )
+        return jsonify({"message": f"Checklist item {item_id} updated."}), 200
+    finally:
+        conn.close()
+
+@app.route('/api/checklist-items/<int:item_id>', methods=['DELETE'])
+def delete_checklist_item(item_id):
+    """Deletes a specific checklist item."""
+    conn = get_db_connection()
+    try:
+        with conn:
+            conn.execute("DELETE FROM inspection_checklist_items WHERE id = ?", (item_id,))
+        return jsonify({"message": f"Checklist item {item_id} deleted."}), 200
+    finally:
+        conn.close()
+
+# Inspection Submission (now requires a checklist_id)
+@app.route('/api/inspections', methods=['POST'])
+def submit_inspection():
+    """Saves a new inspection and its results to the database."""
+    data = request.json
+    conn = get_db_connection()
+    try:
+        with conn:
+            # 1. Insert the main inspection record
+            inspection_cursor = conn.execute(
+                """INSERT INTO inspections (quote_id, checklist_id, inspector_name, unit_status, repair_quote_needed, overall_comments, status)
+                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                (
+                    data['quote_id'], data['checklist_id'], data.get('inspector_name'), 
+                    data.get('unit_status'), data.get('repair_quote_needed'), 
+                    data.get('overall_comments'), 'Submitted'
+                )
+            )
+            inspection_id = inspection_cursor.lastrowid
+
+            # 2. Insert each inspection result
+            results_to_insert = []
+            for result in data.get('results', []):
+                results_to_insert.append((
+                    inspection_id, result['checklist_item_id'], result.get('status', 'Not Checked'), result.get('comments')
+                ))
+            
+            if results_to_insert:
+                conn.executemany(
+                    """INSERT INTO inspection_results (inspection_id, checklist_item_id, status, comments)
+                       VALUES (?, ?, ?, ?)""",
+                    results_to_insert
+                )
+
+            # 3. Insert photo records
+            photos_to_insert = []
+            for photo in data.get('photos', []):
+                photos_to_insert.append((
+                    inspection_id, photo['file_path'], photo.get('description')
+                ))
+
+            if photos_to_insert:
+                conn.executemany(
+                    """INSERT INTO inspection_photos (inspection_id, file_path, description)
+                       VALUES (?, ?, ?)""",
+                    photos_to_insert
+                )
+
+        return jsonify({"message": "Inspection submitted successfully.", "inspection_id": inspection_id}), 201
+    except Exception as e:
+        # Log the exception for debugging
+        print(f"Error submitting inspection: {e}")
+        return jsonify({"error": "An internal error occurred."}), 500
+    finally:
+        conn.close()
+
+
 @app.route('/health')
 def health_check():
     """Simple health check endpoint for Docker."""

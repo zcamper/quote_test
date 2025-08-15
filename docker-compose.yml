@@ -22,8 +22,11 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./Quote_Sheet_V1.html:/usr/share/nginx/html/index.html
-      - ./Quote_Export_V1.html:/usr/share/nginx/html/Quote_Export_V1.html
+      - ./quote/Quote_Sheet_V1.html:/usr/share/nginx/html/index.html
+      - ./quote/Quote_Export_V1.html:/usr/share/nginx/html/Quote_Export_V1.html
+      - ./quote/quote_mgnt.html:/usr/share/nginx/html/quote_mgnt.html
+      - ./checklist/inspection_form.html:/usr/share/nginx/html/inspection_form.html
+      - ./checklist/inspection_mgmnt.html:/usr/share/nginx/html/inspection_mgmnt.html
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - api

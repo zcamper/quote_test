@@ -183,3 +183,56 @@ CREATE TABLE IF NOT EXISTS "iv00102_item_quantity_all" (
   "LOCNCODE" TEXT,
   "QTYONHND" REAL
 );
+
+-- Tables for Inspection Feature
+CREATE TABLE IF NOT EXISTS "checklists" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL UNIQUE,
+    "description" TEXT,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS "inspection_checklist_items" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "checklist_id" INTEGER NOT NULL,
+    "item_text" TEXT NOT NULL,
+    "category" TEXT,
+    "is_required" BOOLEAN NOT NULL DEFAULT 1,
+    "display_order" INTEGER,
+    "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ("checklist_id") REFERENCES "checklists"("id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "inspections" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "quote_id" TEXT NOT NULL,
+    "checklist_id" INTEGER NOT NULL,
+    "inspector_name" TEXT,
+    "inspection_date" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "unit_status" TEXT,
+    "repair_quote_needed" BOOLEAN,
+    "overall_comments" TEXT,
+    "status" TEXT NOT NULL DEFAULT 'Draft', -- e.g., Draft, Submitted
+    FOREIGN KEY ("checklist_id") REFERENCES "checklists"("id")
+);
+
+CREATE TABLE IF NOT EXISTS "inspection_results" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "inspection_id" INTEGER NOT NULL,
+    "checklist_item_id" INTEGER NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'Not Checked', -- e.g., Not Checked, Passed, Failed
+    "comments" TEXT,
+    FOREIGN KEY ("inspection_id") REFERENCES "inspections"("id") ON DELETE CASCADE,
+    FOREIGN KEY ("checklist_item_id") REFERENCES "inspection_checklist_items"("id")
+);
+
+CREATE TABLE IF NOT EXISTS "inspection_photos" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "inspection_id" INTEGER NOT NULL,
+    "file_path" TEXT NOT NULL,
+    "description" TEXT,
+    "uploaded_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ("inspection_id") REFERENCES "inspections"("id") ON DELETE CASCADE
+);

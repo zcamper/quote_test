@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quote Inspection Form</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #3d7fbd;
+            --primary-hover: #316697;
+            --background-color: #f8f9fa;
+            --card-background: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+            --error-bg: #fee2e2;
+            --error-text: #991b1b;
+            --warning-bg: #fef3c7;
+            --warning-text: #92400e;
+            --neutral-bg: #f3f4f6;
+            --neutral-text: #374151;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+        }
+        .status-badge {
+            @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium;
+        }
+        .status-passed {
+            @apply bg-[var(--success-bg)] text-[var(--success-text)];
+        }
+        .status-failed {
+            @apply bg-[var(--error-bg)] text-[var(--error-text)];
+        }
+        .status-needs-revision {
+            @apply bg-[var(--warning-bg)] text-[var(--warning-text)];
+        }
+        .status-not-checked {
+            @apply bg-[var(--neutral-bg)] text-[var(--neutral-text)];
+        }
+        .nav-link {
+          @apply text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors;
+        }
+        .form-section-title {
+            @apply text-xl font-semibold text-[var(--text-primary)] mb-4;
+        }
+        .btn-primary {
+            @apply flex items-center justify-center h-10 px-6 bg-[var(--primary-color)] text-white text-sm font-bold rounded-full transition-colors hover:bg-[var(--primary-hover)];
+        }
+        .btn-secondary {
+            @apply flex items-center justify-center h-10 px-6 bg-gray-200 text-gray-800 text-sm font-bold rounded-full transition-colors hover:bg-gray-300;
+        }
+        .btn-tertiary {
+            @apply flex items-center justify-center h-10 px-6 bg-transparent text-gray-600 text-sm font-medium rounded-full transition-colors hover:bg-gray-100;
+        }
+    </style>
+</head>
+<body class="bg-[var(--background-color)]">
+<div class="flex flex-col min-h-screen">
+<header class="bg-[var(--card-background)] shadow-sm sticky top-0 z-10">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<div class="flex items-center gap-4">
+<div class="w-8 h-8 text-[var(--primary-color)]">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h1 class="text-xl font-bold text-[var(--text-primary)]">Quote Inspector</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="nav-link" href="#">Dashboard</a>
+<a class="nav-link text-[var(--primary-color)] font-semibold" href="#">Quotes</a>
+<a class="nav-link" href="#">Customers</a>
+<a class="nav-link" href="#">Reports</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="relative rounded-full p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary-color)]">
+<span class="material-icons">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDORURPqk2Vc5ZvsjC76ToApz9c_80JGhe9FWYnQElCgKATS16W04TsvRjJvc8Ow5a7UrOBGVSSeExPb6k83AuPqJiVRhDCcSmYp9eT4M5IDTkvuc7syiUgcjgHYRIim2LaJDNxeLGbqQdH3D1OpJyIfxsUZzPUUWPT0HxBtVWXD4p650tqE54pjctCnXy1PDMg6Uc2sdveSzooIG5aHVP_tjHC8rKxTgcQXtupJmL1vskYX9ewvfVS8JfyHh2CCKIYScqpsDpRWwQ");'></div>
+</div>
+</div>
+</div>
+</header>
+<main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+<div class="max-w-4xl mx-auto">
+<div class="mb-8">
+<h1 class="text-3xl font-bold text-[var(--text-primary)]">Quote Inspection Form</h1>
+<p class="mt-1 text-[var(--text-secondary)]">Review and verify the quote details before submission.</p>
+</div>
+<div class="bg-[var(--card-background)] rounded-2xl shadow-lg p-6 md:p-8 mb-8">
+<h2 class="form-section-title">Quote &amp; Inspection Setup</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+    <div>
+        <p class="text-sm font-medium text-[var(--text-secondary)]">Quote Number</p>
+        <p class="text-base font-semibold text-[var(--text-primary)]" id="quote-number">Loading...</p>
+    </div>
+    <div>
+        <p class="text-sm font-medium text-[var(--text-secondary)]">Customer</p>
+        <p class="text-base font-semibold text-[var(--text-primary)]" id="customer-name">Loading...</p>
+    </div>
+    <div>
+        <p class="text-sm font-medium text-[var(--text-secondary)]">Date</p>
+        <p class="text-base font-semibold text-[var(--text-primary)]" id="quote-date">Loading...</p>
+    </div>
+    <div class="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+        <div>
+            <label for="inspector-name" class="text-sm font-medium text-[var(--text-secondary)]">Inspector Name</label>
+            <input type="text" id="inspector-name" class="mt-1 w-full rounded-lg border border-[var(--border-color)] px-3 py-2 text-sm focus:border-[var(--primary-color)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]" placeholder="Enter your name">
+        </div>
+        <div>
+            <label for="checklist-select" class="text-sm font-medium text-[var(--text-secondary)]">Select Inspection Checklist</label>
+            <div class="relative mt-1">
+                <select id="checklist-select" class="w-full appearance-none rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 pr-8 text-sm focus:border-[var(--primary-color)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]">
+                    <option value="">-- Please select a checklist --</option>
+                </select>
+                <span class="material-icons absolute top-1/2 right-2 -translate-y-1/2 pointer-events-none text-gray-400">unfold_more</span>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div id="checklist-container" class="bg-[var(--card-background)] rounded-2xl shadow-lg p-6 md:p-8 mb-8 hidden">
+<h2 class="form-section-title">Inspection Checklist</h2>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="border-b border-[var(--border-color)]">
+<tr>
+<th class="py-3 pr-4 text-sm font-semibold text-[var(--text-primary)] w-2/5">Item</th>
+<th class="py-3 px-4 text-sm font-semibold text-[var(--text-primary)] w-1/5">Status</th>
+<th class="py-3 pl-4 text-sm font-semibold text-[var(--text-primary)] w-2/5">Comments/Notes</th>
+</tr>
+</thead>
+<tbody id="checklist-items-tbody">
+<!-- Dynamic rows will be inserted here -->
+</tbody>
+</table>
+</div>
+</div>
+<div id="photos-container" class="bg-[var(--card-background)] rounded-2xl shadow-lg p-6 md:p-8 mb-8 hidden">
+<h2 class="form-section-title">Inspection Photos</h2>
+<div>
+<label class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-[var(--border-color)] rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors" for="photo-upload">
+<div class="flex flex-col items-center justify-center pt-5 pb-6">
+<span class="material-icons text-4xl text-gray-400 mb-3">cloud_upload</span>
+<p class="mb-2 text-sm text-[var(--text-secondary)]"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+<p class="text-xs text-gray-400">PNG, JPG, or GIF (MAX. 5MB each)</p>
+</div>
+<input class="hidden" id="photo-upload" multiple="" type="file"/>
+</label>
+<div id="photo-previews" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
+<!-- Photo previews will be inserted here -->
+</div>
+</div>
+</div>
+<div id="finalization-container" class="bg-[var(--card-background)] rounded-2xl shadow-lg p-6 md:p-8 hidden">
+<h2 class="form-section-title">Final Inspection Result</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-medium text-[var(--text-secondary)] mb-2" for="unit-status">Unit Status</label>
+<div class="relative">
+<select class="w-full appearance-none rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 pr-8 text-sm focus:border-[var(--primary-color)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]" id="unit-status">
+<option>Operational</option>
+<option>Needs Repair at Next Service</option>
+<option>Will Fail</option>
+<option>Non-Operable</option>
+</select>
+<span class="material-icons absolute top-1/2 right-2 -translate-y-1/2 pointer-events-none text-gray-400">unfold_more</span>
+</div>
+</div>
+<div>
+<label class="block text-sm font-medium text-[var(--text-secondary)] mb-2">Repair Quote Needed?</label>
+<fieldset>
+<legend class="sr-only">Repair Quote Needed</legend>
+<div class="flex items-center gap-6">
+<label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700">
+<input class="form-radio text-[var(--primary-color)] focus:ring-[var(--primary-color)]" name="repair-quote" type="radio" value="true"/>
+<span>Yes</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-gray-700">
+<input checked="" class="form-radio text-[var(--primary-color)] focus:ring-[var(--primary-color)]" name="repair-quote" type="radio" value="false"/>
+<span>No</span>
+</label>
+</div>
+</fieldset>
+</div>
+<div class="md:col-span-2">
+<label class="text-sm font-medium text-[var(--text-secondary)]" for="overall-comments">Overall Comments</label>
+<textarea class="mt-2 w-full rounded-lg border border-[var(--border-color)] px-3 py-2 text-sm focus:border-[var(--primary-color)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)] resize-y" id="overall-comments" name="overallComments" placeholder="Provide a summary of the inspection and any required actions..." rows="4"></textarea>
+</div>
+</div>
+</div>
+<div id="actions-container" class="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 hidden">
+<button class="btn-secondary w-full sm:w-auto" type="button" id="save-draft-btn">Save Draft</button>
+<button class="btn-primary w-full sm:w-auto" type="submit" id="submit-inspection-btn">Submit Inspection</button>
+</div>
+</div>
+</main>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const API_BASE_URL = 'http://localhost:3000/api';
+
+    // --- DOM Elements ---
+    const quoteNumberEl = document.getElementById('quote-number');
+    const customerNameEl = document.getElementById('customer-name');
+    const quoteDateEl = document.getElementById('quote-date');
+    const inspectorNameInput = document.getElementById('inspector-name');
+    const checklistSelect = document.getElementById('checklist-select');
+    
+    const checklistContainer = document.getElementById('checklist-container');
+    const photosContainer = document.getElementById('photos-container');
+    const finalizationContainer = document.getElementById('finalization-container');
+    const actionsContainer = document.getElementById('actions-container');
+
+    const checklistTbody = document.getElementById('checklist-items-tbody');
+    const unitStatusSelect = document.getElementById('unit-status');
+    const overallCommentsTextarea = document.getElementById('overall-comments');
+    const submitBtn = document.getElementById('submit-inspection-btn');
+    const saveDraftBtn = document.getElementById('save-draft-btn');
+
+    // --- State ---
+    let currentQuoteId = null;
+    let currentChecklistId = null;
+    let checklistItems = [];
+
+    // --- API Functions ---
+    const api = {
+        getChecklists: () => fetch(`${API_BASE_URL}/checklists`).then(res => res.json()),
+        getChecklistItems: (id) => fetch(`${API_BASE_URL}/checklists/${id}/items`).then(res => res.json()),
+        createInspection: (data) => fetch(`${API_BASE_URL}/inspections`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then(res => res.json()),
+        createInspectionResult: (data) => fetch(`${API_BASE_URL}/inspection-results`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+    };
+
+    // --- UI Rendering ---
+    const renderChecklistDropdown = (checklists) => {
+        checklists.forEach(c => {
+            const option = new Option(c.name, c.id);
+            checklistSelect.add(option);
+        });
+    };
+
+    const renderChecklistItems = () => {
+        checklistTbody.innerHTML = '';
+        if (checklistItems.length === 0) {
+            checklistTbody.innerHTML = `<tr><td colspan="3" class="text-center py-4">No items in this checklist.</td></tr>`;
+            return;
+        }
+        checklistItems.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.className = 'border-b border-[var(--border-color)]';
+            tr.dataset.itemId = item.id;
+            tr.innerHTML = `
+                <td class="py-4 pr-4 align-top">
+                    <div class="font-medium text-[var(--text-primary)]">${item.item_text}</div>
+                    ${item.category ? `<div class="text-xs text-gray-500">${item.category}</div>` : ''}
+                </td>
+                <td class="py-4 px-4 align-top">
+                    <div class="relative">
+                        <select class="item-status w-full appearance-none rounded-lg border border-[var(--border-color)] bg-white px-3 py-2 pr-8 text-sm focus:border-[var(--primary-color)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]">
+                            <option>Not Checked</option>
+                            <option>Passed</option>
+                            <option>Failed</option>
+                        </select>
+                        <span class="material-icons absolute top-1/2 right-2 -translate-y-1/2 pointer-events-none text-gray-400">unfold_more</span>
+                    </div>
+                </td>
+                <td class="py-4 pl-4 align-top">
+                    <input class="item-comment w-full rounded-lg border border-[var(--border-color)] px-3 py-2 text-sm focus:border-[var(--primary-color)] focus:outline-none focus:ring-1 focus:ring-[var(--primary-color)]" placeholder="Add a note..." type="text"/>
+                </td>
+            `;
+            checklistTbody.appendChild(tr);
+        });
+    };
+    
+    const toggleChecklistVisibility = (visible) => {
+        const containers = [checklistContainer, photosContainer, finalizationContainer, actionsContainer];
+        containers.forEach(c => c.classList.toggle('hidden', !visible));
+    };
+
+    // --- Event Handlers ---
+    checklistSelect.addEventListener('change', async () => {
+        currentChecklistId = checklistSelect.value ? parseInt(checklistSelect.value, 10) : null;
+        if (currentChecklistId) {
+            try {
+                checklistItems = await api.getChecklistItems(currentChecklistId);
+                renderChecklistItems();
+                toggleChecklistVisibility(true);
+            } catch (error) {
+                console.error('Failed to load checklist items:', error);
+                alert('Could not load checklist items.');
+                toggleChecklistVisibility(false);
+            }
+        } else {
+            checklistItems = [];
+            toggleChecklistVisibility(false);
+        }
+    });
+
+    submitBtn.addEventListener('click', async () => {
+        if (!currentQuoteId || !currentChecklistId || !inspectorNameInput.value) {
+            alert('Please fill out the inspector name and select a checklist before submitting.');
+            return;
+        }
+
+        const inspectionData = {
+            quote_id: currentQuoteId,
+            checklist_id: currentChecklistId,
+            inspector_name: inspectorNameInput.value,
+            unit_status: unitStatusSelect.value,
+            repair_quote_needed: document.querySelector('input[name="repair-quote"]:checked').value === 'true',
+            overall_comments: overallCommentsTextarea.value,
+            status: 'Submitted'
+        };
+
+        try {
+            const newInspection = await api.createInspection(inspectionData);
+            if (!newInspection.id) {
+                throw new Error(newInspection.error || 'Failed to create inspection record.');
+            }
+
+            const resultPromises = [];
+            const itemRows = checklistTbody.querySelectorAll('tr[data-item-id]');
+            itemRows.forEach(row => {
+                const resultData = {
+                    inspection_id: newInspection.id,
+                    checklist_item_id: parseInt(row.dataset.itemId, 10),
+                    status: row.querySelector('.item-status').value,
+                    comments: row.querySelector('.item-comment').value
+                };
+                resultPromises.push(api.createInspectionResult(resultData));
+            });
+
+            await Promise.all(resultPromises);
+
+            alert('Inspection submitted successfully!');
+            window.location.reload(); // Or redirect to a confirmation page
+
+        } catch (error) {
+            console.error('Error submitting inspection:', error);
+            alert(`An error occurred: ${error.message}`);
+        }
+    });
+
+    // --- Initialization ---
+    const init = async () => {
+        // 1. Get Quote ID from URL
+        const params = new URLSearchParams(window.location.search);
+        currentQuoteId = params.get('quote_id');
+        
+        if (currentQuoteId) {
+            quoteNumberEl.textContent = currentQuoteId;
+            // In a real app, you'd fetch quote details here
+            customerNameEl.textContent = `Customer for ${currentQuoteId}`;
+            quoteDateEl.textContent = new Date().toLocaleDateString();
+        } else {
+            document.querySelector('.max-w-4xl.mx-auto').innerHTML = 
+                '<div class="text-center bg-white p-8 rounded-lg shadow-lg"><h1 class="text-2xl font-bold text-red-600">Error: No Quote ID Provided</h1><p class="mt-2 text-gray-600">Please access this page with a `quote_id` in the URL. Example: .../inspection_form.html?quote_id=QT-12345</p></div>';
+            return;
+        }
+
+        // 2. Load checklists
+        try {
+            const checklists = await api.getChecklists();
+            renderChecklistDropdown(checklists);
+        } catch (error) {
+            console.error('Failed to load checklists:', error);
+            checklistSelect.innerHTML = '<option>Error loading checklists</option>';
+            checklistSelect.disabled = true;
+        }
+    };
+
+    init();
+});
+</script>
+
+</body></html>
+
