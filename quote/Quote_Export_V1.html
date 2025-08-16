@@ -25,28 +25,28 @@
 <body>
 <div class="relative flex size-full min-h-screen flex-col bg-gray-50 group/design-root overflow-x-hidden">
 <div class="layout-container flex h-full grow flex-col">
-<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 bg-white px-6 py-3">
-<div class="flex items-center gap-4 text-text-primary">
-<div class="size-8 text-[var(--primary)]">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 px-10 py-4 shadow-sm">
+<div class="flex items-center gap-4 text-gray-800">
+<div class="size-6 text-[var(--primary-color)]">
 <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-<path clip-rule="evenodd" d="M24 4H42V17.3333V30.6667H24V44H6V30.6667V17.3333H24V4Z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M36.7273 44C33.9891 44 31.6043 39.8386 30.3636 33.69C29.123 39.8386 26.7382 44 24 44C21.2618 44 18.877 39.8386 17.6364 33.69C16.3957 39.8386 14.0109 44 11.2727 44C7.25611 44 4 35.0457 4 24C4 12.9543 7.25611 4 11.2727 4C14.0109 4 16.3957 8.16144 17.6364 14.31C18.877 8.16144 21.2618 4 24 4C26.7382 4 29.123 8.16144 30.3636 14.31C31.6043 8.16144 33.9891 4 36.7273 4C40.7439 4 44 12.9543 44 24C44 35.0457 40.7439 44 36.7273 44Z" fill="currentColor"></path>
 </svg>
 </div>
-<h1 class="text-text-primary text-xl font-semibold leading-tight">Service Quotes</h1>
+<h2 class="text-gray-900 text-xl font-bold leading-tight tracking-[-0.015em]">QuoteCraft</h2>
 </div>
-<nav class="hidden items-center gap-8 lg:flex">
-<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Dashboard</a>
-<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Quotes</a>
-<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Customers</a>
-<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Units</a>
-<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Parts</a>
-<a class="text-sm font-medium text-text-primary hover:text-[var(--primary)]" href="#">Settings</a>
+<nav class="flex flex-1 justify-center gap-2">
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/dashboard/dashboard.html">Dashboard</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/quote/quote_mgnt.html">Quotes</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/settings/user-mngmt.html">Customers</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="#">Parts &amp; Services</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/checklist/inspection_mgmnt.html">Inspection Checklist</a>
 </nav>
 <div class="flex items-center gap-4">
-<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAIUH3xVYOaxZ0LylGeKn_Z7ChKdknub1FIyp2YWJHK8mBgk92jUUUAjzSPcM6Glhle5-dnQs0XGYSEWcjAX3cnDeitu5pd3txnAU1ghu4mjVph5kgzBWIzZqzmyWai4yhtG3zCh_3t3oQRO3C7WtfW08L3zWcUrlQuGCP2U7wapvxHWlXPTrOhdZ641xuGmXBnHQzkwlycPj4sK3I_sRH2A6VuqizPqF66pzcZYSJHyPZjNlcU9I4zgDEQZ5pp7hKfXDcqF7MvoE");'></div>
-<button class="lg:hidden">
-<span class="material-symbols-outlined"> menu </span>
+<button class="relative">
+<span class="material-icons text-gray-600 hover:text-gray-900">notifications</span>
+<span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
 </button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 user-avatar-mgmnt"></div>
 </div>
 </header>
 <main class="flex-1 px-4 py-8 md:px-6">
@@ -185,7 +185,7 @@
       <p class="summary-value text-sm font-medium text-text-primary" data-summary="seth-fee"></p>
     </div>
     <div class="flex justify-between items-center">
-      <p class="text-sm text-text-secondary">Fuel &amp; Material Surcharge</p>
+      <p class="text-sm text-text-secondary">Fuel & Material Surcharge</p>
       <p class="summary-value text-sm font-medium text-text-primary" data-summary="surcharge"></p>
     </div>
     <div class="flex justify-between items-center pt-4 border-t border-dashed border-gray-300">
@@ -237,7 +237,7 @@
 </label>
 <label class="flex items-center gap-3">
 <input class="h-4 w-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]" type="checkbox" id="exclude-surcharge">
-<span class="text-sm text-text-primary">Exclude Fuel &amp; Material Surcharge</span>
+<span class="text-sm text-text-primary">Exclude Fuel & Material Surcharge</span>
 </label>
 </div>
 <aside class="space-y-8">
