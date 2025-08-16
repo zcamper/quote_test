@@ -28,36 +28,28 @@
 </head>
 <body class="bg-gray-50 text-gray-900">
 <div class="flex min-h-screen flex-col">
-<header class="sticky top-0 z-10 border-b border-gray-200 bg-white">
-<div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-<div class="flex items-center gap-4 py-4">
-<svg class="h-8 w-8 text-[var(--primary-600)]" fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-<path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" fill="currentColor"></path>
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 px-10 py-4 shadow-sm">
+<div class="flex items-center gap-4 text-gray-800">
+<div class="size-6 text-[var(--primary-color)]">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M36.7273 44C33.9891 44 31.6043 39.8386 30.3636 33.69C29.123 39.8386 26.7382 44 24 44C21.2618 44 18.877 39.8386 17.6364 33.69C16.3957 39.8386 14.0109 44 11.2727 44C7.25611 44 4 35.0457 4 24C4 12.9543 7.25611 4 11.2727 4C14.0109 4 16.3957 8.16144 17.6364 14.31C18.877 8.16144 21.2618 4 24 4C26.7382 4 29.123 8.16144 30.3636 14.31C31.6043 8.16144 33.9891 4 36.7273 4C40.7439 4 44 12.9543 44 24C44 35.0457 40.7439 44 36.7273 44Z" fill="currentColor"></path>
 </svg>
-<h1 class="text-xl font-bold text-gray-900">QuoteMaster</h1>
 </div>
-<nav class="hidden items-center gap-6 md:flex">
-<a class="text-sm font-medium text-gray-600 hover:text-gray-900" href="#">Dashboard</a>
-<a class="text-sm font-medium text-gray-600 hover:text-gray-900" href="#">Quotes</a>
-<a class="text-sm font-medium text-gray-600 hover:text-gray-900" href="#">Parts</a>
-<a class="text-sm font-medium text-gray-600 hover:text-gray-900" href="#">Services</a>
-<a class="text-sm font-medium text-gray-600 hover:text-gray-900" href="#">Reports</a>
-<a class="text-sm font-semibold text-[var(--primary-600)]" href="#">Settings</a>
+<h2 class="text-gray-900 text-xl font-bold leading-tight tracking-[-0.015em]">QuoteCraft</h2>
+</div>
+<nav class="flex flex-1 justify-center gap-2">
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/dashboard/dashboard.html">Dashboard</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/quote/quote_mgnt.html">Quotes</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/settings/user-mngmt.html">Customers</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="#">Parts &amp; Services</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/checklist/inspection_mgmnt.html">Inspection Checklist</a>
 </nav>
 <div class="flex items-center gap-4">
-<button class="relative rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:ring-offset-2">
-<span class="sr-only">View notifications</span>
-<svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" stroke-linecap="round" stroke-linejoin="round"></path>
-</svg>
+<button class="relative">
+<span class="material-icons text-gray-600 hover:text-gray-900">notifications</span>
+<span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
 </button>
-<div class="relative">
-<button aria-expanded="false" aria-haspopup="true" class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary-500)] focus:ring-offset-2" id="user-menu-button" type="button">
-<span class="sr-only">Open user menu</span>
-<div class="h-9 w-9 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDRcmpJYAbDndYJBRcIj2yTC6rizyl0FZAkTs0ThjBiGmrkSaZ3ylQ82CY3AYXSBArmdFc973m27XMGE1PHCYJ4XFJCo0qqCgVZk5Tx5VQJNdDuHuwRIEicRdTDr0-K6BVdRi8Uhbk5ab1qpcZuzD49QzC8uNB3vNjFGdAGT17lqnSnxYcvQxzjFSAejnFDuowW1F3snWylWGU1ez_tiSrOlxfwVhaDs5beU1cNzlIcmds0OYgyORrhpemAtpMOexLheOK0Y8EyhcU");'></div>
-</button>
-</div>
-</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 user-avatar-mgmnt"></div>
 </div>
 </header>
 <main class="flex-1">
