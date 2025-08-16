@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; connect-src 'self' http://localhost:3000; img-src 'self' https://lh3.googleusercontent.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; connect-src 'self' http://localhost:3000; img-src 'self' https://lh3.googleusercontent.com;">
 <meta charset="utf-8"/>
 <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/>
 <link as="style" href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B600%3B700&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" onload="this.rel='stylesheet'" rel="stylesheet"/>
@@ -31,11 +31,11 @@
 <h2 class="text-gray-900 text-xl font-bold leading-tight tracking-[-0.015em]">QuoteCraft</h2>
 </div>
 <nav class="flex flex-1 justify-center gap-2">
-<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="#">Dashboard</a>
-<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="#">Quotes</a>
-<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="#">Customers</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/dashboard/dashboard.html">Dashboard</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/quote/quote_mgnt.html">Quotes</a>
+<a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="/settings/user-mngmt.html">Customers</a>
 <a class="text-gray-600 hover:text-gray-900 text-sm font-medium leading-normal px-4 py-2 rounded-full transition-colors" href="#">Parts &amp; Services</a>
-<a class="bg-gray-100 text-gray-900 text-sm font-semibold leading-normal px-4 py-2 rounded-full" href="#">Inspection Checklist</a>
+<a class="bg-gray-100 text-gray-900 text-sm font-semibold leading-normal px-4 py-2 rounded-full" href="/checklist/inspection_mgmnt.html">Inspection Checklist</a>
 </nav>
 <div class="flex items-center gap-4">
 <button class="relative">
